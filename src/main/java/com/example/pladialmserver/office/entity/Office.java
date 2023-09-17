@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,9 +35,9 @@ public class Office extends BaseEntity {
     private String description;
 
     @OneToMany(mappedBy = "office")
-    private List<OfficeFacility> facilityList;
+    private List<OfficeFacility> facilityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "office")
-    private List<OfficeImg> imgList;
+    private List<OfficeImg> imgList = new ArrayList<>();
 
 }

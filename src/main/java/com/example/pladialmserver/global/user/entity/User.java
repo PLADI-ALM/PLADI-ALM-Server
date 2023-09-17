@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,6 @@ public class User extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "user")
-    private List<OfficeBooking> officeBookingList;
+    private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
 }
