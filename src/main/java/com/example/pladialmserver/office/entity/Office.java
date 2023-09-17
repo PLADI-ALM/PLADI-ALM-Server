@@ -24,7 +24,6 @@ public class Office extends BaseEntity {
     @Size(max = 30)
     private String name;
 
-    @NotNull
     @Size(max = 30)
     private String location;
 
