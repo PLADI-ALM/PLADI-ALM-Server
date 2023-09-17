@@ -79,10 +79,14 @@ jobs:
       id: deploy-prod
       if: contains(github.ref, 'main')
       with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ec2-user
-          key: ${{ secrets.PRIVATE_KEY }}
-          envs: GITHUB_SHA
+#          host: ${{ secrets.HOST_PROD }}
+#          username: ec2-user
+#          key: ${{ secrets.PRIVATE_KEY }}
+#          envs: GITHUB_SHA
+          host: ${{ secrets.HOST_DEV }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
           script: |
               sudo docker rm -f $(docker ps -qa)
               sudo docker pull ${{ secrets.DOCKER_REPO }}/pladi-prod
