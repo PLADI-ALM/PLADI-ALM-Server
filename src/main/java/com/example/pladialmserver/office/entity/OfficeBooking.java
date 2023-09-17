@@ -1,5 +1,6 @@
 package com.example.pladialmserver.office.entity;
 
+import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.user.entity.User;
 import lombok.AccessLevel;
@@ -17,7 +18,7 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class OfficeBooking {
+public class OfficeBooking extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
