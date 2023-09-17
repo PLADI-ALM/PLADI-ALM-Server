@@ -35,13 +35,10 @@ public class OfficeBooking extends BaseEntity {
     @NotNull
     private LocalDate date;
 
-    @NotNull
     private LocalTime startTime;
 
-    @NotNull
     private LocalTime endTime;
 
-    @NotNull
     @Size(max = 30)
     private String memo;
 
