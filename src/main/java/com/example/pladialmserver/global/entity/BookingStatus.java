@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BookingStatus {
 
-    BOOKED("예약"),
+    BOOKED("예약중"),
     FINISHED("완료"),
     CANCELED("취소");
 
