@@ -2,6 +2,7 @@ package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
