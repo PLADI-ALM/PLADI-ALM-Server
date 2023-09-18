@@ -37,7 +37,8 @@ public class OfficeController {
             )
     {
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
-        if (date == null || startTime == null || endTime == null) {
+        if ((date != null && (startTime == null || endTime == null)) ||
+                (date == null && (startTime != null || endTime != null))){
            throw new BaseException(BaseResponseCode.OFFICE_NOT_FOUND_DATE_TIME);
         }
         return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime));
