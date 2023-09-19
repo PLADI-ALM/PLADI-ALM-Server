@@ -13,7 +13,7 @@ public class OfficeRes {
     private String name;
     private String location;
     private Integer capacity;
-    private List<OfficeFacilityRes> facilityList;
+    private List<String> facilityList;
     private String description;
 
     public static OfficeRes toDto(Office office, List<Facility> facilities){
@@ -21,7 +21,7 @@ public class OfficeRes {
                 .name(office.getName())
                 .location(office.getLocation())
                 .capacity(office.getCapacity())
-                .facilityList(facilities.stream().map(m -> OfficeFacilityRes.toDto(m.getName())).collect(Collectors.toList()))
+                .facilityList(facilities.stream().map(Facility::getName).collect(Collectors.toList()))
                 .description(office.getDescription())
                 .build();
     }
