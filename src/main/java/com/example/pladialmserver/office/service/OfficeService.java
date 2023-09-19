@@ -30,7 +30,6 @@ public class OfficeService {
         if (date != null && startTime != null && endTime != null) {
             // 입력된 날짜와 시간에 이미 예약된 회의실을 조회
             List<OfficeBooking> bookedOffices = officeBookingRepository.findByDateAndTime(date, startTime, endTime);
-            System.out.println("Booked Offices Size: " + bookedOffices.size());
 
             // 이미 예약된 회의실의 ID 목록을 추출
             List<Long> bookedOfficeIds = bookedOffices.stream()
