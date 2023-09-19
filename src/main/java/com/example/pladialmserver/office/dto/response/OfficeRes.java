@@ -15,14 +15,17 @@ public class OfficeRes {
     private Integer capacity;
     private List<String> facilityList;
     private String description;
+    private List<String> imgUrls;
 
-    public static OfficeRes toDto(Office office, List<Facility> facilities){
+
+    public static OfficeRes toDto(Office office, List<Facility> facilities,List<String> imgUrls){
         return OfficeRes.builder()
                 .name(office.getName())
                 .location(office.getLocation())
                 .capacity(office.getCapacity())
                 .facilityList(facilities.stream().map(Facility::getName).collect(Collectors.toList()))
                 .description(office.getDescription())
+                .imgUrls(imgUrls)
                 .build();
     }
 }
