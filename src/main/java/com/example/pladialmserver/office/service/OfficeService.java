@@ -23,6 +23,7 @@ public class OfficeService {
     private final OfficeBookingRepository officeBookingRepository;
 
 
+
     public List<OfficeRes> findAvailableOffices(LocalDate date, LocalTime startTime, LocalTime endTime) {
         List<Office> allOffices = officeRepository.findAll();
 
@@ -55,4 +56,5 @@ public class OfficeService {
 
         return result;
     }
+
 }
