@@ -4,11 +4,8 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.office.dto.OfficeRes;
-import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.service.OfficeService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +40,11 @@ public class OfficeController {
     /**
      * 회의실 개별 조회
      */
+    @GetMapping("/{officeId}")
+    public ResponseCustom<OfficeRes> getOffice(@PathVariable(name="officeId") Long officeId){
+        return ResponseCustom.OK(officeService.getOffice(officeId));
+    }
+
 
 
 

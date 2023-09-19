@@ -1,5 +1,7 @@
 package com.example.pladialmserver.office.service;
 
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.office.dto.OfficeRes;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
@@ -54,6 +56,17 @@ public class OfficeService {
         }
 
         return result;
+    }
+
+    public OfficeRes getOffice(Long officeId) {
+        Office office = officeRepository.findByOfficeId(officeId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.NOT_FOUND_OFFICE));
+
+        List<Facility> facilities = office.getFacilityList().stream()
+                .map(officeFacility -> officeFacility.getFacility())
+                .collect(Collectors.toList());
+
+        return OfficeRes.toDto(office, facilities);
     }
 
 }

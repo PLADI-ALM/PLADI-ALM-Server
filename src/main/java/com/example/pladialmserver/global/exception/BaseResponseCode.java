@@ -16,7 +16,8 @@ public enum BaseResponseCode {
     BAD_REQUEST("G0001", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
     //office
-    NOT_DATE_TIME("B0001", HttpStatus.BAD_REQUEST,"날짜나 시간을 모두 입력해주세요");
+    NOT_DATE_TIME("B0001", HttpStatus.BAD_REQUEST,"날짜나 시간을 모두 입력해주세요"),
+    NOT_FOUND_OFFICE("B0002",HttpStatus.NOT_FOUND,"해당 사무실을 찾을 수 없습니다.");
 
 
     public final String code;
