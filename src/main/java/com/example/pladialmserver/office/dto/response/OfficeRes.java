@@ -1,4 +1,4 @@
-package com.example.pladialmserver.office.dto;
+package com.example.pladialmserver.office.dto.response;
 
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;

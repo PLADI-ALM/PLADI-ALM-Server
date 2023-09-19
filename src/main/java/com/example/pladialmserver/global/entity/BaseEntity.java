@@ -2,6 +2,7 @@ package com.example.pladialmserver.global.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
+@Where(clause = "isEnable = true")
 public class BaseEntity implements Serializable {
 
     @CreatedDate
