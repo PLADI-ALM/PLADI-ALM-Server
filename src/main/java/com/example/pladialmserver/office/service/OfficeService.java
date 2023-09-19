@@ -7,6 +7,7 @@ import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeBooking;
+import com.example.pladialmserver.office.entity.OfficeFacility;
 import com.example.pladialmserver.office.repository.OfficeBookingRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class OfficeService {
 
         for (Office office : allOffices) {
             List<Facility> facilities = office.getFacilityList().stream()
-                    .map(officeFacility -> officeFacility.getFacility())
+                    .map(OfficeFacility::getFacility)
                     .collect(Collectors.toList());
 
             result.add(OfficeRes.toDto(office, facilities));

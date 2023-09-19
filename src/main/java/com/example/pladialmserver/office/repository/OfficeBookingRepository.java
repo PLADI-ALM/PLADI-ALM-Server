@@ -18,4 +18,3 @@ public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Lo
 
     List<OfficeBooking> findByOfficeAndDateAndIsEnable(Office office, LocalDate date, boolean isEnable);
 }
-

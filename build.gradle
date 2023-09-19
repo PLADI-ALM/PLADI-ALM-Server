@@ -28,23 +28,14 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-
-	// mysql
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	// jdbc
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.6.5'
-	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.6.5'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	// jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
-
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-
-
-

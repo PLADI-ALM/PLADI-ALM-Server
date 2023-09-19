@@ -1,7 +1,5 @@
 package com.example.pladialmserver.global.response;
 
-
-
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

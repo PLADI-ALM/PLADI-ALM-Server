@@ -27,17 +27,16 @@ public class OfficeController {
     /**
      * 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
      */
-    @GetMapping()
+    @GetMapping
     public ResponseCustom<List<OfficeRes>> searchOffice(
-            @RequestParam(required = false ) @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate date,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "HH:mm:ss") LocalTime startTime,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "HH:mm:ss") LocalTime endTime
-            )
-    {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime
+    ) {
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
         if ((date != null && (startTime == null || endTime == null)) ||
-                (date == null && (startTime != null || endTime != null))){
-           throw new BaseException(BaseResponseCode.NOT_DATE_TIME);
+                (date == null && (startTime != null || endTime != null))) {
+            throw new BaseException(BaseResponseCode.DATE_OR_TIME_IS_NULL);
         }
         return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime));
     }
@@ -53,7 +52,7 @@ public class OfficeController {
     public ResponseCustom<Map<String, List<BookedTimeRes>>> getOfficeBookedTimes(
             @PathVariable Long officeId,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
-    ){
+    ) {
         return ResponseCustom.OK(Map.of(BOOKEDTIMES, officeService.getOfficeBookedTimes(officeId, date)));
     }
 
@@ -76,6 +75,5 @@ public class OfficeController {
     /**
      * 회의실 예약 취소
      */
-
 
 }
