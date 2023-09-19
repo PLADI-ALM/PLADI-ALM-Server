@@ -15,7 +15,9 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.pladialmserver.global.Constants.Booking.BOOKEDTIMES;
+import static com.example.pladialmserver.global.Constants.Booking.BOOKED_TIMES;
+import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
+import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,9 +31,9 @@ public class OfficeController {
      */
     @GetMapping
     public ResponseCustom<List<OfficeRes>> searchOffice(
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime
+            @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
+            @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime
     ) {
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
         if ((date != null && (startTime == null || endTime == null)) ||
@@ -51,9 +53,9 @@ public class OfficeController {
     @GetMapping("/{officeId}/booking-state")
     public ResponseCustom<Map<String, List<BookedTimeRes>>> getOfficeBookedTimes(
             @PathVariable Long officeId,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+            @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date
     ) {
-        return ResponseCustom.OK(Map.of(BOOKEDTIMES, officeService.getOfficeBookedTimes(officeId, date)));
+        return ResponseCustom.OK(Map.of(BOOKED_TIMES, officeService.getOfficeBookedTimes(officeId, date)));
     }
 
     /**
