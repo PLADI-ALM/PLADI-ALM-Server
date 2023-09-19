@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
-
 @Getter
 @AllArgsConstructor
 public enum BaseResponseCode {
@@ -16,8 +15,11 @@ public enum BaseResponseCode {
     BAD_REQUEST("G0001", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
     //office
-    NOT_DATE_TIME("B0001", HttpStatus.BAD_REQUEST,"날짜나 시간을 모두 입력해주세요");
+    NOT_DATE_TIME("B0001", HttpStatus.BAD_REQUEST,"날짜나 시간을 모두 입력해주세요"),
 
+    // Office
+    OFFICE_NOT_FOUND("O0001", HttpStatus.NOT_FOUND, "존재하지 않는 회의실입니다."),
+    ;
 
     public final String code;
     public final HttpStatus status;

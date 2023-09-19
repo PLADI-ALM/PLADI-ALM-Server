@@ -1,4 +1,4 @@
-package com.example.pladialmserver.global;
+package com.example.pladialmserver.global.config;
 
 import com.ulisesbocchio.jasyptspringboot.configuration.EnableEncryptablePropertiesConfiguration;
 import org.jasypt.encryption.StringEncryptor;

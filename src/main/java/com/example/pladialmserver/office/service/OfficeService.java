@@ -1,6 +1,9 @@
 package com.example.pladialmserver.office.service;
 
-import com.example.pladialmserver.office.dto.OfficeRes;
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.office.dto.response.BookedTimeRes;
+import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeBooking;
@@ -21,8 +24,6 @@ public class OfficeService {
 
     private final OfficeRepository officeRepository;
     private final OfficeBookingRepository officeBookingRepository;
-
-
 
     public List<OfficeRes> findAvailableOffices(LocalDate date, LocalTime startTime, LocalTime endTime) {
         List<Office> allOffices = officeRepository.findAll();
@@ -56,4 +57,17 @@ public class OfficeService {
         return result;
     }
 
+    /**
+     * 회의실 일자별 예약 현황 조회
+     */
+    public List<BookedTimeRes> getOfficeBookedTimes(Long officeId, LocalDate date) {
+        Office office = officeRepository.findByOfficeIdAndIsEnable(officeId, true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+
+        List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDateAndIsEnable(office, date, true);
+
+        return bookings.stream()
+                .map(booking -> BookedTimeRes.toDto(booking.getStartTime(), booking.getEndTime()))
+                .collect(Collectors.toList());
+    }
 }

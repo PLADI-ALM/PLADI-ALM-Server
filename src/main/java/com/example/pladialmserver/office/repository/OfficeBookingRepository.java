@@ -1,5 +1,6 @@
 package com.example.pladialmserver.office.repository;
 
+import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeBooking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +16,6 @@ public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Lo
     @Query("SELECT ob FROM OfficeBooking ob WHERE ob.date = :date AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) OR (ob.startTime < :endTime AND ob.endTime >= :endTime))")
     List<OfficeBooking> findByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
 
+    List<OfficeBooking> findByOfficeAndDateAndIsEnable(Office office, LocalDate date, boolean isEnable);
 }
 

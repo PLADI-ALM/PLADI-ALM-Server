@@ -3,18 +3,19 @@ package com.example.pladialmserver.office.controller;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.office.dto.OfficeRes;
-import com.example.pladialmserver.office.entity.Office;
+import com.example.pladialmserver.office.dto.response.BookedTimeRes;
+import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+
+import static com.example.pladialmserver.global.Constants.Booking.BOOKEDTIMES;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,15 +41,21 @@ public class OfficeController {
         }
         return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime));
     }
+
     /**
      * 회의실 개별 조회
      */
 
-
-
     /**
      * 회의실 일자별 예약 현황 조회
      */
+    @GetMapping("/{officeId}/booking-state")
+    public ResponseCustom<Map<String, List<BookedTimeRes>>> getOfficeBookedTimes(
+            @PathVariable Long officeId,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    ){
+        return ResponseCustom.OK(Map.of(BOOKEDTIMES, officeService.getOfficeBookedTimes(officeId, date)));
+    }
 
     /**
      * 회의실 예약
