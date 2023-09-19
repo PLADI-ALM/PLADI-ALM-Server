@@ -24,11 +24,5 @@ public class OfficeRes {
                 .facilityList(facilities.stream().map(m -> OfficeFacilityRes.toDto(m.getName())).collect(Collectors.toList()))
                 .description(office.getDescription())
                 .build();
-//        OfficeRes officeRes=new OfficeRes();
-//        officeRes.name=office.getName();
-//        officeRes.location=office.getLocation();
-//        officeRes.capacity=office.getCapacity();
-//        officeRes.facilityList=facilities.stream().map(m -> OfficeFacilityRes.toDto(m.getName())).collect(Collectors.toList());
-//        return officeRes;
     }
 }
