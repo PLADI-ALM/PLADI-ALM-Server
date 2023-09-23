@@ -101,7 +101,7 @@ public class OfficeService {
         // todo: user 로직 생성 후 변경 예정
         User user = userRepository.findById(1L)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
-        Office office = officeRepository.findByOfficeIdAndIsEnable(officeId, true)
+        Office office = officeRepository.findByOfficeId(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         // 이미 예약되어 있는 시간인지 확인
