@@ -2,6 +2,9 @@ package com.example.pladialmserver.office.service;
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.global.user.entity.User;
+import com.example.pladialmserver.global.user.repository.UserRepository;
+import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.*;
@@ -9,6 +12,7 @@ import com.example.pladialmserver.office.repository.OfficeBookingRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,9 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OfficeService {
-
+    private final UserRepository userRepository;
     private final OfficeRepository officeRepository;
     private final OfficeBookingRepository officeBookingRepository;
 
@@ -86,5 +91,21 @@ public class OfficeService {
         return bookings.stream()
                 .map(booking -> BookedTimeRes.toDto(booking.getStartTime(), booking.getEndTime()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 회의실 예약하기
+     */
+    @Transactional
+    public void bookOffice(Long officeId, OfficeReq officeReq) {
+        // todo: user 로직 생성 후 변경 예정
+        User user = userRepository.findById(1L)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        Office office = officeRepository.findByOfficeIdAndIsEnable(officeId, true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+
+        // 이미 예약되어 있는 시간인지 확인
+        if(officeBookingRepository.existsByDateAndTime(officeReq.getDate(), officeReq.getStartTime(), officeReq.getEndTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
+        officeBookingRepository.save(OfficeBooking.toDto(user, office, officeReq));
     }
 }

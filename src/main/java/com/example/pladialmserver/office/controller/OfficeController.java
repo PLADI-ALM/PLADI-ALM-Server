@@ -3,6 +3,7 @@ package com.example.pladialmserver.office.controller;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -66,6 +68,17 @@ public class OfficeController {
     /**
      * 회의실 예약
      */
+    @PostMapping("/{officeId}/booking")
+    public ResponseCustom bookOffice(@PathVariable(name = "officeId") Long officeId,
+                                     @RequestBody @Valid OfficeReq officeReq){
+        // 현재보다 과거 날짜로 등록하는 경우
+        if(LocalDate.now().isAfter(officeReq.getDate())) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        // 끝나는 시간이 시작시간보다 빠른경우
+        if (!officeReq.getStartTime().isBefore(officeReq.getEndTime())) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
+        officeService.bookOffice(officeId, officeReq);
+        return ResponseCustom.OK();
+    }
+
 
     /**
      * 회의실 예약 목록 조회
