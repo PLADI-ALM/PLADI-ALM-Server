@@ -23,6 +23,7 @@ public enum BaseResponseCode {
     START_TIME_MUST_BE_IN_FRONT("B0003", HttpStatus.BAD_REQUEST, "시작시간보다 끝나는 시간이 더 앞에 있습니다."),
     DATE_MUST_BE_THE_FUTURE("B0004", HttpStatus.BAD_REQUEST, "미래의 날짜를 선택해주세요."),
     ALREADY_BOOKED_TIME("B0005", HttpStatus.BAD_REQUEST, "이미 예약되어 있는 시간입니다."),
+    BOOKING_NOT_FOUND("B0006", HttpStatus.NOT_FOUND, "존재하지 않는 예약입니다."),
 
     // Office
     OFFICE_NOT_FOUND("O0001", HttpStatus.NOT_FOUND, "존재하지 않는 회의실입니다."),
