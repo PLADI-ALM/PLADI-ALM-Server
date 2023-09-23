@@ -46,6 +46,11 @@ public class OfficeController {
     /**
      * 회의실 개별 조회
      */
+    @GetMapping("/{officeId}")
+    public ResponseCustom<OfficeRes> getOffice(@PathVariable(name="officeId") Long officeId){
+        return ResponseCustom.OK(officeService.getOffice(officeId));
+    }
+
 
     /**
      * 회의실 일자별 예약 현황 조회
