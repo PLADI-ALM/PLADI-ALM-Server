@@ -83,7 +83,7 @@ public class OfficeService {
     @Transactional
     public void bookOffice(Long officeId, OfficeReq officeReq) {
         // todo: user 로직 생성 후 변경 예정
-        User user = userRepository.findByUserIdAndIsEnable(1L, true)
+        User user = userRepository.findById(1L)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         Office office = officeRepository.findByOfficeIdAndIsEnable(officeId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
