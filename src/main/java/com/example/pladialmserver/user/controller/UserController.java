@@ -1,6 +1,6 @@
-package com.example.pladialmserver.global.user.controller;
+package com.example.pladialmserver.user.controller;
 
-import com.example.pladialmserver.global.user.service.UserService;
+import com.example.pladialmserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

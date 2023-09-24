@@ -1,6 +1,6 @@
-package com.example.pladialmserver.global.user.service;
+package com.example.pladialmserver.user.service;
 
-import com.example.pladialmserver.global.user.repository.UserRepository;
+import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

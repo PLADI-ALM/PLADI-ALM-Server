@@ -79,21 +79,4 @@ public class OfficeController {
         return ResponseCustom.OK();
     }
 
-
-    /**
-     * 회의실 예약 목록 조회
-     */
-
-    /**
-     * 회의실 예약 개별 조회
-     */
-
-    /**
-     * 회의실 예약 수정
-     */
-
-    /**
-     * 회의실 예약 취소
-     */
-
 }

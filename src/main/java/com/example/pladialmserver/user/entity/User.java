@@ -1,10 +1,11 @@
-package com.example.pladialmserver.global.user.entity;
+package com.example.pladialmserver.user.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
-import com.example.pladialmserver.office.entity.OfficeBooking;
+import com.example.pladialmserver.booking.entity.OfficeBooking;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "is_enable = true")
 public class User extends BaseEntity {
 
     @Id

@@ -1,14 +1,15 @@
 package com.example.pladialmserver.office.service;
 
+import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.global.user.entity.User;
-import com.example.pladialmserver.global.user.repository.UserRepository;
+import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.UserRepository;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.*;
-import com.example.pladialmserver.office.repository.OfficeBookingRepository;
+import com.example.pladialmserver.booking.repository.OfficeBookingRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
