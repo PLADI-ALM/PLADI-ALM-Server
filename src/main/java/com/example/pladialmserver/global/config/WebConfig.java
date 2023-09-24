@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 // todo: server url 생성 시 변경 필요
 //                .allowedOrigins("url:8080", "http://localhost:8080")
-                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name()) // 허용 method
+                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name(), HttpMethod.OPTIONS.name()) // 허용 method
                 .allowedHeaders("Authorization", "Content-Type"); // 허용 header
     }
 }
