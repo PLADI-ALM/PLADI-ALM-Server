@@ -41,7 +41,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
         // 사용자가 예약한 경우가 아니면
-        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NOT_MATCHED_BOOKING_USER);
+        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
         // 이미 취소된 예약이면
         if(officeBooking.getStatus().equals(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
         // 취소하려는 예약이 이미 사용이 완료된 경우
