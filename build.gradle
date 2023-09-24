@@ -47,6 +47,11 @@ dependencies {
 	// queryDSL
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// Swagger3 gradle
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation("io.swagger:swagger-annotations:1.5.21")
+	implementation("io.swagger:swagger-models:1.5.21")
 }
 
 tasks.named('test') {
