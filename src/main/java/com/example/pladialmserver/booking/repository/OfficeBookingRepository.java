@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Repository
-public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Long> {
+public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Long>, OfficeBookingCustom {
     @Query("SELECT ob FROM OfficeBooking ob WHERE ob.date = :date AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) OR (ob.startTime < :endTime AND ob.endTime >= :endTime))")
     List<OfficeBooking> findByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
 
