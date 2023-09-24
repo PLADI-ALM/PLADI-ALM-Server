@@ -7,6 +7,12 @@ import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +27,7 @@ import static com.example.pladialmserver.global.Constants.Booking.BOOKED_TIMES;
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
 
+@Api(tags = "회의실 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/offices")
@@ -31,6 +38,11 @@ public class OfficeController {
     /**
      * 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
      */
+    @Operation(summary = "회의실 목록 조회", description = "회의실 목록 조회를 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
     @GetMapping
     public ResponseCustom<List<OfficeRes>> searchOffice(
             @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
@@ -48,6 +60,11 @@ public class OfficeController {
     /**
      * 회의실 개별 조회
      */
+    @Operation(summary = "회의실 개별 조회", description = "회의실 개별 조회를 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(O0001)존재하지 않는 회의실입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
     @GetMapping("/{officeId}")
     public ResponseCustom<OfficeRes> getOffice(@PathVariable(name="officeId") Long officeId){
         return ResponseCustom.OK(officeService.getOffice(officeId));
