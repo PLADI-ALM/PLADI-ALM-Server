@@ -24,6 +24,9 @@ public enum BaseResponseCode {
     DATE_MUST_BE_THE_FUTURE("B0004", HttpStatus.BAD_REQUEST, "미래의 날짜를 선택해주세요."),
     ALREADY_BOOKED_TIME("B0005", HttpStatus.BAD_REQUEST, "이미 예약되어 있는 시간입니다."),
     BOOKING_NOT_FOUND("B0006", HttpStatus.NOT_FOUND, "존재하지 않는 예약입니다."),
+    NOT_MATCHED_BOOKING_USER("B0007", HttpStatus.NOT_FOUND, "사용자가 예약한 내역이 아닙니다."),
+    ALREADY_CANCELED_BOOKING("B0008", HttpStatus.NOT_FOUND, "이미 취소된 예약입니다."),
+    ALREADY_FINISHED_BOOKING("B0009", HttpStatus.NOT_FOUND, "이미 사용이 완료된 예약입니다."),
 
     // Office
     OFFICE_NOT_FOUND("O0001", HttpStatus.NOT_FOUND, "존재하지 않는 회의실입니다."),

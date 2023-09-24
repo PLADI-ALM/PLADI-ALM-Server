@@ -74,4 +74,8 @@ public class OfficeBooking extends BaseEntity {
                 .memo(req.getMemo())
                 .build();
     }
+
+    public void cancelOffice(){
+        this.status = BookingStatus.CANCELED;
+    }
 }
