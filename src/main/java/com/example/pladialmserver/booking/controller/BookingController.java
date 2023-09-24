@@ -39,5 +39,11 @@ public class BookingController {
     /**
      * 회의실 예약 취소
      */
+    @PatchMapping("/offices/{officeBookingId}")
+    public ResponseCustom cancelBookingOffice(@PathVariable(name = "officeBookingId") Long officeBookingId) {
+        bookingService.cancelBookingOffice(officeBookingId);
+        return ResponseCustom.OK();
+    }
+
 
 }
