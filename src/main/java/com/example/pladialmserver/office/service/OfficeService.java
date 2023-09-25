@@ -47,13 +47,15 @@ public class OfficeService {
             allOffices = officeRepository.findAll(pageable);
         }
 
-        List<OfficeRes> result = allOffices.getContent().stream().map(office -> {
-            List<Facility> facilities = office.getFacilityList().stream().map(OfficeFacility::getFacility).collect(Collectors.toList());
-            List<String> imgUrls = office.getImgList().stream().map(OfficeImg::getImgUrl).collect(Collectors.toList());
+        return allOffices.map(office -> {
+            List<Facility> facilities = office.getFacilityList().stream()
+                    .map(OfficeFacility::getFacility)
+                    .collect(Collectors.toList());
+            List<String> imgUrls = office.getImgList().stream()
+                    .map(OfficeImg::getImgUrl)
+                    .collect(Collectors.toList());
             return OfficeRes.toDto(office, facilities, imgUrls);
-        }).collect(Collectors.toList());
-
-        return new PageImpl<>(result, pageable, allOffices.getTotalElements());
+        });
     }
 
      //회의실 개별 조회
