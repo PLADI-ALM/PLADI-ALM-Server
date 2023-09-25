@@ -2,6 +2,8 @@ package com.example.pladialmserver.booking.repository;
 
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,8 +15,8 @@ import java.util.List;
 
 @Repository
 public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Long>, OfficeBookingCustom {
-    @Query("SELECT ob FROM OfficeBooking ob WHERE ob.date = :date AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) OR (ob.startTime < :endTime AND ob.endTime >= :endTime))")
-    List<OfficeBooking> findByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
+    @Query("SELECT ob.office.officeId FROM OfficeBooking ob WHERE ob.date = :date AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) OR (ob.startTime < :endTime AND ob.endTime >= :endTime))")
+    List<Long> findBookedOfficeIdsByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
 
     // todo: querydsl 로 코드 수정 예정
     @Query("SELECT count(ob.officeBookingId) > 0 FROM OfficeBooking ob WHERE ob.date = :date AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) OR (ob.startTime < :endTime AND ob.endTime >= :endTime))")
