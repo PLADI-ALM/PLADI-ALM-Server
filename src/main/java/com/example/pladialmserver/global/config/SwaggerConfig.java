@@ -19,6 +19,10 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +42,10 @@ public class SwaggerConfig {
                 .additionalModels(
                         typeResolver.resolve(ResponseCustom.class)
                 )
+                .directModelSubstitute(LocalDateTime.class, String.class)
+                .directModelSubstitute(LocalDate.class, String.class)
+                .directModelSubstitute(LocalTime.class, String.class)
+                .directModelSubstitute(ZonedDateTime.class, String.class)
                 .apiInfo(apiInfo())
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
