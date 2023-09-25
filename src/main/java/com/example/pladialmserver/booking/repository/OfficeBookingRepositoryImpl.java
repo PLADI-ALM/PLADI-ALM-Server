@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +35,16 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), res.size());
         return new PageImpl<>(res.subList(start, end), pageable, res.size());
+    }
+
+    @Override
+    public Boolean existsByDateAndTime(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        Integer fetchOne = jpaQueryFactory.selectOne()
+                .from(officeBooking)
+                .where(officeBooking.date.eq(date)
+                        .and(officeBooking.startTime.loe(startTime).and(officeBooking.endTime.gt(startTime)))
+                        .or(officeBooking.startTime.lt(endTime).and(officeBooking.endTime.goe(endTime))))
+                .fetchFirst();
+        return fetchOne != null;
     }
 }
