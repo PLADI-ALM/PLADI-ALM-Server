@@ -9,17 +9,20 @@ import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Map;
 
@@ -44,17 +47,18 @@ public class OfficeController {
             @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping
-    public ResponseCustom<List<OfficeRes>> searchOffice(
-            @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
-            @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
-            @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime
+    public ResponseCustom<Page<OfficeRes>> searchOffice(
+            @Parameter(description = "예약 날짜",example = "2023-09-20") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
+            @Parameter(description = "시작 예약 시간",example = "14:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
+            @Parameter(description = "종료 예약 시간",example = "15:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
+            Pageable pageable
     ) {
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
         if ((date != null && (startTime == null || endTime == null)) ||
                 (date == null && (startTime != null || endTime != null))) {
             throw new BaseException(BaseResponseCode.DATE_OR_TIME_IS_NULL);
         }
-        return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime));
+        return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime,pageable));
     }
 
     /**
