@@ -21,5 +21,9 @@ spring:
 server:
   port: 8080
 
+aws:
+  s3:
+    region: ENC(AVCMaqBKtI5yHdJHx9XNjik58YlUD/EY)
+    bucket: ENC(lv1CzlIwi9jUaOJJth3Ppf73A1VpIoRb)
 
 
