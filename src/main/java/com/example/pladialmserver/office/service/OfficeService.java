@@ -42,8 +42,12 @@ public class OfficeService {
             List<Long> bookedOfficeIds = officeBookingRepository.findBookedOfficeIdsByDateAndTime(date, startTime, endTime);
 
             // 예약된 회의실을 제외한 회의실 목록을 페이징 처리하여 조회
-            allOffices = officeRepository.findAllByOfficeIdNotIn(bookedOfficeIds, pageable);
-        } else {
+            if (!bookedOfficeIds.isEmpty()) {
+                allOffices = officeRepository.findAllByOfficeIdNotIn(bookedOfficeIds, pageable);
+            } else {
+                allOffices = officeRepository.findAll(pageable);
+            }
+        }else{
             allOffices = officeRepository.findAll(pageable);
         }
 
