@@ -103,7 +103,7 @@ public class OfficeController {
         // 현재보다 과거 날짜로 등록하는 경우
         if(LocalDate.now().isAfter(officeReq.getDate())) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
         // 끝나는 시간이 시작시간보다 빠른경우
-        if (!officeReq.getStartTime().isBefore(officeReq.getEndTime())) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
+        if (!officeReq.getStartTime().isBefore(officeReq.getEndTime()) && !officeReq.getEndTime().equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
         officeService.bookOffice(officeId, officeReq);
         return ResponseCustom.OK();
     }
