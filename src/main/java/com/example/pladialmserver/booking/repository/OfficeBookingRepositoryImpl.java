@@ -54,7 +54,7 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
         return jpaQueryFactory.selectFrom(officeBooking)
                 .where(officeBooking.status.eq(BookingStatus.BOOKED)
                         .and(officeBooking.date.eq(LocalDate.now()))
-                        .and(officeBooking.startTime.hour().eq(LocalTime.now().getHour())))
+                        .and(officeBooking.endTime.hour().eq(LocalTime.now().getHour())))
                 .fetch();
     }
 }
