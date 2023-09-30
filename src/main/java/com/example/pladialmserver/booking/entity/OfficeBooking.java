@@ -2,9 +2,9 @@ package com.example.pladialmserver.booking.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
-import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.entity.Office;
+import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -75,7 +75,11 @@ public class OfficeBooking extends BaseEntity {
                 .build();
     }
 
-    public void cancelOffice(){
+    public void cancelBookingOffice(){
         this.status = BookingStatus.CANCELED;
+    }
+
+    public void finishBookingOffice(){
+        this.status = BookingStatus.FINISHED;
     }
 }
