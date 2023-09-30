@@ -1,6 +1,7 @@
 package com.example.pladialmserver.booking.dto.response;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,9 +20,9 @@ public class OfficeBookingDetailRes {
 
     public static OfficeBookingDetailRes toDto(OfficeBooking officeBooking) {
         return OfficeBookingDetailRes.builder()
-                .date(officeBooking.getDate().format(DateTimeFormatter.ofPattern(DATE_PATTERN)))
-                .startTime(officeBooking.getStartTime().format(DateTimeFormatter.ofPattern(TIME_PATTERN)))
-                .endTime(officeBooking.getEndTime().format(DateTimeFormatter.ofPattern(TIME_PATTERN)))
+                .date(DateTimeUtil.dateToString(officeBooking.getDate()))
+                .startTime(DateTimeUtil.timeToString(officeBooking.getStartTime()))
+                .endTime(DateTimeUtil.timeToString(officeBooking.getEndTime()))
                 .memo(officeBooking.getMemo())
                 .build();
     }
