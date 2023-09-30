@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
+@DynamicUpdate
 @Where(clause = "is_enable = true")
 public class OfficeBooking extends BaseEntity {
 

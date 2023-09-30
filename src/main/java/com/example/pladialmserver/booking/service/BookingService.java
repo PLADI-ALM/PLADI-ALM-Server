@@ -74,7 +74,6 @@ public class BookingService {
      */
     @Transactional
     @Scheduled(cron="0 0 * * * *", zone="GMT+9:00") // 매시간 정각에 스케줄링
-
     public void checkBookingTime(){
         // 매시간 정각에 예약되어 있는 회의실을 찾아서
         List<OfficeBooking> checkList = officeBookingRepository.findByStatusAndDateAndStartTime(BookingStatus.BOOKED);
