@@ -2,6 +2,7 @@ package com.example.pladialmserver.booking.repository;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,14 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
                         .or(officeBooking.startTime.lt(endTime).and(officeBooking.endTime.goe(endTime))))
                 .fetchFirst();
         return fetchOne != null;
+    }
+
+    @Override
+    public List<OfficeBooking> findByStatusAndDateAndStartTime(BookingStatus status) {
+        return jpaQueryFactory.selectFrom(officeBooking)
+                .where(officeBooking.status.eq(BookingStatus.BOOKED)
+                        .and(officeBooking.date.eq(LocalDate.now()))
+                        .and(officeBooking.endTime.hour().eq(LocalTime.now().getHour())))
+                .fetch();
     }
 }

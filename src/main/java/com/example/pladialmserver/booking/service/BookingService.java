@@ -3,17 +3,20 @@ package com.example.pladialmserver.booking.service;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.booking.repository.OfficeBookingRepository;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
-import com.example.pladialmserver.booking.repository.OfficeBookingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -62,8 +65,22 @@ public class BookingService {
         if(officeBooking.getStatus().equals(BookingStatus.FINISHED)) throw new BaseException(BaseResponseCode.ALREADY_FINISHED_BOOKING);
 
         // 예약 취소
-        officeBooking.cancelOffice();
+        officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+    }
+
+    /**
+     * 회의실 예약 상태 변경 스케줄링
+     */
+    @Transactional
+    @Scheduled(cron="0 0 * * * *", zone="GMT+9:00") // 매시간 정각에 스케줄링
+    public void checkBookingTime(){
+        // 매시간 정각에 예약되어 있는 회의실을 찾아서
+        List<OfficeBooking> checkList = officeBookingRepository.findByStatusAndDateAndStartTime(BookingStatus.BOOKED);
+        // FINISHED로 변경
+        checkList.forEach(OfficeBooking::finishBookingOffice);
+        // 저장
+        officeBookingRepository.saveAll(checkList);
     }
 
 }
