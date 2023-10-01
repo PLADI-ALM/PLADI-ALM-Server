@@ -1,5 +1,6 @@
 package com.example.pladialmserver.office.dto.response;
 
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,8 +17,8 @@ public class BookedTimeRes {
 
     public static BookedTimeRes toDto(LocalTime startTime, LocalTime endTime){
         return BookedTimeRes.builder()
-                .startTime(startTime.format(DateTimeFormatter.ofPattern(TIME_PATTERN)))
-                .endTime(endTime.format(DateTimeFormatter.ofPattern(TIME_PATTERN)))
+                .startTime(DateTimeUtil.timeToString(startTime))
+                .endTime(DateTimeUtil.timeToString(endTime))
                 .build();
     }
 }

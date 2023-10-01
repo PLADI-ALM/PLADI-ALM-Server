@@ -1,6 +1,7 @@
 package com.example.pladialmserver.booking.dto.response;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,15 +28,10 @@ public class BookingRes {
                 .id(officeBooking.getOfficeBookingId())
                 .name(officeBooking.getOffice().getName())
                 .location(officeBooking.getOffice().getLocation())
-                .startDateTime(dateAndTimeConvertString(officeBooking.getDate(), officeBooking.getStartTime()))
-                .endDateTime(dateAndTimeConvertString(officeBooking.getDate(), officeBooking.getEndTime()))
+                .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(), officeBooking.getStartTime()))
+                .endDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(), officeBooking.getEndTime()))
                 .status(officeBooking.getStatus().getValue())
                 .build();
-    }
-
-    // localDate + localTime => localDateTime (String)
-    private static String dateAndTimeConvertString(LocalDate date, LocalTime time) {
-        return LocalDateTime.of(date, time).format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 
 }
