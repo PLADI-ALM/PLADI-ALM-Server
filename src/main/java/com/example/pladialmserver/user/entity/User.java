@@ -35,10 +35,12 @@ public class User extends BaseEntity {
     @Size(max = 255)
     private String password;
 
-    @NotNull
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "department_id")
     private Department department;
 
-    @NotNull
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "position_id")
     private Position position;
 
     @NotNull
@@ -46,6 +48,7 @@ public class User extends BaseEntity {
     private String officeJob;
 
     @NotNull
+    @Enumerated(value = EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user")

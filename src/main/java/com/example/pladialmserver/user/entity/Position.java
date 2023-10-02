@@ -1,21 +1,36 @@
 package com.example.pladialmserver.user.entity;
 
+import com.example.pladialmserver.booking.entity.OfficeBooking;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 @Getter
-@RequiredArgsConstructor
-public enum Position {
-  INTERN("인턴"),
-  EMPLOYEE("사원"),
-  MANAGER("과장"),
-  ASSISTANT("대리"),
-  CONDUCTOR("차장"),
-  DIRECTOR("부장"),
-  CEO("사장"),
-  VICE_PRESIDENT("부사장"),
-  CHAIRMAN("회장"),
-  VICE_CHAIRMAN("부회장");
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
+@Where(clause = "is_enable = true")
+public class Position {
 
-  private final String value;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long positionId;
+
+  @NotNull
+  @Size(max = 30)
+  private String name;
+
+  @OneToMany(mappedBy = "position")
+  private List<User> officeBookingList = new ArrayList<>();
 }
