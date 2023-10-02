@@ -1,12 +1,9 @@
 package com.example.pladialmserver.booking.entity;
 
-import com.example.pladialmserver.equipment.entity.Category;
 import com.example.pladialmserver.global.entity.BookingStatus;
-import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.resouce.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -52,6 +49,5 @@ public class ResourceBooking {
   @Size(max = 100)
   private String memo;
 
-  @NotNull
   private BookingStatus status = BookingStatus.WAITING;
 }
