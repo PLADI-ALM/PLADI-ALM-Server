@@ -41,7 +41,7 @@ public class BookingController {
      */
     @Operation(summary = "회의실 예약 개별 조회", description = "회의실 예약 내역을 개별 조회한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)회의실 에약 개별 조회 성공", content = @Content(schema = @Schema(implementation = OfficeBookingDetailRes.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약 개별 조회 성공"),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
