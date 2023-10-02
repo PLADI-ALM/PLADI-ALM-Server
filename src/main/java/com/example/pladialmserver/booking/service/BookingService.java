@@ -76,7 +76,7 @@ public class BookingService {
     @Scheduled(cron="0 0 * * * *", zone="GMT+9:00") // 매시간 정각에 스케줄링
     public void checkBookingTime(){
         // 매시간 정각에 예약이 끝나는 회의실을 찾아서
-        List<OfficeBooking> checkETList = officeBookingRepository.findByStatusAndDateAndEndTime(BookingStatus.BOOKED);
+        List<OfficeBooking> checkETList = officeBookingRepository.findByStatusAndDateAndEndTime(BookingStatus.USING);
         // FINISHED로 변경
         checkETList.forEach(OfficeBooking::finishBookingOffice);
         // 저장
