@@ -22,6 +22,8 @@ public class OfficeBookingDetailRes {
     private String endTime;
     @Schema(type = "String", description = "이용목적", maxLength = 30)
     private String memo;
+    @Schema(type = "String", description = "예약상태", example = "예약중")
+    private String bookingStatus;
 
     public static OfficeBookingDetailRes toDto(OfficeBooking officeBooking) {
         return OfficeBookingDetailRes.builder()
@@ -30,6 +32,7 @@ public class OfficeBookingDetailRes {
                 .startTime(DateTimeUtil.timeToString(officeBooking.getStartTime()))
                 .endTime(DateTimeUtil.timeToString(officeBooking.getEndTime()))
                 .memo(officeBooking.getMemo())
+                .bookingStatus(officeBooking.getStatus().getValue())
                 .build();
     }
 }
