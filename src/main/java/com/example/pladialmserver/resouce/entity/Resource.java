@@ -34,7 +34,6 @@ public class Resource {
   @Size(max = 255)
   private String description;
 
-  @NotNull
   @Size(max = 255)
   private String imgUrl;
 }

@@ -30,7 +30,4 @@ public class Position {
   @NotNull
   @Size(max = 30)
   private String name;
-
-  @OneToMany(mappedBy = "position")
-  private List<User> officeBookingList = new ArrayList<>();
 }
