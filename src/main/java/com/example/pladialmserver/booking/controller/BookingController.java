@@ -69,5 +69,17 @@ public class BookingController {
         return ResponseCustom.OK();
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////
 
+
+    /**
+     * 자원 예약 취소
+     */
+    @PatchMapping("/resources/{resourceBookingId}/cancel")
+    public ResponseCustom cancelBookingResource(
+            @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
+    ){
+        bookingService.cancelBookingResource(resourceBookingId);
+        return ResponseCustom.OK();
+    }
 }
