@@ -1,6 +1,6 @@
 package com.example.pladialmserver.resouce.service;
 
-import com.example.pladialmserver.booking.repository.ResourceBookingRepository;
+import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
 import com.example.pladialmserver.resouce.repository.ResourceRepository;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

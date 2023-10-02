@@ -1,4 +1,4 @@
-package com.example.pladialmserver.booking.repository;
+package com.example.pladialmserver.booking.repository.officeBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
