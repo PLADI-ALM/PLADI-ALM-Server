@@ -28,9 +28,16 @@ public class BookingController {
     /**
      * 예약 목록 조회
      */
+    @Operation(summary = "예약 목록 조회", description = "회의실 및 비품 예약 내역을 전체 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(G0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
     @GetMapping
-    public ResponseCustom<Page<BookingRes>> getBookings(@RequestParam(required = false) String category,
-                                                        @PageableDefault(size = 8) Pageable pageable){
+    public ResponseCustom<Page<BookingRes>> getBookings(
+            @Parameter(description = "(String) 카테고리 선택", example = "'office' / 'resource'") @RequestParam(required = false) String category,
+            @PageableDefault(size = 8) Pageable pageable){
         // TODO 유저 ID 받아오는 로직 추가, category 검증 추가 (queryDSL 변경 후 적용)
         Long userId = 1L;
         return ResponseCustom.OK(bookingService.getBookings(userId, category, pageable));
