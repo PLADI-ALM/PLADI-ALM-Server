@@ -75,12 +75,19 @@ public class BookingService {
     @Transactional
     @Scheduled(cron="0 0 * * * *", zone="GMT+9:00") // 매시간 정각에 스케줄링
     public void checkBookingTime(){
-        // 매시간 정각에 예약되어 있는 회의실을 찾아서
-        List<OfficeBooking> checkList = officeBookingRepository.findByStatusAndDateAndEndTime(BookingStatus.BOOKED);
+        // 매시간 정각에 예약이 끝나는 회의실을 찾아서
+        List<OfficeBooking> checkETList = officeBookingRepository.findByStatusAndDateAndEndTime(BookingStatus.BOOKED);
         // FINISHED로 변경
-        checkList.forEach(OfficeBooking::finishBookingOffice);
+        checkETList.forEach(OfficeBooking::finishBookingOffice);
         // 저장
-        officeBookingRepository.saveAll(checkList);
+        officeBookingRepository.saveAll(checkETList);
+
+        // 매시간 정각에 예약이 시작되는 회의실을 찾아서
+        List<OfficeBooking> checkSTList = officeBookingRepository.findByStatusAndDateAndStartTime(BookingStatus.BOOKED);
+        // USING 으로 변경
+        checkSTList.forEach(OfficeBooking::usingBookingOffice);
+        // 저장
+        officeBookingRepository.saveAll(checkSTList);
     }
 
 }
