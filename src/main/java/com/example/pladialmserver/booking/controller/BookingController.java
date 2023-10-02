@@ -2,6 +2,7 @@ package com.example.pladialmserver.booking.controller;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
 import com.example.pladialmserver.booking.service.BookingService;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import io.swagger.annotations.Api;
@@ -70,6 +71,16 @@ public class BookingController {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 자원 예약 개별 조회
+     */
+    @GetMapping("/resources/{resourceBookingId}")
+    public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(@Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
+        // TODO 유저 ID 받아오는 로직 추가
+        Long userId = 1L;
+        return ResponseCustom.OK(bookingService.getResourceBookingDetail(userId, resourceBookingId));
+    }
 
 
     /**

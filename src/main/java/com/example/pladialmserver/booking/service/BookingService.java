@@ -2,6 +2,7 @@ package com.example.pladialmserver.booking.service;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
@@ -97,6 +98,19 @@ public class BookingService {
     }
 
     /**
+     * 자원 예약 개별 조회
+     */
+    public ResourceBookingDetailRes getResourceBookingDetail(Long userId, Long resourceBookingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+
+        return ResourceBookingDetailRes.toDto(resourceBooking);
+    }
+
+    /**
      * 자원 예약 취소
      */
     @Transactional
@@ -118,4 +132,5 @@ public class BookingService {
         resourceBooking.cancelBookingResource();
         resourceBookingRepository.save(resourceBooking);
     }
+
 }
