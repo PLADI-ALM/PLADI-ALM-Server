@@ -1,9 +1,12 @@
 package com.example.pladialmserver.booking.entity;
 
+import com.example.pladialmserver.equipment.entity.Category;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.office.entity.Office;
+import com.example.pladialmserver.resouce.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -14,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -32,8 +36,8 @@ public class ResourceBooking {
   private User user;
 
   @ManyToOne
-  @JoinColumn(nullable = false, name = "office_id")
-  private Office office;
+  @JoinColumn(nullable = false, name = "resource_id")
+  private Resource resource;
 
   @NotNull
   private LocalDate startDate;
@@ -42,12 +46,12 @@ public class ResourceBooking {
   private LocalDate endDate;
 
   @NotNull
-  private LocalDate returnDate;
+  private LocalDateTime returnDate;
 
   @NotNull
   @Size(max = 100)
   private String memo;
 
   @NotNull
-  private BookingStatus status;
+  private BookingStatus status = BookingStatus.WAITING;
 }
