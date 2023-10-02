@@ -32,10 +32,18 @@ public class BookingService {
      * 예약 목록 조회
      */
     public Page<BookingRes> getBookings(Long userId, String category, Pageable pageable) {
-        // TODO 비품 테이블명 정한 후, category 분리 로직 추가
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
-        return officeBookingRepository.getBookingsByUser(user, pageable);
+
+        // TODO : QueryDSL로 상수 없애기
+        if(category.equals("office")) {
+            return officeBookingRepository.getBookingsByUser(user, pageable);
+        }
+        else if(category.equals("resource")) {
+            return resourceBookingRepository.getBookingsByUser(user, pageable);
+        } else {
+            throw new BaseException(BaseResponseCode.BAD_REQUEST);
+        }
     }
 
     /**

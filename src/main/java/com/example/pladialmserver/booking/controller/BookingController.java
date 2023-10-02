@@ -31,7 +31,7 @@ public class BookingController {
     @GetMapping
     public ResponseCustom<Page<BookingRes>> getBookings(@RequestParam(required = false) String category,
                                                         @PageableDefault(size = 8) Pageable pageable){
-        // TODO 유저 ID 받아오는 로직 추가
+        // TODO 유저 ID 받아오는 로직 추가, category 검증 추가 (queryDSL 변경 후 적용)
         Long userId = 1L;
         return ResponseCustom.OK(bookingService.getBookings(userId, category, pageable));
     }
