@@ -23,7 +23,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
     public Page<BookingRes> getBookingsByUser(User user, Pageable pageable) {
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.user.eq(user)
-                        .and(resourceBooking.user.isEnable).eq(true))
+                        .and(resourceBooking.isEnable.eq(true)))
                 .orderBy(resourceBooking.createdAt.desc())
                 .fetch();
 
