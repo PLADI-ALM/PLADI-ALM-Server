@@ -29,7 +29,4 @@ public class Department {
   @NotNull
   @Size(max = 30)
   private String name;
-
-  @OneToMany(mappedBy = "department")
-  private List<User> officeBookingList = new ArrayList<>();
 }
