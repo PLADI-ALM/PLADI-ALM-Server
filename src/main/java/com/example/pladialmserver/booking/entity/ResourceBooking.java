@@ -54,4 +54,6 @@ public class ResourceBooking {
   public void cancelBookingResource() {
     status = BookingStatus.CANCELED;
   }
+
+  public void returnBookingResource() { status = BookingStatus.FINISHED; }
 }
