@@ -14,5 +14,6 @@ import java.util.List;
 public interface OfficeBookingCustom {
     Page<BookingRes> getBookingsByUser(User user, Pageable pageable);
     Boolean existsByDateAndTime(LocalDate date, LocalTime startTime, LocalTime endTime);
+    List<OfficeBooking> findByStatusAndDateAndEndTime(BookingStatus status);
     List<OfficeBooking> findByStatusAndDateAndStartTime(BookingStatus status);
 }

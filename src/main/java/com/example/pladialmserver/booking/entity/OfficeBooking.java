@@ -84,4 +84,8 @@ public class OfficeBooking extends BaseEntity {
     public void finishBookingOffice(){
         this.status = BookingStatus.FINISHED;
     }
+
+    public void usingBookingOffice(){
+        this.status = BookingStatus.USING;
+    }
 }
