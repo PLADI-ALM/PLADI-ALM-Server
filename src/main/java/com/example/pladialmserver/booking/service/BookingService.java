@@ -38,9 +38,12 @@ public class BookingService {
     /**
      * 회의실 예약 개별 조회
      */
-    public OfficeBookingDetailRes getOfficeBookingDetail(Long officeBookingId) {
+    public OfficeBookingDetailRes getOfficeBookingDetail(Long userId, Long officeBookingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
 
         return OfficeBookingDetailRes.toDto(officeBooking);
     }

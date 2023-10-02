@@ -39,9 +39,17 @@ public class BookingController {
     /**
      * 회의실 예약 개별 조회
      */
+    @Operation(summary = "회의실 예약 개별 조회", description = "회의실 예약 내역을 개별 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약 개별 조회 성공"),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
     @GetMapping("/offices/{officeBookingId}")
-    public ResponseCustom<OfficeBookingDetailRes> getOfficeBookingDetail(@PathVariable(name="officeBookingId") Long officeBookingId){
-        return ResponseCustom.OK(bookingService.getOfficeBookingDetail(officeBookingId));
+    public ResponseCustom<OfficeBookingDetailRes> getOfficeBookingDetail(@Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name="officeBookingId") Long officeBookingId){
+        // TODO 유저 ID 받아오는 로직 추가
+        Long userId = 1L;
+        return ResponseCustom.OK(bookingService.getOfficeBookingDetail(userId, officeBookingId));
     }
 
     /**
