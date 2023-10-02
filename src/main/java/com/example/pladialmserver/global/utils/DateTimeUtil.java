@@ -24,5 +24,8 @@ public class DateTimeUtil {
         return time.format(DateTimeFormatter.ofPattern(TIME_PATTERN));
     }
 
-
+    // localDateTime => string(YYYY-MM-DD HH:MM)
+    public static String dateTimeToString(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+    }
 }
