@@ -3,6 +3,7 @@ package com.example.pladialmserver.office.service;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
@@ -79,15 +80,15 @@ public class OfficeService {
     /**
      * 회의실 일자별 예약 현황 조회
      */
-    public List<BookedTimeRes> getOfficeBookedTimes(Long officeId, LocalDate date) {
+    public BookingStateRes getOfficeBookedTimes(Long officeId, LocalDate date) {
         Office office = officeRepository.findById(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDate(office, date);
 
-        return bookings.stream()
+        return BookingStateRes.toDto(bookings.stream()
                 .map(booking -> BookedTimeRes.toDto(booking.getStartTime(), booking.getEndTime()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     /**

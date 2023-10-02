@@ -4,7 +4,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
-import com.example.pladialmserver.office.dto.response.BookedTimeRes;
+import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
 import io.swagger.annotations.Api;
@@ -23,10 +23,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.springframework.data.domain.Pageable;
-import java.util.List;
-import java.util.Map;
 
-import static com.example.pladialmserver.global.Constants.Booking.BOOKED_TIMES;
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
 
@@ -76,14 +73,19 @@ public class OfficeController {
 
 
     /**
-     * 회의실 일자별 예약 현황 조회
+     * 일자별 회의실 예약 현황 조회
      */
+    @Operation(summary = "일자별 회의실 예약 현황 조회", description = "일자별 회의실 예약 현황 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)일자별 회의실 예약 현황 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
     @GetMapping("/{officeId}/booking-state")
-    public ResponseCustom<Map<String, List<BookedTimeRes>>> getOfficeBookedTimes(
-            @PathVariable Long officeId,
-            @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date
+    public ResponseCustom<BookingStateRes> getOfficeBookedTimes(
+            @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable Long officeId,
+            @Parameter(description = "(String) 일자", example = "2023-10-02") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date
     ) {
-        return ResponseCustom.OK(Map.of(BOOKED_TIMES, officeService.getOfficeBookedTimes(officeId, date)));
+        return ResponseCustom.OK(officeService.getOfficeBookedTimes(officeId, date));
     }
 
     /**
