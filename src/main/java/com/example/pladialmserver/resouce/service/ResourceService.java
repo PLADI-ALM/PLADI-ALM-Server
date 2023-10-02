@@ -34,9 +34,9 @@ public class ResourceService {
             List<Long> bookedResourceIds = resourceBookingRepository.findBookedResourceIdsByDateAndResourceName(startDate, endDate, resourceName);
 
             if (!bookedResourceIds.isEmpty()) {
-                allResources = resourceRepository.findAllByResourceIdNotIn(bookedResourceIds, pageable);
+                allResources = resourceRepository.findAllByResourceIdNotIn(bookedResourceIds,pageable);
             } else {
-                allResources = resourceRepository.findAll(pageable);
+                allResources = resourceRepository.findByNameContaining(resourceName,pageable);
             }
         } else {
             allResources = resourceRepository.findAll(pageable);

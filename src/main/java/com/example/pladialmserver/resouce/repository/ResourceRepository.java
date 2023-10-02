@@ -10,4 +10,6 @@ import java.util.List;
 public interface ResourceRepository extends JpaRepository<Resource, Long> {
     Page<Resource> findAllByResourceIdNotIn(List<Long> resourceIds, Pageable pageable);
 
+    Page<Resource> findByNameContaining(String resourceName,Pageable pageable);
+
 }
