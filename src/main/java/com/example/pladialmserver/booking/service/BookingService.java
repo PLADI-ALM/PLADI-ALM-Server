@@ -47,7 +47,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
         return OfficeBookingDetailRes.toDto(officeBooking);
     }
@@ -141,7 +141,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
         // 사용자가 예약한 경우가 아니면
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if(!resourceBooking.getStatus().equals(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
