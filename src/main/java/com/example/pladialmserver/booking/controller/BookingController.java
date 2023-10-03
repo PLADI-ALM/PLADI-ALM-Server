@@ -70,7 +70,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0007)이미 취소된 예약입니다. (B0008)이미 사용이 완료된 예약입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @PatchMapping("/offices/{officeBookingId}")
+    @PatchMapping("/offices/{officeBookingId}/cancel")
     public ResponseCustom cancelBookingOffice(
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {
         bookingService.cancelBookingOffice(officeBookingId);
@@ -105,7 +105,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0007)이미 취소된 예약입니다. (B0008)이미 사용이 완료된 예약입니다. (B0009)사용중인 상태에서만 반납이 가능합니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @PatchMapping("/resources/{resourceBookingId}")
+    @PatchMapping("/resources/{resourceBookingId}/return")
     public ResponseCustom returnBookingResource(
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
