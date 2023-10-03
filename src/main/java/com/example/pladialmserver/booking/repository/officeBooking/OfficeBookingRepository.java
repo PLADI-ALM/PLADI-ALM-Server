@@ -1,4 +1,4 @@
-package com.example.pladialmserver.booking.repository;
+package com.example.pladialmserver.booking.repository.officeBooking;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.office.entity.Office;

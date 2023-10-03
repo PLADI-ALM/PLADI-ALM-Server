@@ -1,4 +1,5 @@
 package com.example.pladialmserver.resouce.repository;
+
 import com.example.pladialmserver.resouce.entity.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

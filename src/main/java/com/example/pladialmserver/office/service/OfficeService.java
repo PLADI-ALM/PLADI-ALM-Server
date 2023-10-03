@@ -3,24 +3,23 @@ package com.example.pladialmserver.office.service;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.*;
-import com.example.pladialmserver.booking.repository.OfficeBookingRepository;
+import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,15 +80,15 @@ public class OfficeService {
     /**
      * 회의실 일자별 예약 현황 조회
      */
-    public List<BookedTimeRes> getOfficeBookedTimes(Long officeId, LocalDate date) {
+    public BookingStateRes getOfficeBookedTimes(Long officeId, LocalDate date) {
         Office office = officeRepository.findById(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDate(office, date);
 
-        return bookings.stream()
+        return BookingStateRes.toDto(bookings.stream()
                 .map(booking -> BookedTimeRes.toDto(booking.getStartTime(), booking.getEndTime()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     /**
