@@ -42,12 +42,16 @@ public class ResourceBooking {
   @NotNull
   private LocalDate endDate;
 
-  @NotNull
   private LocalDateTime returnDate;
 
   @NotNull
   @Size(max = 100)
   private String memo;
 
+  @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.WAITING;
+
+  public void cancelBookingResource() {
+    status = BookingStatus.CANCELED;
+  }
 }
