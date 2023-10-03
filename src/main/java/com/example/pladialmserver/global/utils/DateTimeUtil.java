@@ -28,4 +28,9 @@ public class DateTimeUtil {
     public static String dateTimeToString(LocalDateTime localDateTime) {
         return localDateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
+
+    // localDateTime => Null / string(YYYY-MM-DD HH:MM)
+    public static String dateTimeToStringNullable(LocalDateTime localDateTime) {
+        return localDateTime == null ? null : dateTimeToString(localDateTime);
+    }
 }

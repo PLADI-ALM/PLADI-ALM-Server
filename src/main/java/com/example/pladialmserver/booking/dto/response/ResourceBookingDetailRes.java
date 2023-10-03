@@ -25,7 +25,7 @@ public class ResourceBookingDetailRes {
                 .status(resourceBooking.getStatus().getValue())
                 .startDate(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
                 .endDate(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
-                .returnDateTime(resourceBooking.getReturnDate() == null ? null : DateTimeUtil.dateTimeToString(resourceBooking.getReturnDate()))
+                .returnDateTime(DateTimeUtil.dateTimeToStringNullable(resourceBooking.getReturnDate()))
                 .memo(resourceBooking.getMemo())
                 .build();
     }
