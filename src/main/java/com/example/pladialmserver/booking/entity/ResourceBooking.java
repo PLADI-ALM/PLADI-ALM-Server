@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.entity;
 
+import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.resouce.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @Where(clause = "is_enable = true")
-public class ResourceBooking {
+public class ResourceBooking extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
