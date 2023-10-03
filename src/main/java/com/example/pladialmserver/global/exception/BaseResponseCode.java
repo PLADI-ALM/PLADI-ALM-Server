@@ -33,7 +33,9 @@ public enum BaseResponseCode {
     OFFICE_NOT_FOUND("O0001", HttpStatus.NOT_FOUND, "존재하지 않는 회의실입니다."),
 
    //Resource
-    NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"자원 이름과 예약 날짜를 모두 입력해주세요.");
+    NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"자원 이름과 예약 날짜를 모두 입력해주세요."),
+    END_DATE_BEFORE_START_DATE("R0002",HttpStatus.BAD_REQUEST,"종료일은 시작일보다 빠를 수 없습니다.")
+    ;
 
     public final String code;
     public final HttpStatus status;

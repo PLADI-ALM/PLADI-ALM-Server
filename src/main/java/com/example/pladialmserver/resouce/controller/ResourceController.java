@@ -41,8 +41,10 @@ public class ResourceController {
      */
     @Operation(summary = "자원 목록 조회", description = "자원 목록 조회를 진행한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)자원 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)자원 목록 조회 성공"),
             @ApiResponse(responseCode = "400", description = "(R0001)자원과 날짜를 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(R0002)종료일은 시작일보다 빠를 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+
     })
     @GetMapping
     public ResponseCustom<Page<ResourceRes>> selectResource(
