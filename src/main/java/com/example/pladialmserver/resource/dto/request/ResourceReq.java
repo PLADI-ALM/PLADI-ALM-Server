@@ -1,4 +1,4 @@
-package com.example.pladialmserver.resouce.dto.request;
+package com.example.pladialmserver.resource.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

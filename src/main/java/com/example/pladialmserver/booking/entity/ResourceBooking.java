@@ -2,7 +2,7 @@ package com.example.pladialmserver.booking.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
-import com.example.pladialmserver.resouce.entity.Resource;
+import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;

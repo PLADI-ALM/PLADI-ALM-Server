@@ -1,7 +1,7 @@
-package com.example.pladialmserver.resouce.dto.response;
+package com.example.pladialmserver.resource.dto.response;
 
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
-import com.example.pladialmserver.resouce.entity.Resource;
+import com.example.pladialmserver.resource.entity.Resource;
 import lombok.Builder;
 import lombok.Data;
 import io.swagger.v3.oas.annotations.media.Schema;
