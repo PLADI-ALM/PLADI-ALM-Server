@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
+
 @Data
 @Builder
 public class OfficeBookingDetailRes {
