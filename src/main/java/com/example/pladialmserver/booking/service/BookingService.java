@@ -2,6 +2,7 @@ package com.example.pladialmserver.booking.service;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
@@ -54,7 +55,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
         return OfficeBookingDetailRes.toDto(officeBooking);
     }
@@ -72,7 +73,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
         // 사용자가 예약한 경우가 아니면
-        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 이미 취소된 예약이면
         if(officeBooking.getStatus().equals(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
         // 취소하려는 예약이 이미 사용이 완료된 경우
@@ -105,6 +106,19 @@ public class BookingService {
     }
 
     /**
+     * 자원 예약 개별 조회
+     */
+    public ResourceBookingDetailRes getResourceBookingDetail(Long userId, Long resourceBookingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+
+        return ResourceBookingDetailRes.toDto(resourceBooking);
+    }
+
+    /**
      * 자원 예약 취소
      */
     @Transactional
@@ -116,7 +130,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
         // 사용자가 예약한 경우가 아니면
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 이미 취소된 예약이면
         if(resourceBooking.getStatus().equals(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
         // 취소하려는 예약이 이미 사용이 완료된 경우
@@ -135,7 +149,7 @@ public class BookingService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
         // 사용자가 예약한 경우가 아니면
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if(!resourceBooking.getStatus().equals(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
