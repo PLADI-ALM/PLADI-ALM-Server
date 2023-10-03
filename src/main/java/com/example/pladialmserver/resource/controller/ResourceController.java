@@ -59,6 +59,11 @@ public class ResourceController {
     /**
      * 자원 개별 조회
      */
+    @Operation(summary = "자원 개별 조회", description = "자원 개별 조회를 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 자원입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
     @GetMapping("/{resourceId}")
     public ResponseCustom<ResourceDetailRes> getResourceDetail(
             @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId
