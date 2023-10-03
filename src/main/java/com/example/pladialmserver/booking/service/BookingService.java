@@ -128,10 +128,6 @@ public class BookingService {
 
         // 사용자가 예약한 경우가 아니면
         if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
-        // 이미 취소된 예약이면
-        if(resourceBooking.getStatus().equals(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
-        // 취소하려는 예약이 이미 사용이 완료된 경우
-        if(resourceBooking.getStatus().equals(BookingStatus.FINISHED)) throw new BaseException(BaseResponseCode.ALREADY_FINISHED_BOOKING);
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if(!resourceBooking.getStatus().equals(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
