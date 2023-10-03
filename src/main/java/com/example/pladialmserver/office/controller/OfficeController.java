@@ -40,14 +40,14 @@ public class OfficeController {
      */
     @Operation(summary = "회의실 목록 조회", description = "회의실 목록 조회를 진행한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공"),
             @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping
     public ResponseCustom<Page<OfficeRes>> searchOffice(
             @Parameter(description = "예약 날짜",example = "2023-09-20") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
-            @Parameter(description = "시작 예약 시간",example = "14:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
-            @Parameter(description = "종료 예약 시간",example = "15:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
+            @Parameter(description = "시작 예약 시간",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
+            @Parameter(description = "종료 예약 시간",example = "13:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
             Pageable pageable
     ) {
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
@@ -63,7 +63,7 @@ public class OfficeController {
      */
     @Operation(summary = "회의실 개별 조회", description = "회의실 개별 조회를 진행한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공"),
             @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("/{officeId}")
