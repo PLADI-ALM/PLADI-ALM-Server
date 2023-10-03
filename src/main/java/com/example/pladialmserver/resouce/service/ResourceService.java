@@ -1,6 +1,8 @@
 package com.example.pladialmserver.resouce.service;
 
 
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.resouce.dto.response.ResourceRes;
 import com.example.pladialmserver.resouce.entity.Resource;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
@@ -31,6 +33,9 @@ public class ResourceService {
     public Page<ResourceRes> findAvailableResources(String resourceName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         Page<Resource> allResources;
 
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            throw new BaseException(BaseResponseCode.END_DATE_BEFORE_START_DATE);
+        }
         if (resourceName != null && startDate != null && endDate != null) {
             List<Long> bookedResourceIds = resourceBookingRepository.findBookedResourceIdsByDateAndResourceName(startDate, endDate, resourceName);
 
