@@ -126,4 +126,21 @@ public class BookingService {
         resourceBooking.cancelBookingResource();
         resourceBookingRepository.save(resourceBooking);
     }
+
+    @Transactional
+    public void returnBookingResource(Long resourceBookingId) {
+        User user = userRepository.findById(1L)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+
+        // 사용자가 예약한 경우가 아니면
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_ATUTHENTIFICATION);
+        // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
+        if(!resourceBooking.getStatus().equals(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
+
+        // 예약 반납
+        resourceBooking.returnBookingResource();
+        resourceBookingRepository.save(resourceBooking);
+    }
 }

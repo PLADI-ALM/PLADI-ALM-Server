@@ -1,6 +1,7 @@
 package com.example.pladialmserver.resouce.entity;
 
 import com.example.pladialmserver.equipment.entity.Category;
+import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Size;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "is_enable = true")
-public class Resource {
+public class Resource extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
