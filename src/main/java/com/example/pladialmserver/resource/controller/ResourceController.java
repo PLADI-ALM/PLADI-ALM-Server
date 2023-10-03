@@ -3,6 +3,7 @@ package com.example.pladialmserver.resource.controller;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.service.ResourceService;
 import io.swagger.annotations.Api;
@@ -16,10 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -61,11 +59,21 @@ public class ResourceController {
     /**
      * 자원 개별 조회
      */
-
+    @Operation(summary = "자원 개별 조회", description = "자원 개별 조회를 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 자원입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/{resourceId}")
+    public ResponseCustom<ResourceDetailRes> getResourceDetail(
+            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId
+    ) {
+        return ResponseCustom.OK(resourceService.getResourceDetail(resourceId));
+    }
 
 
     /**
-     * 자원 기간별 예약 현황 조회
+     * 자원 기간별 예약 현황 조회별
      */
 
 

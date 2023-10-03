@@ -3,6 +3,7 @@ package com.example.pladialmserver.resource.service;
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
@@ -52,11 +53,14 @@ public class ResourceService {
     }
 
 
-
     /**
      * 자원 개별 조회
      */
-
+    public ResourceDetailRes getResourceDetail(Long resourceId) {
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        return ResourceDetailRes.toDto(resource);
+    }
 
 
 
