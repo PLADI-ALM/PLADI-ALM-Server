@@ -9,6 +9,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ResourceBookingDetailRes {
+    @Schema(type = "Long", description = "자원 Id", example = "1")
+    private Long resourceId;
     @Schema(type = "String", description = "상태", example = "'예약대기' / '예약중' / '사용중' / '사용완료' / '예약취소'")
     private String status;
     @Schema(type = "String", description = "예약일자(시작일)", example = "2023-10-01")
@@ -22,6 +24,7 @@ public class ResourceBookingDetailRes {
 
     public static ResourceBookingDetailRes toDto(ResourceBooking resourceBooking) {
         return ResourceBookingDetailRes.builder()
+                .resourceId(resourceBooking.getResource().getResourceId())
                 .status(resourceBooking.getStatus().getValue())
                 .startDate(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
                 .endDate(DateTimeUtil.dateToString(resourceBooking.getEndDate()))

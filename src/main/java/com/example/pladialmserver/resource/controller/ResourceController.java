@@ -1,11 +1,10 @@
-package com.example.pladialmserver.resouce.controller;
+package com.example.pladialmserver.resource.controller;
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.office.dto.response.OfficeRes;
-import com.example.pladialmserver.resouce.dto.response.ResourceRes;
-import com.example.pladialmserver.resouce.service.ResourceService;
+import com.example.pladialmserver.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.resource.service.ResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
-import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
 
 @Api(tags = "자원 API")
 @RestController

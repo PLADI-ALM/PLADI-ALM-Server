@@ -1,6 +1,6 @@
-package com.example.pladialmserver.resouce.repository;
+package com.example.pladialmserver.resource.repository;
 
-import com.example.pladialmserver.resouce.entity.Resource;
+import com.example.pladialmserver.resource.entity.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

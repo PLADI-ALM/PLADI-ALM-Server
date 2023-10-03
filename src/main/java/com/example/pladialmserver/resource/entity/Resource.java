@@ -1,4 +1,4 @@
-package com.example.pladialmserver.resouce.entity;
+package com.example.pladialmserver.resource.entity;
 
 import com.example.pladialmserver.equipment.entity.Category;
 import com.example.pladialmserver.global.entity.BaseEntity;

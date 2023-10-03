@@ -1,12 +1,12 @@
-package com.example.pladialmserver.resouce.service;
+package com.example.pladialmserver.resource.service;
 
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.resouce.dto.response.ResourceRes;
-import com.example.pladialmserver.resouce.entity.Resource;
+import com.example.pladialmserver.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
-import com.example.pladialmserver.resouce.repository.ResourceRepository;
+import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
