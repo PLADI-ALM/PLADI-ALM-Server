@@ -54,10 +54,7 @@ public class OfficeService {
             List<Facility> facilities = office.getFacilityList().stream()
                     .map(OfficeFacility::getFacility)
                     .collect(Collectors.toList());
-            List<String> imgUrls = office.getImgList().stream()
-                    .map(OfficeImg::getImgUrl)
-                    .collect(Collectors.toList());
-            return OfficeRes.toDto(office, facilities, imgUrls);
+            return OfficeRes.toDto(office, facilities);
         });
     }
 
@@ -70,11 +67,7 @@ public class OfficeService {
                 .map(officeFacility -> officeFacility.getFacility())
                 .collect(Collectors.toList());
 
-        List<String> imgUrls = office.getImgList().stream()
-                .map(OfficeImg::getImgUrl)
-                .collect(Collectors.toList());
-
-        return OfficeRes.toDto(office, facilities,imgUrls);
+        return OfficeRes.toDto(office, facilities);
     }
 
     /**
