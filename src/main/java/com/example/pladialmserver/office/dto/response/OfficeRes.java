@@ -1,5 +1,6 @@
 package com.example.pladialmserver.office.dto.response;
 
+import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,11 +24,10 @@ public class OfficeRes {
     private List<String> facilityList;
     @Schema(type = "String", description = "회의실 설명", example = "'승학이 회의실'")
     private String description;
-    @Schema(type = "String", description = "회의실 이미지", example = "'imgA' / 'imgB'")
-    private List<String> imgUrls;
+    @Schema(type = "String", description = "회의실 이미지", example = "/photo/ex.png")
+    private String imgUrl;
 
-
-    public static OfficeRes toDto(Office office, List<Facility> facilities,List<String> imgUrls){
+    public static OfficeRes toDto(Office office, List<Facility> facilities){
         return OfficeRes.builder()
                 .officeId(office.getOfficeId())
                 .name(office.getName())
@@ -35,7 +35,7 @@ public class OfficeRes {
                 .capacity(office.getCapacity())
                 .facilityList(facilities.stream().map(Facility::getName).collect(Collectors.toList()))
                 .description(office.getDescription())
-                .imgUrls(imgUrls)
+                .imgUrl(AwsS3ImageUrlUtil.toUrl(office.getImgKey()))
                 .build();
     }
 }
