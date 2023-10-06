@@ -1,6 +1,7 @@
 package com.example.pladialmserver.office.service;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.office.dto.response.BookingStateRes;
@@ -77,7 +78,7 @@ public class OfficeService {
         Office office = officeRepository.findById(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
-        List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDate(office, date);
+        List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDateAndStatusNot(office, date, BookingStatus.CANCELED);
 
         return BookingStateRes.toDto(bookings.stream()
                 .map(booking -> BookedTimeRes.toDto(booking.getStartTime(), booking.getEndTime()))
