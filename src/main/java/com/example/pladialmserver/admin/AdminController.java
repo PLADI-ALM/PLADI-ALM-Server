@@ -31,13 +31,11 @@ public class AdminController {
     @Operation(summary = "관리자 회의실 예약 목록 조회", description = "관리자 페이지에서 회의실 예약 내역을 전체 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "400", description = "(G0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping
     public ResponseCustom<Page<AdminBookingRes>> getBookings(
-            @Parameter(description = "회의실 예약 상태 카테고리 선택", example = "'BOOKED' / 'USING'") @RequestParam(required = false) String bookingStatus,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(adminService.getBookingOffices(bookingStatus, pageable));
+        return ResponseCustom.OK(adminService.getBookingOffices(pageable));
     }
 
 

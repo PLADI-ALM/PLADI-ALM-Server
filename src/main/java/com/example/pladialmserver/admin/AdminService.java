@@ -26,28 +26,13 @@ public class AdminService {
     /**
      * 관리자 회의실 예약 목록 조회
      */
-    public Page<AdminBookingRes> getBookingOffices(String bookingStatus, Pageable pageable) {
+    public Page<AdminBookingRes> getBookingOffices(Pageable pageable) {
         Page<OfficeBooking> bookings;
 
-        if (bookingStatus == null) {
             bookings = officeBookingRepository.findByStatusIn(
                     Arrays.asList(BookingStatus.BOOKED, BookingStatus.USING),
                     pageable
             );
-        }
-        else {
-            try {
-                BookingStatus status = BookingStatus.valueOf(bookingStatus.toUpperCase());
-
-                if (status != BookingStatus.BOOKED && status != BookingStatus.USING) {
-                    throw new BaseException(BaseResponseCode.BAD_REQUEST);
-                }
-                bookings = officeBookingRepository.findByStatus(status, pageable);
-            }
-            catch (IllegalArgumentException e) {
-                throw new BaseException(BaseResponseCode.BAD_REQUEST);
-            }
-        }
 
         return bookings.map(AdminBookingRes::toDto);
     }
