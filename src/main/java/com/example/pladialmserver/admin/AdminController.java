@@ -33,7 +33,7 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
     })
     @GetMapping
-    public ResponseCustom<Page<AdminBookingRes>> getBookings(
+    public ResponseCustom<Page<AdminBookingRes>> getBookingOffices(
             @PageableDefault(size = 8) Pageable pageable){
         return ResponseCustom.OK(adminService.getBookingOffices(pageable));
     }
