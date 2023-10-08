@@ -82,4 +82,8 @@ public class ResourceBooking extends BaseEntity {
     status = BookingStatus.FINISHED;
     returnDate = LocalDateTime.now();
   }
+
+  public void allowBookingResource() {
+    status = BookingStatus.BOOKED;
+  }
 }

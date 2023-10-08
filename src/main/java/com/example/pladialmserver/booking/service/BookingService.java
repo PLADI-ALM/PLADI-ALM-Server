@@ -11,6 +11,7 @@ import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBoo
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class BookingService {
     private final UserRepository userRepository;
     private final OfficeBookingRepository officeBookingRepository;
     private final ResourceBookingRepository resourceBookingRepository;
+    private final ResourceRepository resourceRepository;
 
     /**
      * 예약 목록 조회
@@ -175,5 +177,26 @@ public class BookingService {
         );
 
         return bookings.map(AdminBookingRes::toDto);
+    }
+
+    /**
+     * 관리자 자원 예약 허가
+     */
+    @Transactional
+    public void allowResourceBooking(Long userId, Long resourceBookingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+
+        // 유저-예약 연결 여부
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        // 예약대기가 아닌 경우
+        if(!resourceBooking.getStatus().equals(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
+        // 이미 예약된 날짜 여부 확인
+        if(resourceBookingRepository.existsDate(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
+
+        // 예약 허가
+        resourceBooking.allowBookingResource();
     }
 }
