@@ -1,5 +1,6 @@
 package com.example.pladialmserver.user.entity;
 
+import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Where(clause = "is_enable = true")
-public class Department {
+public class Department extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,3 +25,6 @@ aws:
   s3:
     region: ENC(g5tyuGOJBDEmnezuqqberSvKxUO3sHtm)
     bucket: ENC(xV+R4mKu3wiOHGoDKhWrsRyXTDOauoNy)
+
+jwt:
+  secret: ENC(m8hv7okIea5oHi2vzsdKBKl4Pzbv8fFW3cU1UVWrk4a7IWTmyVl27pUqqyhP/Ril2V4Vpyv4nObk6lojgwnZag==)
