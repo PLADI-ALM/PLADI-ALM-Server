@@ -184,13 +184,7 @@ public class BookingService {
      */
     @Transactional
     public void rejectResourceBooking(Long userId, Long resourceBookingId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
-        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-
-        // 관리자 유무
-        if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        ResourceBooking resourceBooking = checkResourceBookingByAdmin(userId, resourceBookingId);
         // 예약대기가 아닌 경우
         if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
 
@@ -203,13 +197,7 @@ public class BookingService {
      */
     @Transactional
     public void allowResourceBooking(Long userId, Long resourceBookingId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
-        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-
-        // 관리자 유무
-        if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        ResourceBooking resourceBooking = checkResourceBookingByAdmin(userId, resourceBookingId);
         // 예약대기가 아닌 경우
         if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 이미 예약된 날짜 여부 확인
@@ -217,5 +205,17 @@ public class BookingService {
 
         // 예약 허가
         resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
+    }
+
+    // 자원 예약 + 관리자 예외 체
+    private ResourceBooking checkResourceBookingByAdmin(Long userId, Long resourceBookingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+
+        // 관리자 유무
+        if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        return resourceBooking;
     }
 }
