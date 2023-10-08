@@ -35,10 +35,10 @@ public class Office extends BaseEntity {
     @Size(max = 30)
     private String description;
 
+    private String imgKey;
+
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "office")
-    private List<OfficeImg> imgList = new ArrayList<>();
 
 }
