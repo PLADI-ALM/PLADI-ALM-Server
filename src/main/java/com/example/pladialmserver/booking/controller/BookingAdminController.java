@@ -61,15 +61,35 @@ public class BookingAdminController {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "409", description = "(B0011)반려할 수 없는 예약 상태입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(B0011)불가능한 예약 상태입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @PatchMapping("/resources/{resourceBookingId}/reject")
     public ResponseCustom rejectResourceBooking(
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
         // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
+        Long userId = 3L;
         bookingService.rejectResourceBooking(userId, resourceBookingId);
+        return ResponseCustom.OK();
+    }
+
+    /**
+     * 관리자 자원 예약 허가
+     */
+    @Operation(summary = "관리자 자원 예약 허가", description = "관리자 페이지에서 자원 예약을 허가한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(B0005)이미 예약되어 있는 시간입니다. (B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(B0011)불가능한 예약 상태입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @PatchMapping("/resources/{resourceBookingId}/allow")
+    public ResponseCustom allowResourceBooking(
+            @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
+    ){
+        // TODO 유저 ID 받아오는 로직 추가
+        Long userId = 3L;
+        bookingService.allowResourceBooking(userId, resourceBookingId);
         return ResponseCustom.OK();
     }
 }

@@ -44,7 +44,7 @@ public enum BaseResponseCode {
     ALREADY_FINISHED_BOOKING("B0008", HttpStatus.CONFLICT, "이미 사용이 완료된 예약입니다."),
     MUST_BE_IN_USE("B0009", HttpStatus.CONFLICT, "사용중인 상태에서만 반납이 가능합니다."),
     DATE_IS_NULL("B0010", HttpStatus.BAD_REQUEST, "날짜를 모두 입력해주세요."),
-    INVALID_REJECT_BOOKING_STATUS("B0011", HttpStatus.CONFLICT, "반려할 수 없는 예약 상태입니다."),
+    INVALID_BOOKING_STATUS("B0011", HttpStatus.CONFLICT, "불가능한 예약 상태입니다."),
 
     // Office
     OFFICE_NOT_FOUND("O0001", HttpStatus.NOT_FOUND, "존재하지 않는 회의실입니다."),

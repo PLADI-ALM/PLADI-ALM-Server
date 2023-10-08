@@ -86,4 +86,5 @@ public class ResourceBooking extends BaseEntity {
   public boolean checkBookingStatus(BookingStatus bookingStatus) {
     return status.equals(bookingStatus);
   }
+
 }

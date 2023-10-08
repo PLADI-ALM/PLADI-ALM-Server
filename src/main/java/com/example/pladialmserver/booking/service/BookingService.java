@@ -11,6 +11,7 @@ import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBoo
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
@@ -183,6 +184,31 @@ public class BookingService {
      */
     @Transactional
     public void rejectResourceBooking(Long userId, Long resourceBookingId) {
+        ResourceBooking resourceBooking = checkResourceBookingByAdmin(userId, resourceBookingId);
+        // 예약대기가 아닌 경우
+        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
+
+        // 예약 취소
+        resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
+    }
+
+    /**
+     * 관리자 자원 예약 허가
+     */
+    @Transactional
+    public void allowResourceBooking(Long userId, Long resourceBookingId) {
+        ResourceBooking resourceBooking = checkResourceBookingByAdmin(userId, resourceBookingId);
+        // 예약대기가 아닌 경우
+        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
+        // 이미 예약된 날짜 여부 확인
+        if(resourceBookingRepository.existsDate(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
+
+        // 예약 허가
+        resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
+    }
+
+    // 자원 예약 + 관리자 예외 체
+    private ResourceBooking checkResourceBookingByAdmin(Long userId, Long resourceBookingId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
@@ -190,10 +216,6 @@ public class BookingService {
 
         // 관리자 유무
         if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-        // 예약대기가 아닌 경우
-        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_REJECT_BOOKING_STATUS);
-
-        // 예약 취소
-        resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
+        return resourceBooking;
     }
 }
