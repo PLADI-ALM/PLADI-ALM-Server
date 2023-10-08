@@ -1,9 +1,6 @@
 package com.example.pladialmserver.booking.repository.resourceBooking;
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
-import com.example.pladialmserver.global.entity.BookingStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
