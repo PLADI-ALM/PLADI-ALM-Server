@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.admin.AdminBookingRes;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
@@ -14,11 +15,14 @@ import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -156,5 +160,20 @@ public class BookingService {
         // 예약 반납
         resourceBooking.returnBookingResource();
         resourceBookingRepository.save(resourceBooking);
+    }
+
+    /**
+     * 관리자 회의실 예약 목록 조회
+     */
+    public Page<AdminBookingRes> getBookingOffices(Pageable pageable) {
+        Pageable sortedByDateAndStartTimeAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.asc("date"), Sort.Order.asc("startTime")));
+
+        Page<OfficeBooking>  bookings = officeBookingRepository.findByStatusIn(
+                Arrays.asList(BookingStatus.BOOKED, BookingStatus.USING),
+                sortedByDateAndStartTimeAsc
+        );
+
+        return bookings.map(AdminBookingRes::toDto);
     }
 }
