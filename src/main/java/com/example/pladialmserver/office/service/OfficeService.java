@@ -1,6 +1,7 @@
 package com.example.pladialmserver.office.service;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.office.dto.response.BookingStateRes;
@@ -54,10 +55,7 @@ public class OfficeService {
             List<Facility> facilities = office.getFacilityList().stream()
                     .map(OfficeFacility::getFacility)
                     .collect(Collectors.toList());
-            List<String> imgUrls = office.getImgList().stream()
-                    .map(OfficeImg::getImgUrl)
-                    .collect(Collectors.toList());
-            return OfficeRes.toDto(office, facilities, imgUrls);
+            return OfficeRes.toDto(office, facilities);
         });
     }
 
@@ -70,11 +68,7 @@ public class OfficeService {
                 .map(officeFacility -> officeFacility.getFacility())
                 .collect(Collectors.toList());
 
-        List<String> imgUrls = office.getImgList().stream()
-                .map(OfficeImg::getImgUrl)
-                .collect(Collectors.toList());
-
-        return OfficeRes.toDto(office, facilities,imgUrls);
+        return OfficeRes.toDto(office, facilities);
     }
 
     /**
@@ -84,7 +78,7 @@ public class OfficeService {
         Office office = officeRepository.findById(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
-        List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDate(office, date);
+        List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDateAndStatusNot(office, date, BookingStatus.CANCELED);
 
         return BookingStateRes.toDto(bookings.stream()
                 .map(booking -> BookedTimeRes.toDto(booking.getStartTime(), booking.getEndTime()))
@@ -103,7 +97,7 @@ public class OfficeService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         // 이미 예약되어 있는 시간인지 확인
-        if(!officeBookingRepository.existsByDateAndTime(officeReq.getDate(), officeReq.getStartTime(), officeReq.getEndTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
+        if(officeBookingRepository.existsByDateAndTime(officeReq.getDate(), officeReq.getStartTime(), officeReq.getEndTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         officeBookingRepository.save(OfficeBooking.toDto(user, office, officeReq));
     }
 }
