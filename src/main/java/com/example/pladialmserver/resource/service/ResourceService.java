@@ -17,7 +17,9 @@ import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,11 +105,12 @@ public class ResourceService {
      * 관리자 자원 예약 목록을 조회
      */
     public Page<AdminResourceRes> getBookingResources(Pageable pageable) {
-        Page<ResourceBooking> resourceBookings;
+        Pageable sortedByDateAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.asc("startDate")));
 
-        resourceBookings=resourceBookingRepository.findByStatusIn(
+        Page<ResourceBooking> resourceBookings=resourceBookingRepository.findByStatusIn(
                 Arrays.asList(BookingStatus.BOOKED, BookingStatus.USING,BookingStatus.WAITING),
-                pageable
+                sortedByDateAsc
         );
 
         return resourceBookings.map(AdminResourceRes::toDto);
