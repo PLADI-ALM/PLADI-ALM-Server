@@ -79,7 +79,8 @@ public class JwtUtil {
     }
 
     // userId 불러오기
-    public Long getUserIdFromJWT(String accessToken){
-        return Long.parseLong((String) parseClaims(accessToken).get(CLAIM_NAME));
+    public Long getUserIdFromJWT(String accessToken) {
+        String userId = String.valueOf(parseClaims(accessToken).get(CLAIM_NAME));
+        return Long.parseLong(userId);
     }
 }
