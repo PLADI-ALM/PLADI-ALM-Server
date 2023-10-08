@@ -5,6 +5,7 @@ import com.example.pladialmserver.booking.service.BookingService;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -49,4 +50,17 @@ public class BookingAdminController {
     /**
      * 관리자 자원 예약 목록을 조회
      */
+
+    /**
+     * 관리자 자원 예약 반려
+     */
+    @PatchMapping("/resources/{resourceBookingId}/reject")
+    public ResponseCustom rejectResourceBooking(
+            @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
+    ){
+        // TODO 유저 ID 받아오는 로직 추가
+        Long userId = 1L;
+        bookingService.rejectResourceBooking(userId, resourceBookingId);
+        return ResponseCustom.OK();
+    }
 }

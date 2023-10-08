@@ -176,4 +176,23 @@ public class BookingService {
 
         return bookings.map(AdminBookingRes::toDto);
     }
+
+    /**
+     * 관리자 자원 예약 반려
+     */
+    @Transactional
+    public void rejectResourceBooking(Long userId, Long resourceBookingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+
+        // 유저-예약 연결 여부
+        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        // 예약대기가 아닌 경우
+        if(!resourceBooking.getStatus().equals(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_REJECT_BOOKING_STATUS);
+
+        // 예약 취소
+        resourceBooking.cancelBookingResource();
+    }
 }
