@@ -1,5 +1,6 @@
-package com.example.pladialmserver.admin;
+package com.example.pladialmserver.booking.controller;
 
+import com.example.pladialmserver.booking.dto.response.AdminBookingRes;
 import com.example.pladialmserver.booking.service.BookingService;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import io.swagger.annotations.Api;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "관리자 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/bookings")
+@RequestMapping("/bookings/admin")
 public class BookingAdminController {
     private final BookingService bookingService;
 

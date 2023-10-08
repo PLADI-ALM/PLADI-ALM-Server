@@ -1,7 +1,6 @@
-package com.example.pladialmserver.admin;
+package com.example.pladialmserver.booking.dto.response;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
-import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
