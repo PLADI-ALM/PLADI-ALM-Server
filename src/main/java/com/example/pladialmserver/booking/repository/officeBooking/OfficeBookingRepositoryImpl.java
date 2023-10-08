@@ -42,9 +42,8 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
     public Boolean existsByDateAndTime(LocalDate date, LocalTime startTime, LocalTime endTime) {
         Integer fetchOne = jpaQueryFactory.selectOne()
                 .from(officeBooking)
-                .where(officeBooking.date.eq(date)
-                        .and(officeBooking.startTime.loe(startTime).and(officeBooking.endTime.gt(startTime)))
-                        .or(officeBooking.startTime.lt(endTime).and(officeBooking.endTime.goe(endTime))))
+                .where(officeBooking.date.eq(date).and(officeBooking.startTime.loe(startTime).and(officeBooking.endTime.gt(startTime)))
+                        .or(officeBooking.date.eq(date).and(officeBooking.startTime.lt(endTime).and(officeBooking.endTime.goe(endTime)))))
                 .fetchFirst();
         return fetchOne != null;
     }

@@ -3,6 +3,7 @@ package com.example.pladialmserver.global.config;
 
 import com.example.pladialmserver.global.CustomPage;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.user.entity.User;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +47,7 @@ public class SwaggerConfig {
                 .directModelSubstitute(LocalDate.class, String.class)
                 .directModelSubstitute(LocalTime.class, String.class)
                 .directModelSubstitute(ZonedDateTime.class, String.class)
+                .ignoredParameterTypes(User.class)
                 .apiInfo(apiInfo())
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))

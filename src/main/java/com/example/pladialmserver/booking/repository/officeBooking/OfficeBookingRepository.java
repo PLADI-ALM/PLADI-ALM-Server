@@ -3,6 +3,8 @@ package com.example.pladialmserver.booking.repository.officeBooking;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.office.entity.Office;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +18,7 @@ import java.util.List;
 public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Long>, OfficeBookingCustom {
     @Query("SELECT ob.office.officeId FROM OfficeBooking ob WHERE ob.date = :date AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) OR (ob.startTime < :endTime AND ob.endTime >= :endTime))")
     List<Long> findBookedOfficeIdsByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
-
+    Page<OfficeBooking> findByStatusIn(List<BookingStatus> list, Pageable pageable);
+    Page<OfficeBooking> findByStatus(BookingStatus status, Pageable pageable);
     List<OfficeBooking> findByOfficeAndDateAndStatusNot(Office office, LocalDate date, BookingStatus bookingStatus);
 }

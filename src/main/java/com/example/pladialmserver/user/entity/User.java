@@ -1,11 +1,12 @@
 package com.example.pladialmserver.user.entity;
 
-import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,8 +16,10 @@ import java.util.List;
 
 @Entity
 @Getter
+@DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
+//@Where(clause = "is_enable = true")
 public class User extends BaseEntity {
 
     @Id
