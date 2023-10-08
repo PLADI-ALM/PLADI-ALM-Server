@@ -2,10 +2,12 @@ package com.example.pladialmserver.resource.service;
 
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
+import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.entity.Resource;
@@ -15,11 +17,14 @@ import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -94,6 +99,21 @@ public class ResourceService {
         if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, resourceReq));
 
+    }
+
+    /**
+     * 관리자 자원 예약 목록을 조회
+     */
+    public Page<AdminResourceRes> getBookingResources(Pageable pageable) {
+        Pageable sortedByDateAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Order.asc("startDate")));
+
+        Page<ResourceBooking> resourceBookings=resourceBookingRepository.findByStatusIn(
+                Arrays.asList(BookingStatus.BOOKED, BookingStatus.USING,BookingStatus.WAITING),
+                sortedByDateAsc
+        );
+
+        return resourceBookings.map(AdminResourceRes::toDto);
     }
 
 }
