@@ -4,6 +4,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,9 @@ public class UserService {
         if(!user.getPassword().equals(loginReq.getPassword())) throw new BaseException(INVALID_PASSWORD);
 
         return jwtUtil.createToken(user.getUserId(), user.getRole());
+    }
+
+    public UserPositionRes getUserPosition(User user) {
+        return UserPositionRes.toDto(user);
     }
 }
