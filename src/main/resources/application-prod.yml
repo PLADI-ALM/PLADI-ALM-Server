@@ -21,9 +21,11 @@ spring:
 server:
   port: 8080
 
+jwt:
+  secret: ENC(7JHqgwmXfXySGksMK5SOUrWg7edAhDXA044D8pyPbQbsYgdgs+by47ti/tHUwlwqSCMmmD9FM3tZvazmb/0wtqTKqYXGsrNnlkD2yFO11Z6Gis49IO0SWhaAnmyUexlwy+Bscc2pZBK12M50vCeHkFQGRIe1SlPj)
+
 aws:
   s3:
     region: ENC(AVCMaqBKtI5yHdJHx9XNjik58YlUD/EY)
     bucket: ENC(lv1CzlIwi9jUaOJJth3Ppf73A1VpIoRb)
-
 

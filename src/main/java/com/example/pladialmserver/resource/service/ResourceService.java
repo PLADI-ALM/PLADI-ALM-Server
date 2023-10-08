@@ -5,6 +5,7 @@ import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.entity.Resource;
@@ -69,7 +70,13 @@ public class ResourceService {
     /**
      * 자원 기간별 예약 현황 조회
      */
-
+    public List<String> getResourceBookedDate(Long resourceId, String month) {
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        // 예약 현황 조회할 월
+        LocalDate standardDate = DateTimeUtil.stringToFirstLocalDate(month);
+        return resourceBookingRepository.getResourceBookedDate(resource, standardDate);
+    }
 
 
 

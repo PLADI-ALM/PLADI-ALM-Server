@@ -33,4 +33,14 @@ public class DateTimeUtil {
     public static String dateTimeToStringNullable(LocalDateTime localDateTime) {
         return localDateTime == null ? null : dateTimeToString(localDateTime);
     }
+
+    // string(YYYY-MM) -> localDate
+    public static LocalDate stringToLocalDate(String stringDate) {
+        return LocalDate.parse(stringDate, DateTimeFormatter.ISO_DATE);
+    }
+
+    // string(YYYY-MM) -> localDate (해당 월의 첫 날)
+    public static LocalDate stringToFirstLocalDate(String stringDate) {
+        return stringToLocalDate(stringDate + "-01");
+    }
 }
