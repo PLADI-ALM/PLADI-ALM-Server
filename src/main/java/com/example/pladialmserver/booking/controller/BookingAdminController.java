@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "관리자 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bookings/admin")
+@RequestMapping("/admin/bookings")
 public class BookingAdminController {
     private final BookingService bookingService;
 
@@ -36,7 +36,7 @@ public class BookingAdminController {
 
 
     /**
-     * 관리자 회의실 예약 반
+     * 관리자 회의실 예약 반려
      */
 
 
