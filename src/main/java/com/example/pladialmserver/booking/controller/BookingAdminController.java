@@ -49,9 +49,7 @@ public class BookingAdminController {
 
 
 
-    /**
-     * 관리자 자원 예약 목록을 조회
-     */
+
 
     /**
      * 관리자 자원 예약 반려
