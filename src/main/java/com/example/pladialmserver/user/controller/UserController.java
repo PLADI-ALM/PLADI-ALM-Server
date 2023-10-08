@@ -43,6 +43,11 @@ public class UserController {
     /**
      * 사이드바 사용자 정보
      */
+    @Operation(summary = "사용자 정보", description = "사이드바에 필요한 사용자 정보를 불러온다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)로그인 성공"),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
     @PostMapping("/position")
     public ResponseCustom<UserPositionRes> getUserPosition(@Account User user){
         return ResponseCustom.OK(userService.getUserPosition(user));
