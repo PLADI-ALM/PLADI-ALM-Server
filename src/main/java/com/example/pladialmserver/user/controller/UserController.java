@@ -1,8 +1,11 @@
 package com.example.pladialmserver.user.controller;
 
+import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.response.UserPositionRes;
+import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -38,5 +38,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseCustom<TokenDto> login(@RequestBody @Valid LoginReq loginReq){
         return ResponseCustom.OK(userService.login(loginReq));
+    }
+
+    /**
+     * 사이드바 사용자 정보
+     */
+    @PostMapping("/position")
+    public ResponseCustom<UserPositionRes> getUserPosition(@Account User user){
+        return ResponseCustom.OK(userService.getUserPosition(user));
     }
 }
