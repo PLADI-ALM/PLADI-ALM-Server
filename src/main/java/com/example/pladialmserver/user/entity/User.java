@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
+//@Where(clause = "is_enable = true")
 public class User extends BaseEntity {
 
     @Id

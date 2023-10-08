@@ -27,6 +27,11 @@ public enum BaseResponseCode {
 
     // User
     USER_NOT_FOUND("U0001", HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
+    INVALID_EMAIL_FORMAT("U0002", HttpStatus.BAD_REQUEST, "이메일 형식을 확인해주세요."),
+    INVALID_PASSWORD_FORMAT("U0003", HttpStatus.BAD_REQUEST, "비밀번호 형식을 확인해주세요."),
+    NOT_EMPTY_EMAIL("U0004", HttpStatus.BAD_REQUEST, "이메일을 입력해주세요."),
+    NOT_EMPTY_PASSWORD("U0005", HttpStatus.BAD_REQUEST, "비밀번호를 입력해주세요."),
+    INVALID_PASSWORD("U0005", HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
     // Booking
     DATE_OR_TIME_IS_NULL("B0001", HttpStatus.BAD_REQUEST, "날짜와 시간을 모두 입력해주세요."),
