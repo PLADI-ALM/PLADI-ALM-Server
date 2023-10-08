@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "관리자 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bookings/admin")
+@RequestMapping("/admin/bookings")
 public class BookingAdminController {
     private final BookingService bookingService;
 
@@ -39,7 +39,7 @@ public class BookingAdminController {
 
 
     /**
-     * 관리자 회의실 예약 반
+     * 관리자 회의실 예약 반려
      */
 
 
@@ -52,6 +52,26 @@ public class BookingAdminController {
     /**
      * 관리자 자원 예약 목록을 조회
      */
+
+    /**
+     * 관리자 자원 예약 반려
+     */
+    @Operation(summary = "관리자 자원 예약 반려", description = "관리자 페이지에서 자원 예약을 반려한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(B0011)반려할 수 없는 예약 상태입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @PatchMapping("/resources/{resourceBookingId}/reject")
+    public ResponseCustom rejectResourceBooking(
+            @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
+    ){
+        // TODO 유저 ID 받아오는 로직 추가
+        Long userId = 1L;
+        bookingService.rejectResourceBooking(userId, resourceBookingId);
+        return ResponseCustom.OK();
+    }
 
     /**
      * 관리자 자원 예약 허가
