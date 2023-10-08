@@ -20,6 +20,8 @@ spring:
 
 server:
   port: 8080
+  archiving:
+    url:
 
 aws:
   s3:
