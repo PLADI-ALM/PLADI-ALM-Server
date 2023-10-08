@@ -41,6 +41,19 @@ public class BookingAdminController {
     /**
      * 관리자 회의실 예약 반려
      */
+    @Operation(summary = "관리자 회의실 예약 반려", description = "관리자 회의실 예약을 반려한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 에약 취소 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(B0007)이미 취소된 예약입니다. (B0008)이미 사용이 완료된 예약입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @PatchMapping("/offices/{officeBookingId}/cancel")
+    public ResponseCustom cancelBookingOffice(
+            @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {
+        bookingService.cancelBookingOffice(officeBookingId);
+        return ResponseCustom.OK();
+    }
 
 
     /**
