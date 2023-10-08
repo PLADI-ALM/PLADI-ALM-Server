@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 @Component
-@FeignClient(name="recipe-server", url = "${server.archiving.url}")
+@FeignClient(name="archiving-server", url = "${server.archiving.url}")
 public interface ArchivingServerClient {
     @PostMapping("/users")
     void addUser(@RequestBody UserReq userReq);

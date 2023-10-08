@@ -21,7 +21,7 @@ spring:
 server:
   port: 8080
   archiving:
-    url:
+    url: https://gpkzpnv8lh.execute-api.ap-northeast-2.amazonaws.com/dev/dev-pladi-archiving
 
 aws:
   s3:
