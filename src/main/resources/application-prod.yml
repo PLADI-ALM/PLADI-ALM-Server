@@ -26,4 +26,6 @@ aws:
     region: ENC(AVCMaqBKtI5yHdJHx9XNjik58YlUD/EY)
     bucket: ENC(lv1CzlIwi9jUaOJJth3Ppf73A1VpIoRb)
 
+jwt:
+  secret: ENC(m8hv7okIea5oHi2vzsdKBKl4Pzbv8fFW3cU1UVWrk4a7IWTmyVl27pUqqyhP/Ril2V4Vpyv4nObk6lojgwnZag==)
 
