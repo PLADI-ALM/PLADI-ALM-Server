@@ -2,9 +2,11 @@ package com.example.pladialmserver.booking.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
+import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -51,6 +53,26 @@ public class ResourceBooking extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.WAITING;
+
+  @Builder
+  public ResourceBooking(User user, Resource resource, LocalDate startDate, LocalDate endDate, String memo) {
+    this.user = user;
+    this.resource = resource;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.memo = memo;
+  }
+
+
+  public static ResourceBooking toDto(User user, Resource resource, ResourceReq resourceReq) {
+    return ResourceBooking.builder()
+            .user(user)
+            .resource(resource)
+            .startDate(resourceReq.getStartDate())
+            .endDate(resourceReq.getEndDate())
+            .memo(resourceReq.getMemo())
+            .build();
+  }
 
   public void cancelBookingResource() {
     status = BookingStatus.CANCELED;
