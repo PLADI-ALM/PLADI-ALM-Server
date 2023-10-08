@@ -68,7 +68,7 @@ public class BookingAdminController {
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
         // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
+        Long userId = 3L;
         bookingService.rejectResourceBooking(userId, resourceBookingId);
         return ResponseCustom.OK();
     }
@@ -88,7 +88,7 @@ public class BookingAdminController {
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
         // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
+        Long userId = 3L;
         bookingService.allowResourceBooking(userId, resourceBookingId);
         return ResponseCustom.OK();
     }
