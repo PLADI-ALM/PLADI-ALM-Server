@@ -142,7 +142,7 @@ public class BookingService {
         if(resourceBooking.getStatus().equals(BookingStatus.FINISHED)) throw new BaseException(BaseResponseCode.ALREADY_FINISHED_BOOKING);
 
         // 예약 취소
-        resourceBooking.cancelBookingResource();
+        resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
         resourceBookingRepository.save(resourceBooking);
     }
 
@@ -194,6 +194,6 @@ public class BookingService {
         if(!resourceBooking.getStatus().equals(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_REJECT_BOOKING_STATUS);
 
         // 예약 취소
-        resourceBooking.cancelBookingResource();
+        resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
     }
 }
