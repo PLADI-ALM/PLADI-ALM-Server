@@ -31,7 +31,7 @@ public class AdminResourceRes {
                 .category(resourceBooking.getResource().getCategory().getValue())
                 .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
-                .requester(resourceBooking.getUser().getName())
+                .requester(resourceBooking.getUser().getPosition().getName())
                 .status(resourceBooking.getStatus().getValue())
                 .build();
 
