@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 
@@ -75,6 +76,11 @@ public class ResourceController {
     /**
      * 자원 기간별 예약 현황 조회별
      */
+    @GetMapping("/{resourceId}/booking-state")
+    public ResponseCustom<List<String>> getResourceBookedDate(@PathVariable(name = "resourceId") Long resourceId,
+                                                              @RequestParam String month) {
+        return ResponseCustom.OK(resourceService.getResourceBookedDate(resourceId, month));
+    }
 
 
 
