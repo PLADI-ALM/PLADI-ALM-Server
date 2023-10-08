@@ -22,7 +22,8 @@ server:
   port: 8080
   archiving:
     url: https://gpkzpnv8lh.execute-api.ap-northeast-2.amazonaws.com/dev/dev-pladi-archiving
-
+  servlet:
+    context-path: /api
 
 jwt:
   secret: ENC(7JHqgwmXfXySGksMK5SOUrWg7edAhDXA044D8pyPbQbsYgdgs+by47ti/tHUwlwqSCMmmD9FM3tZvazmb/0wtqTKqYXGsrNnlkD2yFO11Z6Gis49IO0SWhaAnmyUexlwy+Bscc2pZBK12M50vCeHkFQGRIe1SlPj)
