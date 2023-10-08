@@ -12,6 +12,7 @@ public class TokenDto {
     private String accessToken;
     @Schema(type = "String", description = "RefreshToken", example = "bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTY3NTg2OTcsInVzZXJJZHgiOjEsInN1YiI6IjEifQ.DSBuBlStkjhT05vuzjWd-cg7naG5KikUxII734u3nUw")
     private String refreshToken;
+    @Schema(type = "String", description = "사용자 역할", example = "BASIC / ADMIN")
     private Role role;
 
     public static TokenDto toDto(String accessToken, String refreshToken, Role role){
