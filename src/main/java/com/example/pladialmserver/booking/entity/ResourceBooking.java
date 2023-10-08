@@ -56,5 +56,8 @@ public class ResourceBooking extends BaseEntity {
     status = BookingStatus.CANCELED;
   }
 
-  public void returnBookingResource() { status = BookingStatus.FINISHED; }
+  public void returnBookingResource() {
+    status = BookingStatus.FINISHED;
+    returnDate = LocalDateTime.now();
+  }
 }
