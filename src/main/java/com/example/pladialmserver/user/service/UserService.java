@@ -1,5 +1,7 @@
 package com.example.pladialmserver.user.service;
 
+import com.example.pladialmserver.global.feign.dto.UserReq;
+import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
@@ -20,6 +22,7 @@ import static com.example.pladialmserver.global.exception.BaseResponseCode.USER_
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ArchivingServerClient archivingServerClient;
     private final JwtUtil jwtUtil;
 
     public TokenDto login(LoginReq loginReq) {
