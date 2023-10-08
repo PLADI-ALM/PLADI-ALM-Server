@@ -87,7 +87,4 @@ public class ResourceBooking extends BaseEntity {
     return status.equals(bookingStatus);
   }
 
-  public void allowBookingResource() {
-    status = BookingStatus.BOOKED;
-  }
 }

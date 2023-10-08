@@ -192,7 +192,7 @@ public class BookingService {
         // 관리자 유무
         if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 예약대기가 아닌 경우
-        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_REJECT_BOOKING_STATUS);
+        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
 
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
@@ -208,14 +208,14 @@ public class BookingService {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
-        // 유저-예약 연결 여부
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        // 관리자 유무
+        if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 예약대기가 아닌 경우
-        if(!resourceBooking.getStatus().equals(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
+        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 이미 예약된 날짜 여부 확인
         if(resourceBookingRepository.existsDate(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
 
         // 예약 허가
-        resourceBooking.allowBookingResource();
+        resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
     }
 }
