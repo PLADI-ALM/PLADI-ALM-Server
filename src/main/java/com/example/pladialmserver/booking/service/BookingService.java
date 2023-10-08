@@ -11,6 +11,7 @@ import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBoo
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -187,6 +188,8 @@ public class BookingService {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
+        // 관리자 유무
+        if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 유저-예약 연결 여부
         if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 예약대기가 아닌 경우
