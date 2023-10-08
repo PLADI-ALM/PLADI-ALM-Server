@@ -190,8 +190,6 @@ public class BookingService {
 
         // 관리자 유무
         if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-        // 유저-예약 연결 여부
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         // 예약대기가 아닌 경우
         if(!resourceBooking.getStatus().equals(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_REJECT_BOOKING_STATUS);
 
