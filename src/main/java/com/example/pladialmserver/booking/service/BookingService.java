@@ -1,6 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
-import com.example.pladialmserver.admin.AdminBookingRes;
+import com.example.pladialmserver.booking.dto.response.AdminBookingRes;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
