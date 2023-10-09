@@ -32,3 +32,8 @@ aws:
   s3:
     region: ENC(g5tyuGOJBDEmnezuqqberSvKxUO3sHtm)
     bucket: ENC(xV+R4mKu3wiOHGoDKhWrsRyXTDOauoNy)
+
+redis:
+  host: ENC(wIh6kiQ7W/qgHC1zR1Vb7ZanSpzgLsT7)
+  port: ENC(52XQ9OWXFVilIpOWtV217g==)
+  password: ENC(12sPod7cSJbwOScRscRp3A==)

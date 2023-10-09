@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 
 import static com.example.pladialmserver.global.Constants.JWT.BEARER_PREFIX;
@@ -22,8 +23,10 @@ public class JwtUtil {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private final Key key;
+    private final RedisUtil redisUtil;
 
-    public JwtUtil(@Value("${jwt.secret}") String secretKey) {
+    public JwtUtil(@Value("${jwt.secret}") String secretKey, RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -33,6 +36,7 @@ public class JwtUtil {
         long now = new Date().getTime();
         String accessToken = createAccessToken(userIdx, now).compact();
         String refreshToken = createToken(now, REFRESH_TOKEN_EXPIRE_TIME).compact();
+        redisUtil.setValue(userIdx.toString(), refreshToken, Duration.ofMillis(REFRESH_TOKEN_EXPIRE_TIME));
         return TokenDto.toDto(BEARER_PREFIX + accessToken, BEARER_PREFIX + refreshToken, role);
     }
 
