@@ -49,7 +49,6 @@ public class JwtUtil {
 
     // Token 기본 생성 및 RefreshToken 생성
     private JwtBuilder createToken(long now, long expireTime) {
-        // todo redis refresh token 적용
         return Jwts.builder()
                 .setExpiration(new Date(now + expireTime))
                 .signWith(key, SignatureAlgorithm.HS256);
@@ -86,5 +85,10 @@ public class JwtUtil {
     public Long getUserIdFromJWT(String accessToken) {
         String userId = String.valueOf(parseClaims(accessToken).get(CLAIM_NAME));
         return Long.parseLong(userId);
+    }
+
+    // redis 내 token 가져오기
+    public String getTokenInRedis(String token){
+        return redisUtil.getValue(token);
     }
 }
