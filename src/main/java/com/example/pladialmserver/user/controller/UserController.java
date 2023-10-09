@@ -62,7 +62,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)로그아웃 성공"),
     })
-    @PostMapping("/position")
+    @PostMapping("/logout")
     public ResponseCustom logout(@Account User user, HttpServletRequest request){
         userService.logout(user, request);
         return ResponseCustom.OK();
