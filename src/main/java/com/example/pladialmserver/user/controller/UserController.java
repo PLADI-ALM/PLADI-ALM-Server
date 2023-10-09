@@ -14,11 +14,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -31,7 +29,7 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * 로그인
+     * [토큰 X] 로그인
      */
     @Operation(summary = "로그인", description = "로그인을 한다.")
     @ApiResponses(value = {
@@ -55,5 +53,18 @@ public class UserController {
     @GetMapping("/position")
     public ResponseCustom<UserPositionRes> getUserPosition(@Account User user){
         return ResponseCustom.OK(userService.getUserPosition(user));
+    }
+
+    /**
+     * 로그아웃
+     */
+    @Operation(summary = "로그아웃", description = "로그아웃을 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)로그아웃 성공"),
+    })
+    @PostMapping("/position")
+    public ResponseCustom logout(@Account User user, HttpServletRequest request){
+        userService.logout(user, request);
+        return ResponseCustom.OK();
     }
 }

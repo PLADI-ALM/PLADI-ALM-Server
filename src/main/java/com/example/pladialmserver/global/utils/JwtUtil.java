@@ -9,10 +9,12 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.example.pladialmserver.global.Constants.JWT.BEARER_PREFIX;
 import static com.example.pladialmserver.global.Constants.JWT.CLAIM_NAME;
@@ -90,5 +92,21 @@ public class JwtUtil {
     // redis 내 token 가져오기
     public String getTokenInRedis(String token){
         return redisUtil.getValue(token);
+    }
+
+    // blacklist
+    public void setBlackListToken(String token, String status) {
+        redisUtil.setValue(token, status, getExpiration(token), TimeUnit.MILLISECONDS);
+    }
+
+    public void deleteRefreshToken(Long userId) {
+        if (!ObjectUtils.isEmpty(redisUtil.getValue(userId.toString()))) redisUtil.deleteValue(userId.toString());
+    }
+
+    // token의 남은 시간 계산
+    private Long getExpiration(String token) {
+        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
+        long now = new Date().getTime();
+        return expiration.getTime() - now;
     }
 }

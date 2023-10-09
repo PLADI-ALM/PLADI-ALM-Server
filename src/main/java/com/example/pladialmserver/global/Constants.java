@@ -13,5 +13,7 @@ public class Constants {
         public static final String AUTHORIZATION_HEADER = "Authorization";
         public static final String BEARER_PREFIX = "bearer ";
         public static final String CLAIM_NAME = "userIdx";
+        public static final String LOGOUT = "logout";
+        public static final String SIGNOUT = "signout";
     }
 }
