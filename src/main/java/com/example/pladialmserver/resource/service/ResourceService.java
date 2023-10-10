@@ -101,19 +101,5 @@ public class ResourceService {
 
     }
 
-    /**
-     * 관리자 자원 예약 목록을 조회
-     */
-    public Page<AdminResourceRes> getBookingResources(Pageable pageable) {
-        Pageable sortedByDateAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                Sort.by(Sort.Order.asc("startDate")));
-
-        Page<ResourceBooking> resourceBookings=resourceBookingRepository.findByStatusIn(
-                Arrays.asList(BookingStatus.BOOKED, BookingStatus.USING,BookingStatus.WAITING),
-                sortedByDateAsc
-        );
-
-        return resourceBookings.map(AdminResourceRes::toDto);
-    }
 
 }
