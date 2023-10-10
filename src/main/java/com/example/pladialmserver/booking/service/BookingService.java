@@ -48,7 +48,7 @@ public class BookingService {
         }
     }
 
-    // 권한 확인
+    // 자원 예약 권한 확인
     private ResourceBooking checkAuthentication(User user, Long resourceBookingId, Role role) {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
@@ -63,6 +63,21 @@ public class BookingService {
         return resourceBooking;
     }
 
+    // 회의실 예약 권한 확인
+    private OfficeBooking checkOfficeBookingAuthentication(User user, Long officeBookingId, Role role,Object object) {
+        OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        switch (role) {
+            case BASIC:
+                if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                break;
+            case ADMIN:
+                if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                break;
+        }
+        return officeBooking;
+    }
+
     // 자원 예약 반납 공통 메서드
     private void returnBookingResource(ResourceBooking resourceBooking) {
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
@@ -73,6 +88,7 @@ public class BookingService {
         resourceBookingRepository.save(resourceBooking);
     }
 
+
     // ===================================================================================================================
     // [일반-회의실]
     // ===================================================================================================================
@@ -81,10 +97,8 @@ public class BookingService {
     /**
      * 회의실 예약 개별 조회
      */
-    public OfficeBookingDetailRes getOfficeBookingDetail(User user, Long officeBookingId) {
-        OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+    public OfficeBookingDetailRes getOfficeBookingDetailByBasic(User user, Long officeBookingId) {
+        OfficeBooking officeBooking = checkOfficeBookingAuthentication(user, officeBookingId, Role.BASIC);
         return OfficeBookingDetailRes.toDto(officeBooking);
     }
 
@@ -187,6 +201,14 @@ public class BookingService {
         );
 
         return bookings.map(AdminBookingRes::toDto);
+    }
+
+    /**
+     * 관리자 회의실 예약 개별 조회
+     */
+    public OfficeBookingDetailRes getOfficeBookingDetailByAdmin(User user, Long officeBookingId) {
+        OfficeBooking officeBooking = checkOfficeBookingAuthentication(user, officeBookingId, Role.ADMIN);
+        return OfficeBookingDetailRes.toDto(officeBooking);
     }
 
 
