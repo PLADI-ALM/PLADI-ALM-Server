@@ -16,5 +16,4 @@ public class PladiAlmServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(PladiAlmServerApplication.class, args);
     }
-
 }
