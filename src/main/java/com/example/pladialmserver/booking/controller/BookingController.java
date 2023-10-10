@@ -113,7 +113,7 @@ public class BookingController {
             @Account User user,
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
-        bookingService.returnBookingResource(user, resourceBookingId);
+        bookingService.returnBookingResourceByBasic(user, resourceBookingId);
         return ResponseCustom.OK();
     }
 

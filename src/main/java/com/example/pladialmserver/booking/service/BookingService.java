@@ -11,7 +11,6 @@ import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBoo
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.UserRepository;
@@ -141,13 +140,16 @@ public class BookingService {
         resourceBookingRepository.save(resourceBooking);
     }
 
+    /**
+     * 자원 예약 반납
+     */
     @Transactional
-    public void returnBookingResource(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+    public void returnBookingResourceByBasic(User user, Long resourceBookingId) {
+        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.BASIC);
+        returnBookingResource(resourceBooking);
+    }
 
-        // 사용자가 예약한 경우가 아니면
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+    private void returnBookingResource(ResourceBooking resourceBooking) {
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if(!resourceBooking.checkBookingStatus(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
@@ -210,4 +212,30 @@ public class BookingService {
         if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         return resourceBooking;
     }
+
+
+    /**
+     * 관리자 자원 예약 반납
+     */
+    @Transactional
+    public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
+        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
+        returnBookingResource(resourceBooking);
+    }
+
+    // 권한 확인
+    private ResourceBooking checkAuthentication(User user, Long resourceBookingId, Role role) {
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        switch (role) {
+            case BASIC:
+                if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                break;
+            case ADMIN:
+                if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                break;
+        }
+        return resourceBooking;
+    }
+
 }
