@@ -89,10 +89,7 @@ public class OfficeService {
      * 회의실 예약하기
      */
     @Transactional
-    public void bookOffice(Long officeId, OfficeReq officeReq) {
-        // todo: user 로직 생성 후 변경 예정
-        User user = userRepository.findById(1L)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+    public void bookOffice(User user, Long officeId, OfficeReq officeReq) {
         Office office = officeRepository.findByOfficeId(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
