@@ -88,7 +88,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: 22
           script: |
-            sudo docker rm -f $(docker ps -qa)
+            # sudo docker rm -f $(docker ps -qa)
+            sudo docker rm -f $(docker ps --filter name=pladi-prod -a -q)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/pladi-prod
             docker-compose up -d
             docker image prune -f
@@ -105,7 +106,8 @@ jobs:
           port: 22
           #key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            sudo docker rm -f $(docker ps -qa)
+            # sudo docker rm -f $(docker ps -qa)
+            sudo docker rm -f $(docker ps --filter name=pladi-dev -a -q)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/pladi-dev
             docker-compose up -d
             docker image prune -f
