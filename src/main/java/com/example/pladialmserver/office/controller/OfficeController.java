@@ -18,13 +18,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import org.springframework.data.domain.Pageable;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
@@ -40,7 +40,7 @@ public class OfficeController {
     /**
      * 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
      */
-    @Operation(summary = "회의실 목록 조회", description = "회의실 목록 조회를 진행한다.")
+    @Operation(summary = "회의실 목록 조회 (이승학)", description = "회의실 목록 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공"),
             @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -63,7 +63,7 @@ public class OfficeController {
     /**
      * 회의실 개별 조회
      */
-    @Operation(summary = "회의실 개별 조회", description = "회의실 개별 조회를 진행한다.")
+    @Operation(summary = "회의실 개별 조회 (이승학)", description = "회의실 개별 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공"),
             @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -77,7 +77,7 @@ public class OfficeController {
     /**
      * 일자별 회의실 예약 현황 조회
      */
-    @Operation(summary = "일자별 회의실 예약 현황 조회", description = "일자별 회의실 예약 현황 조회한다.")
+    @Operation(summary = "일자별 회의실 예약 현황 조회 (박서연)", description = "일자별 회의실 예약 현황 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)일자별 회의실 예약 현황 조회 성공"),
             @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
@@ -93,7 +93,7 @@ public class OfficeController {
     /**
      * 회의실 예약
      */
-    @Operation(summary = "회의실 예약", description = "회의실을 예약한다.")
+    @Operation(summary = "회의실 예약 (장채은)", description = "회의실을 예약한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요. (B0002) 요청사항은 30자 이하로 작성해주세요. (B0003)시작시간보다 끝나는 시간이 더 앞에 있습니다. (B0004)미래의 날짜를 선택해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),

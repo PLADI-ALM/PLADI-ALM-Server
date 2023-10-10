@@ -3,7 +3,6 @@ package com.example.pladialmserver.resource.controller;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
@@ -19,12 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
@@ -40,7 +37,7 @@ public class ResourceController {
     /**
      * 전체 자원 목록 조회 and 예약 가능한 자원 목록 조회
      */
-    @Operation(summary = "자원 목록 조회", description = "자원 목록 조회를 진행한다.")
+    @Operation(summary = "자원 목록 조회 (이승학)", description = "자원 목록 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)자원 목록 조회 성공"),
             @ApiResponse(responseCode = "400", description = "(R0001)자원과 날짜를 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -65,7 +62,7 @@ public class ResourceController {
     /**
      * 자원 개별 조회
      */
-    @Operation(summary = "자원 개별 조회", description = "자원 개별 조회를 진행한다.")
+    @Operation(summary = "자원 개별 조회 (박소정)", description = "자원 개별 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 자원입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
@@ -81,7 +78,7 @@ public class ResourceController {
     /**
      * 자원 월별 예약 현황 조회
      */
-    @Operation(summary = "자원 월별 예약 현황 조회", description = "월별로 자원 예약이 불가능한 날짜를 조회를 진행한다.")
+    @Operation(summary = "자원 월별 예약 현황 조회 (박소정)", description = "월별로 자원 예약이 불가능한 날짜를 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 자원입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
@@ -98,7 +95,7 @@ public class ResourceController {
     /**
      * 자원 예약
      */
-    @Operation(summary = "자원 예약", description = "자원을 예약한다.")
+    @Operation(summary = "자원 예약 (박소정)", description = "자원을 예약한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "400", description = "(B0010)날짜를 모두 입력해주세요. (B0002) 요청사항은 30자 이하로 작성해주세요. (B0003)시작시간보다 끝나는 시간이 더 앞에 있습니다. (B0004)미래의 날짜를 선택해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),

@@ -1,18 +1,20 @@
 package com.example.pladialmserver.office.service;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.office.dto.response.BookingStateRes;
-import com.example.pladialmserver.user.entity.User;
-import com.example.pladialmserver.user.repository.UserRepository;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
+import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
-import com.example.pladialmserver.office.entity.*;
-import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
+import com.example.pladialmserver.office.entity.Facility;
+import com.example.pladialmserver.office.entity.Office;
+import com.example.pladialmserver.office.entity.OfficeFacility;
 import com.example.pladialmserver.office.repository.OfficeRepository;
+import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
