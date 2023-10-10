@@ -3,7 +3,9 @@ package com.example.pladialmserver.booking.controller;
 import com.example.pladialmserver.booking.dto.response.AdminBookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.service.BookingService;
+import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,8 +53,9 @@ public class BookingAdminController {
     })
     @PatchMapping("/offices/{officeBookingId}/cancel")
     public ResponseCustom cancelBookingOffice(
+            @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {
-        bookingService.cancelBookingOffice(officeBookingId);
+        bookingService.cancelBookingOffice(user, officeBookingId);
         return ResponseCustom.OK();
     }
 
