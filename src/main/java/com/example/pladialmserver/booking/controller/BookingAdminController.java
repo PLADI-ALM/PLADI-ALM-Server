@@ -88,10 +88,10 @@ public class BookingAdminController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/resources/{resourceBookingId}")
-    public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(@Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
-        // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 3L;
-        return ResponseCustom.OK(bookingService.getResourceBookingDetailByAdmin(userId, resourceBookingId));
+    public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(
+            @Account User user,
+            @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
+        return ResponseCustom.OK(bookingService.getResourceBookingDetailByAdmin(user, resourceBookingId));
     }
 
 
