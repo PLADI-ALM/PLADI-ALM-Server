@@ -212,19 +212,16 @@ public class BookingService {
     }
 
     public ResourceBookingDetailRes getResourceBookingDetailByAdmin(Long userId, Long resourceBookingId) {
-        User user = checkAdmin(userId);
+        checkAdmin(userId);
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-        if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-
         return ResourceBookingDetailRes.toDto(resourceBooking);
     }
 
-    private User checkAdmin(Long userId) {
+    private void checkAdmin(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         // 관리자 유무
         if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-        return user;
     }
 }
