@@ -2,11 +2,13 @@ package com.example.pladialmserver.office.controller;
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
+import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -100,13 +102,14 @@ public class OfficeController {
     })
     @PostMapping("/{officeId}/booking")
     public ResponseCustom bookOffice(
+            @Account User user,
             @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name = "officeId") Long officeId,
             @RequestBody @Valid OfficeReq officeReq){
         // 현재보다 과거 날짜로 등록하는 경우
         if(LocalDate.now().isAfter(officeReq.getDate())) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
         // 끝나는 시간이 시작시간보다 빠른경우
         if (!officeReq.getStartTime().isBefore(officeReq.getEndTime()) && !officeReq.getEndTime().equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
-        officeService.bookOffice(officeId, officeReq);
+        officeService.bookOffice(user, officeId, officeReq);
         return ResponseCustom.OK();
     }
 

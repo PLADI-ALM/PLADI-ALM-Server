@@ -71,10 +71,7 @@ public class BookingService {
      * 회의실 예약 취소
      */
     @Transactional
-    public void cancelBookingOffice(Long officeBookingId) {
-        // todo: 로그인 기능 생성 후 변경 예정
-        User user = userRepository.findById(1L)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+    public void cancelBookingOffice(User user, Long officeBookingId) {
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
@@ -128,10 +125,7 @@ public class BookingService {
      * 자원 예약 취소
      */
     @Transactional
-    public void cancelBookingResource(Long resourceBookingId) {
-        // todo: 로그인 기능 생성 후 변경 예정
-        User user = userRepository.findById(1L)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+    public void cancelBookingResource(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
@@ -148,9 +142,7 @@ public class BookingService {
     }
 
     @Transactional
-    public void returnBookingResource(Long resourceBookingId) {
-        User user = userRepository.findById(1L)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+    public void returnBookingResource(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
