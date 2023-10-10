@@ -81,7 +81,7 @@ public class BookingAdminController {
     /**
      * 관리자 자원 예약 개별 조회
      */
-    @Operation(summary = "자원 예약 개별 조회", description = "자원 예약 내역을 개별 조회한다.")
+    @Operation(summary = "관리자 자원 예약 개별 조회", description = "자원 예약 내역을 개별 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -90,7 +90,7 @@ public class BookingAdminController {
     @GetMapping("/resources/{resourceBookingId}")
     public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(@Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
         // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
+        Long userId = 3L;
         return ResponseCustom.OK(bookingService.getResourceBookingDetailByAdmin(userId, resourceBookingId));
     }
 
