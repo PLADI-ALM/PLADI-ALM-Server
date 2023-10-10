@@ -39,11 +39,11 @@ public class BookingController {
     })
     @GetMapping
     public ResponseCustom<Page<BookingRes>> getBookings(
+            @Account User user,
             @Parameter(description = "(String) 카테고리 선택", example = "'office' / 'resource'") @RequestParam(required = false) String category,
             @PageableDefault(size = 8) Pageable pageable){
-        // TODO 유저 ID 받아오는 로직 추가, category 검증 추가 (queryDSL 변경 후 적용)
-        Long userId = 1L;
-        return ResponseCustom.OK(bookingService.getBookings(userId, category, pageable));
+        // category 검증 추가 (queryDSL 변경 후 적용)
+        return ResponseCustom.OK(bookingService.getBookings(user, category, pageable));
     }
 
     /**
@@ -56,10 +56,11 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/offices/{officeBookingId}")
-    public ResponseCustom<OfficeBookingDetailRes> getOfficeBookingDetail(@Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name="officeBookingId") Long officeBookingId){
-        // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
-        return ResponseCustom.OK(bookingService.getOfficeBookingDetail(userId, officeBookingId));
+    public ResponseCustom<OfficeBookingDetailRes> getOfficeBookingDetail(
+            @Account User user,
+            @Parameter(description = "(Long) 회의실 예약 Id", example = "1")
+            @PathVariable(name="officeBookingId") Long officeBookingId){
+        return ResponseCustom.OK(bookingService.getOfficeBookingDetail(user, officeBookingId));
     }
 
     /**
@@ -92,10 +93,10 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/resources/{resourceBookingId}")
-    public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(@Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
-        // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
-        return ResponseCustom.OK(bookingService.getResourceBookingDetail(userId, resourceBookingId));
+    public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(
+            @Account User user,
+            @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
+        return ResponseCustom.OK(bookingService.getResourceBookingDetail(user, resourceBookingId));
     }
 
     /**
