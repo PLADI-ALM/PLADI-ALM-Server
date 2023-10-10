@@ -6,6 +6,7 @@ import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
 import com.example.pladialmserver.booking.service.BookingService;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -152,5 +153,18 @@ public class BookingAdminController {
     ){
         bookingService.returnBookingResourceByAdmin(user, resourceBookingId);
         return ResponseCustom.OK();
+    }
+
+    /**
+     * 관리자 자원 예약 목록을 조회
+     */
+    @Operation(summary = "관리자 자원 예약 목록 조회 (이승학)", description = "관리자 페이지에서 자원 예약 내역을 전체 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+    })
+    @GetMapping("/resources")
+    public ResponseCustom<Page<AdminResourceRes>> getBookingResources(
+            @PageableDefault(size = 8) Pageable pageable){
+        return ResponseCustom.OK(bookingService.getBookingResources(pageable));
     }
 }
