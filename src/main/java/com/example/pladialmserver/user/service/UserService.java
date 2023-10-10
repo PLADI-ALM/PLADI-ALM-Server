@@ -41,7 +41,7 @@ public class UserService {
 
     public void logout(User user, HttpServletRequest request) {
         String bearerToken = request.getHeader(Constants.JWT.AUTHORIZATION_HEADER);
-        bearerToken = bearerToken.replace(Constants.JWT.BEARER_PREFIX, "");
+        bearerToken = bearerToken.substring(Constants.JWT.BEARER_PREFIX.length());
         jwtUtil.setBlackListToken(bearerToken, Constants.JWT.LOGOUT);
         jwtUtil.deleteRefreshToken(user.getUserId());
     }
