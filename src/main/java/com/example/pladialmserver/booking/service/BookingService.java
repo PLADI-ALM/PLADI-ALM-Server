@@ -106,7 +106,6 @@ public class BookingService {
      */
     @Transactional
     public void cancelBookingOffice(User user, Long officeBookingId) {
-        if (!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
