@@ -87,7 +87,6 @@ public class BookingService {
         resourceBookingRepository.save(resourceBooking);
     }
 
-
     // ===================================================================================================================
     // [일반-회의실]
     // ===================================================================================================================
@@ -107,6 +106,7 @@ public class BookingService {
      */
     @Transactional
     public void cancelBookingOffice(User user, Long officeBookingId) {
+        if (!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
 
@@ -190,7 +190,9 @@ public class BookingService {
     /**
      * 관리자 회의실 예약 목록 조회
      */
-    public Page<AdminBookingRes> getBookingOffices(Pageable pageable) {
+    public Page<AdminBookingRes> getBookingOffices(User user,Pageable pageable) {
+        // 권한 확인
+        checkAdminRole(user);
         Pageable sortedByDateAndStartTimeAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by(Sort.Order.asc("date"), Sort.Order.asc("startTime")));
 
@@ -202,12 +204,37 @@ public class BookingService {
         return bookings.map(AdminBookingRes::toDto);
     }
 
+    private void checkAdminRole(User user) {
+        if (user.getRole() != Role.ADMIN) {
+            throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        }
+    }
+
     /**
      * 관리자 회의실 예약 개별 조회
      */
     public OfficeBookingDetailRes getOfficeBookingDetailByAdmin(User user, Long officeBookingId) {
         OfficeBooking officeBooking = checkOfficeBookingAuthentication(user, officeBookingId, Role.ADMIN);
         return OfficeBookingDetailRes.toDto(officeBooking);
+    }
+
+    /**
+     * 관리자 회의실 예약 반려
+     */
+    @Transactional
+    public void cancelBookingOfficeByAdmin(User user, Long officeBookingId) {
+        OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        //관리자인지 확인
+        if (!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        // 이미 취소된 예약이면
+        if(officeBooking.getStatus().equals(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
+        // 취소하려는 예약이 이미 사용이 완료된 경우
+        if(officeBooking.getStatus().equals(BookingStatus.FINISHED)) throw new BaseException(BaseResponseCode.ALREADY_FINISHED_BOOKING);
+
+        // 예약 취소
+        officeBooking.cancelBookingOffice();
+        officeBookingRepository.save(officeBooking);
     }
 
 
