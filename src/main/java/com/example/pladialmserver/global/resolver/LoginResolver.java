@@ -35,7 +35,7 @@ public class LoginResolver implements HandlerMethodArgumentResolver {
         String token = webRequest.getHeader(Constants.JWT.AUTHORIZATION_HEADER);
         if(!StringUtils.hasText(token)) throw new BaseException(BaseResponseCode.NULL_TOKEN);
         // 추출
-        token = token.replace(Constants.JWT.BEARER_PREFIX, "");
+        token = token.substring(Constants.JWT.BEARER_PREFIX.length());
         // 유효성 검사
         jwtUtil.validateToken(token);
         // 이미 로그아웃 & 회원 탈퇴가 된 토큰인지 확인
