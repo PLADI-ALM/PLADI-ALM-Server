@@ -31,7 +31,7 @@ public class UserController {
     /**
      * [토큰 X] 로그인
      */
-    @Operation(summary = "로그인", description = "로그인을 한다.")
+    @Operation(summary = "로그인 (장채은)", description = "로그인을 한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)로그인 성공"),
             @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0003)비밀번호 형식을 확인해주세요. \n (U0004)이메일을 입력해주세요.\n (U0005)비밀번호를 입력해주세요. \n (U0006)비밀번호가 일치하지 않습니다. ", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -45,7 +45,7 @@ public class UserController {
     /**
      * 사이드바 사용자 정보
      */
-    @Operation(summary = "사용자 정보", description = "사이드바에 필요한 사용자 정보를 불러온다.")
+    @Operation(summary = "사용자 정보 (장채은)", description = "사이드바에 필요한 사용자 정보를 불러온다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)사용자 정보 불러오기 성공"),
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
@@ -58,7 +58,7 @@ public class UserController {
     /**
      * 로그아웃
      */
-    @Operation(summary = "로그아웃", description = "로그아웃을 진행한다.")
+    @Operation(summary = "로그아웃 (장채은)", description = "로그아웃을 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)로그아웃 성공"),
     })

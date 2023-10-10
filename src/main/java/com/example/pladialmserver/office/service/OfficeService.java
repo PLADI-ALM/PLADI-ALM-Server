@@ -1,18 +1,19 @@
 package com.example.pladialmserver.office.service;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.office.dto.response.BookingStateRes;
-import com.example.pladialmserver.user.entity.User;
-import com.example.pladialmserver.user.repository.UserRepository;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookedTimeRes;
+import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
-import com.example.pladialmserver.office.entity.*;
-import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
+import com.example.pladialmserver.office.entity.Facility;
+import com.example.pladialmserver.office.entity.Office;
+import com.example.pladialmserver.office.entity.OfficeFacility;
 import com.example.pladialmserver.office.repository.OfficeRepository;
+import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +29,13 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OfficeService {
-    private final UserRepository userRepository;
     private final OfficeRepository officeRepository;
     private final OfficeBookingRepository officeBookingRepository;
 
-    //전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
+
+    /**
+     * 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
+     */
     public Page<OfficeRes> findAvailableOffices(LocalDate date, LocalTime startTime, LocalTime endTime, Pageable pageable) {
 
         Page<Office> allOffices;
@@ -59,7 +62,9 @@ public class OfficeService {
         });
     }
 
-     //회의실 개별 조회
+    /**
+     * 회의실 개별 조회
+     */
     public OfficeRes getOffice(Long officeId) {
         Office office = officeRepository.findByOfficeId(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
