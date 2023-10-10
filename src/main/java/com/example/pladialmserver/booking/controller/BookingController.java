@@ -60,7 +60,7 @@ public class BookingController {
             @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1")
             @PathVariable(name="officeBookingId") Long officeBookingId){
-        return ResponseCustom.OK(bookingService.getOfficeBookingDetail(user, officeBookingId));
+        return ResponseCustom.OK(bookingService.getOfficeBookingDetailByBasic(user, officeBookingId));
     }
 
     /**

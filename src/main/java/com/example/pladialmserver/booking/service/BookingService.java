@@ -48,19 +48,32 @@ public class BookingService {
         }
     }
 
-    // 권한 확인
-    private ResourceBooking checkAuthentication(User user, Long resourceBookingId, Role role) {
+    // 자원 예약 권한 확인
+    private ResourceBooking checkResourceBookingAuthentication(User user, Long resourceBookingId, Role role) {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        checkRole(role, resourceBooking.getUser(), user);
+        return resourceBooking;
+    }
+
+    // 회의실 예약 권한 확인
+    private OfficeBooking checkOfficeBookingAuthentication(User user, Long officeBookingId, Role role) {
+        OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        checkRole(role, officeBooking.getUser(), user);
+        return officeBooking;
+    }
+
+    // 권한 확인
+    private static void checkRole(Role role, User user, User target) {
         switch (role) {
             case BASIC:
-                if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                if (!user.equals(target)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
                 break;
             case ADMIN:
-                if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                if (!target.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
                 break;
         }
-        return resourceBooking;
     }
 
     // 자원 예약 반납 공통 메서드
@@ -73,6 +86,7 @@ public class BookingService {
         resourceBookingRepository.save(resourceBooking);
     }
 
+
     // ===================================================================================================================
     // [일반-회의실]
     // ===================================================================================================================
@@ -81,10 +95,8 @@ public class BookingService {
     /**
      * 회의실 예약 개별 조회
      */
-    public OfficeBookingDetailRes getOfficeBookingDetail(User user, Long officeBookingId) {
-        OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-        if(!officeBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+    public OfficeBookingDetailRes getOfficeBookingDetailByBasic(User user, Long officeBookingId) {
+        OfficeBooking officeBooking = checkOfficeBookingAuthentication(user, officeBookingId, Role.BASIC);
         return OfficeBookingDetailRes.toDto(officeBooking);
     }
 
@@ -139,7 +151,7 @@ public class BookingService {
      * 자원 예약 개별 조회
      */
     public ResourceBookingDetailRes getResourceBookingDetail(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.BASIC);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
         return ResourceBookingDetailRes.toDto(resourceBooking);
     }
 
@@ -148,7 +160,7 @@ public class BookingService {
      */
     @Transactional
     public void cancelBookingResource(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.BASIC);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
 
         // 이미 취소된 예약이면
         if(resourceBooking.checkBookingStatus(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
@@ -165,7 +177,7 @@ public class BookingService {
      */
     @Transactional
     public void returnBookingResourceByBasic(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.BASIC);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
         returnBookingResource(resourceBooking);
     }
 
@@ -189,6 +201,14 @@ public class BookingService {
         return bookings.map(AdminBookingRes::toDto);
     }
 
+    /**
+     * 관리자 회의실 예약 개별 조회
+     */
+    public OfficeBookingDetailRes getOfficeBookingDetailByAdmin(User user, Long officeBookingId) {
+        OfficeBooking officeBooking = checkOfficeBookingAuthentication(user, officeBookingId, Role.ADMIN);
+        return OfficeBookingDetailRes.toDto(officeBooking);
+    }
+
 
     // ===================================================================================================================
     // [관리자-자원]
@@ -198,7 +218,7 @@ public class BookingService {
      * 관리자 자원 예약 개별 조회
      */
     public ResourceBookingDetailRes getResourceBookingDetailByAdmin(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         return ResourceBookingDetailRes.toDto(resourceBooking);
     }
 
@@ -207,7 +227,7 @@ public class BookingService {
      */
     @Transactional
     public void rejectResourceBooking(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         // 예약대기가 아닌 경우
         if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 예약 취소
@@ -219,7 +239,7 @@ public class BookingService {
      */
     @Transactional
     public void allowResourceBooking(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         // 예약대기가 아닌 경우
         if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 이미 예약된 날짜 여부 확인
@@ -234,7 +254,7 @@ public class BookingService {
      */
     @Transactional
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         returnBookingResource(resourceBooking);
     }
 
