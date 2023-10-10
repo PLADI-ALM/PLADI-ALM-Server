@@ -13,7 +13,6 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
-import com.example.pladialmserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,9 +29,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BookingService {
-    private final UserRepository userRepository;
     private final OfficeBookingRepository officeBookingRepository;
     private final ResourceBookingRepository resourceBookingRepository;
+
 
     /**
      * 예약 목록 조회
@@ -48,6 +47,36 @@ public class BookingService {
             throw new BaseException(BaseResponseCode.BAD_REQUEST);
         }
     }
+
+    // 권한 확인
+    private ResourceBooking checkAuthentication(User user, Long resourceBookingId, Role role) {
+        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
+        switch (role) {
+            case BASIC:
+                if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                break;
+            case ADMIN:
+                if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                break;
+        }
+        return resourceBooking;
+    }
+
+    // 자원 예약 반납 공통 메서드
+    private void returnBookingResource(ResourceBooking resourceBooking) {
+        // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
+        if(!resourceBooking.checkBookingStatus(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
+
+        // 예약 반납
+        resourceBooking.returnBookingResource();
+        resourceBookingRepository.save(resourceBooking);
+    }
+
+    // ===================================================================================================================
+    // [일반-회의실]
+    // ===================================================================================================================
+
 
     /**
      * 회의실 예약 개별 조회
@@ -101,6 +130,11 @@ public class BookingService {
         officeBookingRepository.saveAll(checkSTList);
     }
 
+
+    // ===================================================================================================================
+    // [일반-자원]
+    // ===================================================================================================================
+
     /**
      * 자원 예약 개별 조회
      */
@@ -135,15 +169,10 @@ public class BookingService {
         returnBookingResource(resourceBooking);
     }
 
-    // 자원 예약 반납
-    private void returnBookingResource(ResourceBooking resourceBooking) {
-        // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
-        if(!resourceBooking.checkBookingStatus(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
-        // 예약 반납
-        resourceBooking.returnBookingResource();
-        resourceBookingRepository.save(resourceBooking);
-    }
+    // ===================================================================================================================
+    // [관리자-회의실]
+    // ===================================================================================================================
 
     /**
      * 관리자 회의실 예약 목록 조회
@@ -158,6 +187,19 @@ public class BookingService {
         );
 
         return bookings.map(AdminBookingRes::toDto);
+    }
+
+
+    // ===================================================================================================================
+    // [관리자-자원]
+    // ===================================================================================================================
+
+    /**
+     * 관리자 자원 예약 개별 조회
+     */
+    public ResourceBookingDetailRes getResourceBookingDetailByAdmin(User user, Long resourceBookingId) {
+        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
+        return ResourceBookingDetailRes.toDto(resourceBooking);
     }
 
     /**
@@ -188,35 +230,12 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 개별 조회
-     */
-    public ResourceBookingDetailRes getResourceBookingDetailByAdmin(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
-        return ResourceBookingDetailRes.toDto(resourceBooking);
-    }
-
-    /**
      * 관리자 자원 예약 반납
      */
     @Transactional
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkAuthentication(user, resourceBookingId, Role.ADMIN);
         returnBookingResource(resourceBooking);
-    }
-
-    // 권한 확인
-    private ResourceBooking checkAuthentication(User user, Long resourceBookingId, Role role) {
-        ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
-        switch (role) {
-            case BASIC:
-                if(!resourceBooking.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-                break;
-            case ADMIN:
-                if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-                break;
-        }
-        return resourceBooking;
     }
 
 }
