@@ -33,6 +33,15 @@ public enum BaseResponseCode {
     NOT_EMPTY_EMAIL("U0004", HttpStatus.BAD_REQUEST, "이메일을 입력해주세요."),
     NOT_EMPTY_PASSWORD("U0005", HttpStatus.BAD_REQUEST, "비밀번호를 입력해주세요."),
     INVALID_PASSWORD("U0006", HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+    NOT_EMPTY_NAME("U0007", HttpStatus.BAD_REQUEST, "성명을 입력해주세요."),
+    NOT_EMPTY_DEPARTMENT("U0008", HttpStatus.BAD_REQUEST, "부서를 입력해주세요."),
+    NOT_EMPTY_POSITION("U0009", HttpStatus.BAD_REQUEST, "직위 입력해주세요."),
+    NOT_EMPTY_OFFICE_JOB("U0010", HttpStatus.BAD_REQUEST, "직책 입력해주세요."),
+    NOT_EMPTY_ROLE("U0011", HttpStatus.BAD_REQUEST, "역할을 입력해주세요."),
+    DEPARTMENT_NOT_FOUND("U0012", HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
+    POSITION_NOT_FOUND("U0013", HttpStatus.NOT_FOUND, "직위를 찾을 수 없습니다."),
+    ROLE_NOT_FOUND("U0013", HttpStatus.NOT_FOUND, "역할을 찾을 수 없습니다."),
+    EXISTS_EMAIL("U0014", HttpStatus.CONFLICT, "존재하는 이메일입니다."),
 
     // Booking
     DATE_OR_TIME_IS_NULL("B0001", HttpStatus.BAD_REQUEST, "날짜와 시간을 모두 입력해주세요."),
