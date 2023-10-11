@@ -165,7 +165,8 @@ public class BookingAdminController {
     })
     @GetMapping("/resources")
     public ResponseCustom<Page<AdminResourceRes>> getBookingResources(
+            @Account User user,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(bookingService.getBookingResources(pageable));
+        return ResponseCustom.OK(bookingService.getBookingResources(user,pageable));
     }
 }
