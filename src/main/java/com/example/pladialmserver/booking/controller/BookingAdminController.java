@@ -38,8 +38,9 @@ public class BookingAdminController {
     })
     @GetMapping("/offices")
     public ResponseCustom<Page<AdminBookingRes>> getBookingOffices(
+            @Account User user,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(bookingService.getBookingOffices(pageable));
+        return ResponseCustom.OK(bookingService.getBookingOffices(user,pageable));
     }
 
 
@@ -57,7 +58,7 @@ public class BookingAdminController {
     public ResponseCustom cancelBookingOffice(
             @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {
-        bookingService.cancelBookingOffice(user, officeBookingId);
+        bookingService.cancelBookingOfficeByAdmin(user, officeBookingId);
         return ResponseCustom.OK();
     }
 
