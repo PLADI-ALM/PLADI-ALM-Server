@@ -21,7 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "관리자 API")
+@Api(tags = "관리자 예약 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/bookings")

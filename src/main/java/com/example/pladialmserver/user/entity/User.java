@@ -2,7 +2,9 @@ package com.example.pladialmserver.user.entity;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BaseEntity;
+import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -57,4 +59,26 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
+    @Builder
+    public User(String name, String email, String password, Department department, Position position, String officeJob, Role role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.department = department;
+        this.position = position;
+        this.officeJob = officeJob;
+        this.role = role;
+    }
+
+    public static User toEntity(CreateUserReq req, Department department, Position position){
+        return User.builder()
+                .name(req.getName())
+                .email(req.getEmail())
+                .password(req.getPassword())
+                .department(department)
+                .position(position)
+                .officeJob(req.getOfficeJob())
+                .role(Role.getRoleByName(req.getRole()))
+                .build();
+    }
 }
