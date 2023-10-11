@@ -225,7 +225,7 @@ public class BookingService {
         OfficeBooking officeBooking = officeBookingRepository.findById(officeBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
         //관리자인지 확인
-        if (!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        checkAdminRole(user);
         // 이미 취소된 예약이면
         if(officeBooking.getStatus().equals(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
         // 취소하려는 예약이 이미 사용이 완료된 경우
@@ -288,7 +288,8 @@ public class BookingService {
     /**
      * 관리자 자원 예약 목록을 조회
      */
-    public Page<AdminResourceRes> getBookingResources(Pageable pageable) {
+    public Page<AdminResourceRes> getBookingResources(User user,Pageable pageable) {
+        checkAdminRole(user);
         Pageable sortedByDateAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by(Sort.Order.asc("startDate")));
 
