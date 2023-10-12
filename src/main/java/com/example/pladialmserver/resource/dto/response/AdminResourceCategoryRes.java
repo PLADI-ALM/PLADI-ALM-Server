@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Data
 @Builder
 public class AdminResourceCategoryRes {
-    @Schema(type = "[String]", description = "자원 카테고리 이름", example = "'벤츠'")
+    @Schema(type = "[String]", description = "자원 카테고리 이름", example = "[전자기기, 문구류, 차량, 기타]")
     private List<String> category;
 
 
