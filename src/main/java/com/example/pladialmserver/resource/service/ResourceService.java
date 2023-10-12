@@ -3,28 +3,23 @@ package com.example.pladialmserver.resource.service;
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
-import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
-import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.User;
-import com.example.pladialmserver.user.repository.UserRepository;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

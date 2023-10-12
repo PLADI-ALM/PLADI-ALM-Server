@@ -9,14 +9,17 @@ import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.LoginReq;
 import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
+import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Position;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
 import com.example.pladialmserver.user.repository.PositionRepository;
-import com.example.pladialmserver.user.repository.UserRepository;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,5 +86,12 @@ public class UserService {
         List<Department> departments = departmentRepository.findAll();
         List<Position> positions = positionRepository.findAll();
         return CompanyRankListRes.toDto(departments, positions);
+    }
+
+    // 직원 계정 목록 조회
+    public Page<UserRes> getUserList(User admin, String name, Pageable pageable) {
+        // admin 사용자 확인
+        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        return userRepository.findAllByName(name, pageable).map(UserRes::toDto);
     }
 }

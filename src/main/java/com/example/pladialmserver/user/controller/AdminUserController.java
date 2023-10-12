@@ -4,15 +4,19 @@ import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
+import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,4 +53,15 @@ public class AdminUserController {
         return ResponseCustom.OK(userService.getCompanyRankList());
     }
 
+    @Operation(summary = "직원 계정 목록 조회 (장채은)", description = "직원 계정 목록을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)직원 계정 목록 조회 성공"),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("")
+    public ResponseCustom<Page<UserRes>> getUserList(@Account User user,
+                                                     Pageable pageable,
+                                                     @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
+        return ResponseCustom.OK(userService.getUserList(user, name, pageable));
+    }
 }
