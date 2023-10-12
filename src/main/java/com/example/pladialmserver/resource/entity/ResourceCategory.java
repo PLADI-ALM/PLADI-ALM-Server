@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @DynamicUpdate
 @Where(clause = "is_enable = true")
 public class ResourceCategory extends BaseEntity {
-  // 직위 (사원, 대리 등등)
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long resourceCategoryId;
