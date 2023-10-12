@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 @Builder
 public class CompanyRankListRes {
     @Schema(type = "Arrays", description = "부서 리스트")
-    private List<CompanyRankRes> departmentList;
+    private List<String> departmentList;
     @Schema(type = "Arrays", description = "직책 리스트")
-    private List<CompanyRankRes> positionList;
+    private List<String> positionList;
 
     public static CompanyRankListRes toDto(List<Department> departments, List<Position> positions){
         return CompanyRankListRes.builder()
-                .departmentList(departments.stream().map(CompanyRankRes::toDto).collect(Collectors.toList()))
-                .positionList(positions.stream().map(CompanyRankRes::toDto).collect(Collectors.toList()))
+                .departmentList(departments.stream().map(Department::getName).collect(Collectors.toList()))
+                .positionList(positions.stream().map(Position::getName).collect(Collectors.toList()))
                 .build();
     }
 }
