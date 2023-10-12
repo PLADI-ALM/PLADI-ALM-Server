@@ -7,6 +7,7 @@ import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Position;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import static com.example.pladialmserver.global.exception.BaseResponseCode.*;
 
@@ -74,5 +76,12 @@ public class UserService {
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
         userRepository.save(User.toEntity(createUserReq, department, position));
+    }
+
+    // 부서 및 직책 리스트
+    public CompanyRankListRes getCompanyRankList() {
+        List<Department> departments = departmentRepository.findAll();
+        List<Position> positions = positionRepository.findAll();
+        return CompanyRankListRes.toDto(departments, positions);
     }
 }
