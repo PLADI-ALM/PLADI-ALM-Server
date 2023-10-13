@@ -2,7 +2,7 @@ package com.example.pladialmserver.user.entity;
 
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BaseEntity;
-import com.example.pladialmserver.user.dto.request.CreateUserReq;
+import com.example.pladialmserver.user.dto.request.UserReq;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,7 +70,7 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public static User toEntity(CreateUserReq req, Department department, Position position){
+    public static User toEntity(UserReq req, Department department, Position position){
         return User.builder()
                 .name(req.getName())
                 .email(req.getEmail())
@@ -80,5 +80,16 @@ public class User extends BaseEntity {
                 .officeJob(req.getOfficeJob())
                 .role(Role.getRoleByName(req.getRole()))
                 .build();
+    }
+
+    public void updateUser(UserReq req, Department department, Position position){
+        if(!req.getEmail().equals(email)) email = req.getEmail();
+        if(!req.getName().equals(name)) name = req.getName();
+        if(!department.equals(this.department)) this.department = department;
+        if(!position.equals(this.position)) this.position = position;
+        if(!req.getOfficeJob().equals(officeJob)) officeJob = req.getOfficeJob();
+        password = req.getPassword();
+        Role reqRole = Role.getRoleByName(req.getRole());
+        if(!reqRole.equals(role)) role = reqRole;
     }
 }

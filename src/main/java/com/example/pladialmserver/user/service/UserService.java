@@ -5,7 +5,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
-import com.example.pladialmserver.user.dto.request.CreateUserReq;
+import com.example.pladialmserver.user.dto.request.UserReq;
 import com.example.pladialmserver.user.dto.request.LoginReq;
 import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
@@ -67,7 +67,7 @@ public class UserService {
 
     // 직원 등록
     @Transactional
-    public void createUser(User admin, CreateUserReq createUserReq) {
+    public void createUser(User admin, UserReq createUserReq) {
         // admin 사용자 확인
         if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 이메일 중복 확인
@@ -79,6 +79,22 @@ public class UserService {
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
         userRepository.save(User.toEntity(createUserReq, department, position));
+    }
+
+    @Transactional
+    public void updateUser(User admin, Long userId, UserReq updateUserReq) {
+        // admin 사용자 확인
+        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        // 정보 변경 사용자 정보 확인
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+        if (userRepository.existsByEmailAndUserIdNot(updateUserReq.getEmail(), userId)) throw new BaseException(EXISTS_EMAIL);
+        Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Position position = positionRepository.findByName(updateUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
+        // 비밀번호 암호화
+        updateUserReq.setPassword(passwordEncoder.encode(updateUserReq.getPassword()));
+        // 수정 및 저장
+        user.updateUser(updateUserReq, department, position);
+        userRepository.save(user);
     }
 
     // 부서 및 직책 리스트
@@ -94,4 +110,5 @@ public class UserService {
         if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         return userRepository.findAllByName(name, pageable).map(UserRes::toDto);
     }
+
 }
