@@ -29,6 +29,10 @@ public class Resource extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private Category category;
 
+  @ManyToOne
+  @JoinColumn(nullable = false, name = "resource_category_id")
+  private ResourceCategory resourceCategory;
+
   @NotNull
   @Size(max = 255)
   private String description;
