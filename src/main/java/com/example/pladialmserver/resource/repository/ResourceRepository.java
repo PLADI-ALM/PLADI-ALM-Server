@@ -12,5 +12,6 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
     Page<Resource> findAllByResourceIdNotIn(List<Long> resourceIds, Pageable pageable);
 
     Page<Resource> findByNameContaining(String resourceName,Pageable pageable);
+    Page<Resource> findByNameContainingOrderByName(String resourceName,Pageable pageable);
 
 }

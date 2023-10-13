@@ -8,10 +8,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
-import com.example.pladialmserver.resource.dto.response.AdminResourceCategoryRes;
-import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
-import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
-import com.example.pladialmserver.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.resource.dto.response.*;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.resource.entity.ResourceCategory;
 import com.example.pladialmserver.resource.repository.ResourceCategoryRepository;
@@ -112,6 +109,10 @@ public class ResourceService {
 
     }
 
+    // ===================================================================================================================
+    // [관리자]
+    // ===================================================================================================================
+
     /**
      * 자원 카테고리
      */
@@ -124,5 +125,14 @@ public class ResourceService {
 
     }
 
-
+    /**
+     * 관리자 자원 목록 조회
+     */
+    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
+        // 관리자 권한 확인
+        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        // 자원 조회
+        Page<Resource> resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
+        return resources.map(AdminResourcesRes::toDto);
+    }
 }
