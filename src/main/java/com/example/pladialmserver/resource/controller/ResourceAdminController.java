@@ -28,7 +28,7 @@ public class ResourceAdminController {
      */
     @Operation(summary = "자원 카테고리 (차유상)", description = "자원 카테고리를 가져온다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("/category")
