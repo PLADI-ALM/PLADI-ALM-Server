@@ -3,6 +3,7 @@ package com.example.pladialmserver.user.controller;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
+import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -37,6 +38,15 @@ public class AdminUserController {
                                      @RequestBody @Valid CreateUserReq createUserReq) {
         userService.createUser(user, createUserReq);
         return ResponseCustom.OK();
+    }
+
+    @Operation(summary = "부서 및 직책 리스트 (장채은)", description = "부서 및 직책 리스트를 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)부서 및 직책 리스트 확인 성공")
+    })
+    @GetMapping("/ranks")
+    public ResponseCustom<CompanyRankListRes> getCompanyRankList() {
+        return ResponseCustom.OK(userService.getCompanyRankList());
     }
 
 }
