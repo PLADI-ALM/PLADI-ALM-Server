@@ -38,10 +38,9 @@ public class ResourceService {
     private final ResourceCategoryRepository resourceCategoryRepository;
 
 
+    // 관리자 권한 확인
     private void checkAdminRole(User user) {
-        if (user.getRole() != Role.ADMIN) {
-            throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-        }
+        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 
 
@@ -115,7 +114,7 @@ public class ResourceService {
      * 자원 카테고리
      */
     public AdminResourceCategoryRes getResourceCategory(User user) {
-        //관리자인지 확인
+        // 관리자 권한 확인
         checkAdminRole(user);
 
         List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
@@ -128,7 +127,7 @@ public class ResourceService {
      */
     public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
         // 관리자 권한 확인
-        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        checkAdminRole(user);
         // 자원 조회
         Page<Resource> resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
         return resources.map(AdminResourcesRes::toDto);
