@@ -2,11 +2,13 @@ package com.example.pladialmserver.resource.controller;
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.service.ResourceService;
+import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

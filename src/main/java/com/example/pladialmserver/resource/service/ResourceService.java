@@ -7,10 +7,15 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.resource.dto.response.AdminResourceCategoryRes;
+import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.entity.Resource;
+import com.example.pladialmserver.resource.entity.ResourceCategory;
+import com.example.pladialmserver.resource.repository.ResourceCategoryRepository;
 import com.example.pladialmserver.resource.repository.ResourceRepository;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +34,14 @@ public class ResourceService {
     private final UserRepository userRepository;
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
+    private final ResourceCategoryRepository resourceCategoryRepository;
 
+
+    private void checkAdminRole(User user) {
+        if (user.getRole() != Role.ADMIN) {
+            throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        }
+    }
 
 
     /**
@@ -93,6 +105,18 @@ public class ResourceService {
         // 이미 예약된 날짜 여부 확인
         if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, resourceReq));
+
+    }
+
+    /**
+     * 자원 카테고리
+     */
+    public AdminResourceCategoryRes getResourceCategory(User user) {
+        //관리자인지 확인
+        checkAdminRole(user);
+
+        List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
+        return AdminResourceCategoryRes.toDto(resourceCategories);
 
     }
 
