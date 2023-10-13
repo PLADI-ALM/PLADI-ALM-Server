@@ -97,9 +97,7 @@ public class ResourceService {
      * 자원 예약
      */
     @Transactional
-    public void bookResource(Long userId, Long resourceId, ResourceReq resourceReq) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+    public void bookResource(User user, Long resourceId, ResourceReq resourceReq) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
