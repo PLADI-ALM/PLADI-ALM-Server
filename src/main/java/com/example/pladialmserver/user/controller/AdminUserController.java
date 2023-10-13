@@ -80,4 +80,17 @@ public class AdminUserController {
                                                      @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
         return ResponseCustom.OK(userService.getUserList(user, name, pageable));
     }
+
+    @Operation(summary = "직원 개별 조회 (장채은)", description = "개별 직원의 정보를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)직원 개별 조회 성공"),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두]", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/{userId}")
+    public ResponseCustom<UserRes> getUserInfo(@Account User user,
+                                                     @Parameter(description = "(Long) 변경하려는 사용자 id", example = "1") @PathVariable(name = "userId") Long userId){
+        return ResponseCustom.OK(userService.getUserInfo(user, userId));
+    }
+
 }
