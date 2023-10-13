@@ -21,7 +21,7 @@ public class ResourceDetailRes {
     public static ResourceDetailRes toDto(Resource resource) {
         return ResourceDetailRes.builder()
                 .name(resource.getName())
-                .category(resource.getCategory().getValue())
+                .category(resource.getResourceCategory().getName())
                 .description(resource.getDescription())
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgUrl()))
                 .build();

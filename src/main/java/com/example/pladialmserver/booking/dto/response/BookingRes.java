@@ -39,7 +39,7 @@ public class BookingRes {
         return BookingRes.builder()
                 .id(resourceBooking.getResourceBookingId())
                 .name(resourceBooking.getResource().getName())
-                .detailInfo(resourceBooking.getResource().getCategory().getValue())
+                .detailInfo(resourceBooking.getResource().getResourceCategory().getName())
                 .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
                 .status(resourceBooking.getStatus().getValue())
