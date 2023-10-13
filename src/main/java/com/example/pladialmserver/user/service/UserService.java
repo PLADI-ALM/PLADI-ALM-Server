@@ -81,6 +81,7 @@ public class UserService {
         userRepository.save(User.toEntity(createUserReq, department, position));
     }
 
+    // 직원 수정
     @Transactional
     public void updateUser(User admin, Long userId, UserReq updateUserReq) {
         // admin 사용자 확인
