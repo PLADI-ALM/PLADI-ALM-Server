@@ -5,8 +5,9 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
-import com.example.pladialmserver.user.dto.request.UserReq;
+import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.request.UpdateUserReq;
 import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
@@ -67,7 +68,7 @@ public class UserService {
 
     // 직원 등록
     @Transactional
-    public void createUser(User admin, UserReq createUserReq) {
+    public void createUser(User admin, CreateUserReq createUserReq) {
         // admin 사용자 확인
         if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 이메일 중복 확인
@@ -83,16 +84,13 @@ public class UserService {
 
     // 직원 수정
     @Transactional
-    public void updateUser(User admin, Long userId, UserReq updateUserReq) {
+    public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
         // admin 사용자 확인
         if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 정보 변경 사용자 정보 확인
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
-        if (userRepository.existsByEmailAndUserIdNot(updateUserReq.getEmail(), userId)) throw new BaseException(EXISTS_EMAIL);
         Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
         Position position = positionRepository.findByName(updateUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
-        // 비밀번호 암호화
-        updateUserReq.setPassword(passwordEncoder.encode(updateUserReq.getPassword()));
         // 수정 및 저장
         user.updateUser(updateUserReq, department, position);
         userRepository.save(user);

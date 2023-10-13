@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class UserReq {
+public class CreateUserReq {
     @Schema(type = "String", description = "성명", example = "홍길동", required = true)
     @NotBlank(message = "U0007")
     private String name;
