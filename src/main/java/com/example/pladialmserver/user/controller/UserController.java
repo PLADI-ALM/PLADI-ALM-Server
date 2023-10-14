@@ -64,7 +64,7 @@ public class UserController {
     })
     @PostMapping("/logout")
     public ResponseCustom logout(@Account User user, HttpServletRequest request){
-        userService.logout(user, request);
+        userService.setExpiredToken(user, request);
         return ResponseCustom.OK();
     }
 }

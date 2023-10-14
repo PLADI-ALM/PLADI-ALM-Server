@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Api(tags = "관리자 유저 API")
@@ -91,6 +92,19 @@ public class AdminUserController {
     public ResponseCustom<UserRes> getUserInfo(@Account User user,
                                                      @Parameter(description = "(Long) 변경하려는 사용자 id", example = "1") @PathVariable(name = "userId") Long userId){
         return ResponseCustom.OK(userService.getUserInfo(user, userId));
+    }
+
+    @Operation(summary = "직원 탈퇴 (장채은)", description = "직원을 탈퇴 한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)직원 탈퇴  성공"),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두]", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @DeleteMapping("/{userId}")
+    public ResponseCustom resignUser(@Account User user,
+                                     @Parameter(description = "(Long) 삭제하려는 사용자 id", example = "1") @PathVariable(name = "userId") Long userId){
+        userService.resignUser(user, userId);
+        return ResponseCustom.OK();
     }
 
 }
