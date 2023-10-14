@@ -131,7 +131,7 @@ public class BookingService {
      * 회의실 예약 상태 변경 스케줄링
      */
     @Transactional
-    @Scheduled(cron="0 0 * * * *", zone="GMT+9:00") // 매시간 정각에 스케줄링
+    @Scheduled(cron="0 0 0/1 * * *", zone="GMT+9:00") // 매시간 정각에 스케줄링
     public void checkBookingTime(){
         // 매시간 정각에 예약이 끝나는 회의실을 찾아서
         List<OfficeBooking> checkETList = officeBookingRepository.findByStatusAndDateAndEndTime(BookingStatus.USING);
