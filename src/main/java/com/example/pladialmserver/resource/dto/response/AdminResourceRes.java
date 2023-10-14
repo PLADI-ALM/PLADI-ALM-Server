@@ -30,7 +30,7 @@ public class AdminResourceRes {
         return AdminResourceRes.builder()
                 .id(resourceBooking.getResourceBookingId())
                 .name(resourceBooking.getResource().getName())
-                .category(resourceBooking.getResource().getCategory().getValue())
+                .category(resourceBooking.getResource().getResourceCategory().getName())
                 .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
                 .requester(resourceBooking.getUser().getName())

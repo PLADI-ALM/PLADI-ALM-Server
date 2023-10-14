@@ -99,12 +99,13 @@ public class ResourceController {
      */
     @Operation(summary = "자원 예약 (박소정)", description = "자원을 예약한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(B0010)날짜를 모두 입력해주세요. (B0002) 요청사항은 30자 이하로 작성해주세요. (B0003)시작시간보다 끝나는 시간이 더 앞에 있습니다. (B0004)미래의 날짜를 선택해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0005)이미 예약되어 있는 시간입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))})
     @PostMapping("/{resourceId}")
     public ResponseCustom bookResource(
+            @Account User user,
             @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
             @RequestBody @Valid ResourceReq resourceReq) {
 
@@ -114,10 +115,8 @@ public class ResourceController {
         // 종료일이 시작일 보다 빠른 경우
         if (resourceReq.getEndDate().isBefore(resourceReq.getStartDate()))
             throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
-        // TODO 유저 ID 받아오는 로직 추가
-        Long userId = 1L;
 
-        resourceService.bookResource(userId, resourceId, resourceReq);
+        resourceService.bookResource(user, resourceId, resourceReq);
         return ResponseCustom.OK();
     }
 }

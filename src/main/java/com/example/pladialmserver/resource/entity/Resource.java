@@ -1,6 +1,5 @@
 package com.example.pladialmserver.resource.entity;
 
-import com.example.pladialmserver.equipment.entity.Category;
 import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,9 +24,9 @@ public class Resource extends BaseEntity {
   @Size(max = 50)
   private String name;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private Category category;
+  @ManyToOne
+  @JoinColumn(nullable = false, name = "resource_category_id")
+  private ResourceCategory resourceCategory;
 
   @NotNull
   @Size(max = 255)

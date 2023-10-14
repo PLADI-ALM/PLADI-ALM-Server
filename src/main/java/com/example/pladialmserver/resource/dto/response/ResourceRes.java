@@ -25,7 +25,7 @@ public class ResourceRes {
                 .resourceId(resource.getResourceId())
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgUrl()))
                 .name(resource.getName())
-                .category(resource.getCategory().getValue())
+                .category(resource.getResourceCategory().getName())
                 .description(resource.getDescription())
                 .build();
     }
