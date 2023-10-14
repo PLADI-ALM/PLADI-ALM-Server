@@ -50,6 +50,7 @@ public class OfficeController {
             @Parameter(description = "예약 날짜",example = "2023-09-20") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
             @Parameter(description = "시작 예약 시간",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
             @Parameter(description = "종료 예약 시간",example = "13:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
+            @Parameter(description = "시설",example = "빔 프로젝터")@RequestParam(required = false) String facilityName,
             Pageable pageable
     ) {
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
@@ -57,7 +58,7 @@ public class OfficeController {
                 (date == null && (startTime != null || endTime != null))) {
             throw new BaseException(BaseResponseCode.DATE_OR_TIME_IS_NULL);
         }
-        return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime,pageable));
+        return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime,facilityName,pageable));
     }
 
     /**

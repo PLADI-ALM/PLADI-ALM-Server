@@ -36,7 +36,7 @@ public class OfficeService {
     /**
      * 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
      */
-    public Page<OfficeRes> findAvailableOffices(LocalDate date, LocalTime startTime, LocalTime endTime, Pageable pageable) {
+    public Page<OfficeRes> findAvailableOffices(LocalDate date, LocalTime startTime, LocalTime endTime, String facilityName,Pageable pageable) {
 
         Page<Office> allOffices;
 
@@ -46,12 +46,27 @@ public class OfficeService {
 
             // 예약된 회의실을 제외한 회의실 목록을 페이징 처리하여 조회
             if (!bookedOfficeIds.isEmpty()) {
-                allOffices = officeRepository.findAllByOfficeIdNotIn(bookedOfficeIds, pageable);
+                if (facilityName != null && !facilityName.isEmpty()) {
+                    // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
+                    allOffices = officeRepository.findByFacilityNameAndOfficeIdNotIn(facilityName, bookedOfficeIds, pageable);
+                }else {
+                    allOffices = officeRepository.findAllByOfficeIdNotIn(bookedOfficeIds, pageable);
+                }
             } else {
-                allOffices = officeRepository.findAll(pageable);
+                if (facilityName != null && !facilityName.isEmpty()) {
+                    // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
+                    allOffices = officeRepository.findByFacilityName(facilityName, pageable);
+                }else {
+                    allOffices = officeRepository.findAll(pageable);
+                }
             }
         }else{
-            allOffices = officeRepository.findAll(pageable);
+            if (facilityName != null && !facilityName.isEmpty()) {
+                // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
+                allOffices = officeRepository.findByFacilityName(facilityName, pageable);
+            }else {
+                allOffices = officeRepository.findAll(pageable);
+            }
         }
 
         return allOffices.map(office -> {
