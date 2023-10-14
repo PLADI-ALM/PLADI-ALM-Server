@@ -142,4 +142,20 @@ public class ResourceService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
         resourceRepository.save(Resource.toDto(request, category));
     }
+
+    /**
+     * 관리자 자원 수정
+     */
+    @Transactional
+    public void updateResourceByAdmin(User user, Long resourceId, CreateResourceReq request) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 자원 유무 확인
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
+        // 자원 수정
+        resource.updateResource(request, category);
+    }
 }
