@@ -75,14 +75,10 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
     public void updateBookingStatusForResigning(User user) {
         jpaQueryFactory.update(officeBooking)
                 .set(officeBooking.status, BookingStatus.CANCELED)
-                .where(officeBooking.user.eq(user).and(checkBookingStatus()))
+                .where(officeBooking.user.eq(user)
+                        .and(officeBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
                 .execute();
         // 영속성 컨텍스트를 DB 에 즉시 반영
         entityManager.flush();
-    }
-
-    private static BooleanExpression checkBookingStatus() {
-        return officeBooking.status.eq(BookingStatus.BOOKED)
-                .or(officeBooking.status.eq(BookingStatus.USING));
     }
 }

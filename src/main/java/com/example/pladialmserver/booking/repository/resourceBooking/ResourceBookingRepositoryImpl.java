@@ -79,17 +79,12 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
     public void updateBookingStatusForResigning(User user) {
         jpaQueryFactory.update(resourceBooking)
                 .set(resourceBooking.status, BookingStatus.CANCELED)
-                .where(resourceBooking.user.eq(user).and(checkBookingStatus()))
+                .where(resourceBooking.user.eq(user)
+                        .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)))
                 .execute();
 
         // 영속성 컨텍스트를 DB 에 즉시 반영
         entityManager.flush();
-    }
-
-    private static BooleanExpression checkBookingStatus() {
-        return resourceBooking.status.eq(BookingStatus.WAITING)
-                .or(resourceBooking.status.eq(BookingStatus.BOOKED))
-                .or(resourceBooking.status.eq(BookingStatus.USING));
     }
 
     @Override
