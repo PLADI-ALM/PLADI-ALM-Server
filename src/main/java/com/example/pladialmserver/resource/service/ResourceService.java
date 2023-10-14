@@ -7,6 +7,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
+import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.AdminResourceCategoryRes;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
@@ -18,7 +19,6 @@ import com.example.pladialmserver.resource.repository.ResourceCategoryRepository
 import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
-import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -132,6 +130,18 @@ public class ResourceService {
         // 자원 조회
         Page<Resource> resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
         return resources.map(AdminResourcesRes::toDto);
+    }
+
+    /**
+     * 관리자 자원 추가
+     */
+    @Transactional
+    public void createResourceByAdmin(User user, CreateResourceReq request) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
+        resourceRepository.save(Resource.toDto(request, category));
     }
 
     /**
