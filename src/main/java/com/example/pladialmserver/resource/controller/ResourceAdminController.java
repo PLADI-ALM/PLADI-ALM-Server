@@ -2,6 +2,7 @@ package com.example.pladialmserver.resource.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
