@@ -2,6 +2,7 @@ package com.example.pladialmserver.booking.repository.resourceBooking;
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
+import com.example.pladialmserver.resource.entity.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,7 @@ public interface ResourceBookingRepository extends JpaRepository<ResourceBooking
     List<Long> findBookedResourceIdsByDateAndResourceName(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("resourceName") String resourceName);
 
     Page<ResourceBooking> findByStatusIn(List<BookingStatus> list, Pageable pageable);
+
+    boolean existsByResourceAndStatusIn(Resource resource, List<BookingStatus> bookingStatus);
+
 }

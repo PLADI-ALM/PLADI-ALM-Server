@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,4 +57,21 @@ public class ResourceAdminController {
             return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
         }
 
+
+    /**
+     * 관리자 자원 삭제
+     */
+    @Operation(summary = "관리자 자원 삭제 (박소정)", description = "관리자가 자원을 삭제한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @DeleteMapping("/{resourceId}")
+    public ResponseCustom updateResource(
+            @Account User user,
+            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name="resourceId") Long resourceId) {
+        resourceService.deleteResourceByAdmin(user, resourceId);
+        return ResponseCustom.OK();
+    }
 }
