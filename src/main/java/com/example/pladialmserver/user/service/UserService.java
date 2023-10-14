@@ -110,4 +110,11 @@ public class UserService {
         return userRepository.findAllByName(name, pageable).map(UserRes::toDto);
     }
 
+    // 직원 개별 정보
+    public UserRes getUserInfo(User admin, Long userId) {
+        // admin 사용자 확인
+        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+        return UserRes.toDto(user);
+    }
 }
