@@ -2,6 +2,7 @@ package com.example.pladialmserver.resource.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
@@ -16,12 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+
 
 @Api(tags = "관리자 자원 API")
 @RestController
@@ -57,7 +56,18 @@ public class ResourceAdminController {
             @Account User user,
             @Parameter(description = "(String) 이름 검색어", example = "'MacBook'") @RequestParam(required = false) String keyword,
             @PageableDefault(size = 8) Pageable pageable) {
-            return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
-        }
+        return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
+    }
+
+    /**
+     * 관리자 자원 추가
+     */
+    @PostMapping("")
+    public ResponseCustom createResource(
+            @Account User user,
+            @RequestBody @Valid CreateResourceReq request) {
+        resourceService.createResourceByAdmin(user, request);
+        return ResponseCustom.OK();
+    }
 
 }

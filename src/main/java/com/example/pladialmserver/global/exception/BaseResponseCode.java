@@ -62,7 +62,13 @@ public enum BaseResponseCode {
    //Resource
     NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"자원 이름과 예약 날짜를 모두 입력해주세요."),
     END_DATE_BEFORE_START_DATE("R0002",HttpStatus.BAD_REQUEST,"종료일은 시작일보다 빠를 수 없습니다."),
-    RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 자원입니다.")
+    RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 자원입니다."),
+    DESCRIPTION_SIZE_OVER("R0004", HttpStatus.BAD_REQUEST, "설명은 255자 이하로 작성해주세요."),
+    RESOURCE_NAME_SIZE_OVER("R0005", HttpStatus.BAD_REQUEST, "자원명은 50자 이하로 작성해주세요."),
+    RESOURCE_CATEGORY_NOT_FOUND("R0006", HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
+    NOT_EMPTY_RESOURCE_NAME("R0007", HttpStatus.BAD_REQUEST, "자원명을 입력해주세요."),
+    NOT_EMPTY_RESOURCE_CATEGORY("R0008", HttpStatus.BAD_REQUEST, "카테고리를 입력해주세요."),
+    NOT_EMPTY_DESCRIPTION("R0009", HttpStatus.BAD_REQUEST, "설명을 입력해주세요."),
     ;
 
     public final String code;
