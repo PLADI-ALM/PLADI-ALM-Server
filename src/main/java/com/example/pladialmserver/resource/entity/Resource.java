@@ -55,4 +55,12 @@ public class Resource extends BaseEntity {
             .imgUrl((request.getImgUrl()==null) ? null : request.getImgUrl())
             .build();
   }
+
+  public void updateResource(CreateResourceReq request, ResourceCategory category) {
+    if(!request.getName().equals(name)) name = request.getName();
+    if(!category.equals(resourceCategory)) resourceCategory = category;
+    if(!request.getDescription().equals(description)) description = request.getDescription();
+    if(!request.getImgUrl().equals(imgUrl)) imgUrl = request.getImgUrl();
+  }
+
 }

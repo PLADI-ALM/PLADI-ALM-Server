@@ -66,13 +66,32 @@ public class ResourceAdminController {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(R0004)설명은 255자 이하로 작성해주세요. (R0005)자원명은 50자 이하로 작성해주세요. (R0007)자원명을 입력해주세요. (R0008)카테고리를 입력해주세요. (R0009)설명을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(R0006)카테고리를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다. (R0006)카테고리를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @PostMapping("")
     public ResponseCustom createResource(
             @Account User user,
             @RequestBody @Valid CreateResourceReq request) {
         resourceService.createResourceByAdmin(user, request);
+        return ResponseCustom.OK();
+    }
+
+    /**
+     * 관리자 자원 수정
+     */
+    @Operation(summary = "관리자 자원 수정 (박소정)", description = "관리자가 자원을 수정한다. (요청 값 모두 필요)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(R0004)설명은 255자 이하로 작성해주세요. (R0005)자원명은 50자 이하로 작성해주세요. (R0007)자원명을 입력해주세요. (R0008)카테고리를 입력해주세요. (R0009)설명을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다. (U0001)사용자를 찾을 수 없습니다. (R0006)카테고리를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @PatchMapping("/{resourceId}")
+    public ResponseCustom updateResource(
+            @Account User user,
+            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name="resourceId") Long resourceId,
+            @RequestBody @Valid CreateResourceReq request) {
+        resourceService.updateResourceByAdmin(user, resourceId, request);
         return ResponseCustom.OK();
     }
 
