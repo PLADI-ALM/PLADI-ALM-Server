@@ -23,4 +23,5 @@ public interface ResourceBookingRepository extends JpaRepository<ResourceBooking
 
     boolean existsByResourceAndStatusIn(Resource resource, List<BookingStatus> bookingStatus);
 
+    List<ResourceBooking> findAllByResource(Resource resource);
 }
