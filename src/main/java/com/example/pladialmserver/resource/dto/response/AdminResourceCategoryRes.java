@@ -17,7 +17,7 @@ public class AdminResourceCategoryRes {
 
     public static AdminResourceCategoryRes toDto(List<ResourceCategory> resourceCategories) {
         return AdminResourceCategoryRes.builder()
-                .category(resourceCategories.stream().map(resourceCategory -> resourceCategory.getName()).collect(Collectors.toList()))
+                .category(resourceCategories.stream().map(ResourceCategory::getName).collect(Collectors.toList()))
                 .build();
     }
 }

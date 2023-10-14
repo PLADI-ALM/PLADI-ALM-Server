@@ -8,7 +8,7 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.AdminResourceCategoryRes;
-import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
+import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.entity.Resource;
@@ -31,16 +31,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ResourceService {
-    private final UserRepository userRepository;
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
     private final ResourceCategoryRepository resourceCategoryRepository;
 
 
+    // 관리자 권한 확인
     private void checkAdminRole(User user) {
-        if (user.getRole() != Role.ADMIN) {
-            throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-        }
+        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 
 
@@ -96,9 +94,7 @@ public class ResourceService {
      * 자원 예약
      */
     @Transactional
-    public void bookResource(Long userId, Long resourceId, ResourceReq resourceReq) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+    public void bookResource(User user, Long resourceId, ResourceReq resourceReq) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
@@ -108,11 +104,15 @@ public class ResourceService {
 
     }
 
+    // ===================================================================================================================
+    // [관리자]
+    // ===================================================================================================================
+
     /**
      * 자원 카테고리
      */
     public AdminResourceCategoryRes getResourceCategory(User user) {
-        //관리자인지 확인
+        // 관리자 권한 확인
         checkAdminRole(user);
 
         List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
@@ -120,5 +120,14 @@ public class ResourceService {
 
     }
 
-
+    /**
+     * 관리자 자원 목록 조회
+     */
+    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 자원 조회
+        Page<Resource> resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
+        return resources.map(AdminResourcesRes::toDto);
+    }
 }

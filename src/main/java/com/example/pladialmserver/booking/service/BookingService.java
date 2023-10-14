@@ -72,9 +72,14 @@ public class BookingService {
                 if (!user.equals(target)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
                 break;
             case ADMIN:
-                if (!target.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+                checkAdminRole(target);
                 break;
         }
+    }
+
+    // 관리자 권환 확인
+    private static void checkAdminRole(User user) {
+        if (!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 
     // 자원 예약 반납 공통 메서드
@@ -201,12 +206,6 @@ public class BookingService {
         );
 
         return bookings.map(AdminBookingRes::toDto);
-    }
-
-    private void checkAdminRole(User user) {
-        if (user.getRole() != Role.ADMIN) {
-            throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
-        }
     }
 
     /**

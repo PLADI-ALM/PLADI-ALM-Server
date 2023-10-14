@@ -1,6 +1,5 @@
 package com.example.pladialmserver.resource.dto.response;
 
-import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.resource.entity.Resource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -8,22 +7,25 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ResourceDetailRes {
+public class AdminResourcesRes {
+    @Schema(type = "Long", description = "자원 Id", example = "1")
+    private Long resourceId;
+
     @Schema(type = "String", description = "자원명", example = "MacBook Pro")
     private String name;
-    @Schema(type = "String", description = "카테고리", example = "PC")
-    private String category;
-    @Schema(type = "String", description = "설명", example = "맥북 프로 ")
-    private String description;
-    @Schema(type = "String", description = "이미지 url", example = "https://secret-s3-bucket.s3.ap-northeast-2.amazonaws.com/img.key")
-    private String imgUrl;
 
-    public static ResourceDetailRes toDto(Resource resource) {
-        return ResourceDetailRes.builder()
+    @Schema(type = "String", description = "자원 카테고리", example = "전자기기")
+    private String category;
+
+    @Schema(type = "String", description = "자원 설명", example = "맥북프로사줘")
+    private String description;
+
+    public static AdminResourcesRes toDto(Resource resource) {
+        return AdminResourcesRes.builder()
+                .resourceId(resource.getResourceId())
                 .name(resource.getName())
                 .category(resource.getResourceCategory().getName())
                 .description(resource.getDescription())
-                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgUrl()))
                 .build();
     }
 }
