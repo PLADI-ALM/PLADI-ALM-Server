@@ -70,7 +70,7 @@ public class UserService {
     @Transactional
     public void createUser(User admin, CreateUserReq createUserReq) {
         // admin 사용자 확인
-        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 이메일 중복 확인
         if(userRepository.existsByEmail(createUserReq.getEmail())) throw new BaseException(EXISTS_EMAIL);
         // 회원 생성 리소스 접근
@@ -86,7 +86,7 @@ public class UserService {
     @Transactional
     public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
         // admin 사용자 확인
-        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 정보 변경 사용자 정보 확인
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
@@ -106,14 +106,14 @@ public class UserService {
     // 직원 계정 목록 조회
     public Page<UserRes> getUserList(User admin, String name, Pageable pageable) {
         // admin 사용자 확인
-        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         return userRepository.findAllByName(name, pageable).map(UserRes::toDto);
     }
 
     // 직원 개별 정보
     public UserRes getUserInfo(User admin, Long userId) {
         // admin 사용자 확인
-        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         return UserRes.toDto(user);
     }
