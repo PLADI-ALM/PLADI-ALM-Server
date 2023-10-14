@@ -127,7 +127,12 @@ public class ResourceService {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 자원 조회
-        Page<Resource> resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
+        Page<Resource> resources = null;
+        if(keyword == "" || keyword == null) {
+            resources = resourceRepository.findAll(pageable);
+        }else {
+            resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
+        }
         return resources.map(AdminResourcesRes::toDto);
     }
 
