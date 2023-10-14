@@ -7,6 +7,7 @@ import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.request.UpdateUserReq;
 import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
@@ -81,6 +82,20 @@ public class UserService {
         userRepository.save(User.toEntity(createUserReq, department, position));
     }
 
+    // 직원 수정
+    @Transactional
+    public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
+        // admin 사용자 확인
+        if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+        // 정보 변경 사용자 정보 확인
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+        Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Position position = positionRepository.findByName(updateUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
+        // 수정 및 저장
+        user.updateUser(updateUserReq, department, position);
+        userRepository.save(user);
+    }
+
     // 부서 및 직책 리스트
     public CompanyRankListRes getCompanyRankList() {
         List<Department> departments = departmentRepository.findAll();
@@ -94,4 +109,5 @@ public class UserService {
         if (!admin.getRole().equals(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         return userRepository.findAllByName(name, pageable).map(UserRes::toDto);
     }
+
 }

@@ -3,6 +3,7 @@ package com.example.pladialmserver.user.entity;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
+import com.example.pladialmserver.user.dto.request.UpdateUserReq;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -82,7 +83,17 @@ public class User extends BaseEntity {
                 .build();
     }
 
+    public void updateUser(UpdateUserReq req, Department department, Position position){
+        if(!req.getName().equals(name)) name = req.getName();
+        if(!department.equals(this.department)) this.department = department;
+        if(!position.equals(this.position)) this.position = position;
+        if(!req.getOfficeJob().equals(officeJob)) officeJob = req.getOfficeJob();
+        Role reqRole = Role.getRoleByName(req.getRole());
+        if(!reqRole.equals(role)) role = reqRole;
+    }
+  
     public boolean checkRole(Role role) {
         return this.role == role;
     }
+  
 }
