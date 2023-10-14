@@ -79,7 +79,6 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
                 .execute();
         // 영속성 컨텍스트를 DB 에 즉시 반영
         entityManager.flush();
-//        entityManager.clear(); -> 영속성 컨텍스트 캐시에 모든 엔터티를 제거하면 삭제가 안됨
     }
 
     private static BooleanExpression checkBookingStatus() {
