@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -233,6 +234,20 @@ public class BookingService {
         // 예약 취소
         officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+    }
+
+    /**
+     * 자원 예약 상태 변경 스케줄링
+     */
+    @Transactional
+    @Scheduled(cron="0 0 * * * *", zone="GMT+9:00") // 날짜가 바뀔 때(0시)에 스케줄링
+    public void checkResourceBookingTime(){
+        // 오늘 날짜 + 예약중 인 것
+        List<ResourceBooking> resourceBookingStartList = resourceBookingRepository.findByStartDateAndStatus(LocalDate.now(), BookingStatus.BOOKED);
+        // USING 으로 변경
+        resourceBookingStartList.forEach(ResourceBooking::startResourceBooking);
+        // 저장
+        resourceBookingRepository.saveAll(resourceBookingStartList);
     }
 
 
