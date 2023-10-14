@@ -2,6 +2,7 @@ package com.example.pladialmserver.resource.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
@@ -16,12 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+
 
 @Api(tags = "관리자 자원 API")
 @RestController
@@ -57,7 +56,25 @@ public class ResourceAdminController {
             @Account User user,
             @Parameter(description = "(String) 이름 검색어", example = "'MacBook'") @RequestParam(required = false) String keyword,
             @PageableDefault(size = 8) Pageable pageable) {
-            return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
-        }
+        return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
+    }
+
+    /**
+     * 관리자 자원 추가
+     */
+    @Operation(summary = "관리자 자원 추가 (박소정)", description = "관리자가 자원을 추가한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(R0004)설명은 255자 이하로 작성해주세요. (R0005)자원명은 50자 이하로 작성해주세요. (R0007)자원명을 입력해주세요. (R0008)카테고리를 입력해주세요. (R0009)설명을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0006)카테고리를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @PostMapping("")
+    public ResponseCustom createResource(
+            @Account User user,
+            @RequestBody @Valid CreateResourceReq request) {
+        resourceService.createResourceByAdmin(user, request);
+        return ResponseCustom.OK();
+    }
 
 }
