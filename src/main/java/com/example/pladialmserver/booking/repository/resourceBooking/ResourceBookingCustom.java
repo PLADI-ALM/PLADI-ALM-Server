@@ -13,4 +13,5 @@ public interface ResourceBookingCustom {
     Page<BookingRes> getBookingsByUser(User user, Pageable pageable);
     boolean existsDate(Resource resource, LocalDate startDate, LocalDate endDate);
     List<String> getResourceBookedDate(Resource resource, LocalDate standardDate);
+    void updateBookingStatusForResigning(User user);
 }
