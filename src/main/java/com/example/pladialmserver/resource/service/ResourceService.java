@@ -3,6 +3,7 @@ package com.example.pladialmserver.resource.service;
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -162,5 +165,22 @@ public class ResourceService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
         // 자원 수정
         resource.updateResource(request, category);
+    }
+
+    /**
+     * 관리자 자원 삭제
+     */
+    @Transactional
+    public void deleteResourceByAdmin(User user, Long resourceId) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 자원 유무 확인
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        // 자원 예약 내역 상태 확인
+        List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
+        if(resourceBookingRepository.existsByResourceAndStatusIn(resource, bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
+        // 자원 삭제
+        resourceRepository.delete(resource);
     }
 }

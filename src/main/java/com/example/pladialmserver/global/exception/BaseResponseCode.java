@@ -69,6 +69,7 @@ public enum BaseResponseCode {
     NOT_EMPTY_RESOURCE_NAME("R0007", HttpStatus.BAD_REQUEST, "자원명을 입력해주세요."),
     NOT_EMPTY_RESOURCE_CATEGORY("R0008", HttpStatus.BAD_REQUEST, "카테고리를 입력해주세요."),
     NOT_EMPTY_DESCRIPTION("R0009", HttpStatus.BAD_REQUEST, "설명을 입력해주세요."),
+    INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 자원의 예약 현황 수정이 필요합니다.")
     ;
 
     public final String code;
