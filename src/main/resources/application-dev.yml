@@ -21,7 +21,7 @@ spring:
 server:
   port: 8080
   archiving:
-    url: https://gpkzpnv8lh.execute-api.ap-northeast-2.amazonaws.com/dev/dev-pladi-archiving
+    url: ENC(mgbO6QO3wScbYH9yPV/a7e5cvA6sc5/z9dig4/VlywgHXN+UrDaRWhQYOAY7bqEkcI8O2nmMlWIIUlzZyaRzSoD+AmgSVeQUPNCcYGPt1B1dZHbtNCZmc5i6KWBJfKKx)
   servlet:
     context-path: /api
 
