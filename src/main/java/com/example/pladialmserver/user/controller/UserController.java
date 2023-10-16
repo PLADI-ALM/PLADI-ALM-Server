@@ -67,4 +67,14 @@ public class UserController {
         userService.setExpiredToken(user, request);
         return ResponseCustom.OK();
     }
+
+    @Operation(summary = "토큰 재발급 (장채은)", description = "토큰 재발급을 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)토큰 재발급 성공"),
+            @ApiResponse(responseCode = "403", description = "(G0001)잘못된 요청입니다.")
+    })
+    @PostMapping("/reissuance")
+    public ResponseCustom reissue(@Valid TokenDto tokenDto){
+        return ResponseCustom.OK(userService.reissue(tokenDto));
+    }
 }

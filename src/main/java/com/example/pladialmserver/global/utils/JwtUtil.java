@@ -1,5 +1,6 @@
 package com.example.pladialmserver.global.utils;
 
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.user.dto.TokenDto;
@@ -99,6 +100,12 @@ public class JwtUtil {
         redisUtil.setValue(token, status, getExpiration(token), TimeUnit.MILLISECONDS);
     }
 
+    public void validateRefreshToken(Long userId, String refreshToken){
+        String validToken = redisUtil.getValue(userId.toString());
+        System.out.println(validToken);
+        if(validToken == null || !validToken.equals(refreshToken)) throw new BaseException(BaseResponseCode.INVALID_TOKEN);
+    }
+
     public void deleteRefreshToken(Long userId) {
         if (!ObjectUtils.isEmpty(redisUtil.getValue(userId.toString()))) redisUtil.deleteValue(userId.toString());
     }
@@ -108,5 +115,9 @@ public class JwtUtil {
         Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration();
         long now = new Date().getTime();
         return expiration.getTime() - now;
+    }
+
+    public static String replaceBearerToken(String token){
+        return token.substring(Constants.JWT.BEARER_PREFIX.length());
     }
 }
