@@ -19,6 +19,7 @@ public class HealthCheckController {
 
   @GetMapping("time-zone")
   public ResponseCustom<?> getLocalDateTime() {
-    return ResponseCustom.OK(DateTimeUtils.now().toString());
+    return ResponseCustom.OK(LocalDateTime.now());
   }
+
 }
