@@ -3,6 +3,7 @@ package com.example.pladialmserver.resource.controller;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
+import com.example.pladialmserver.resource.dto.response.AdminResourcesDetailsRes;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
@@ -113,5 +114,23 @@ public class ResourceAdminController {
             @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name="resourceId") Long resourceId) {
         resourceService.deleteResourceByAdmin(user, resourceId);
         return ResponseCustom.OK();
+    }
+
+    /**
+     * 관리자 자원별 예약 이력을 조회한다.
+     */
+    @Operation(summary = "관리자 자원별 예약 이력을 조회 (이승학)", description = "관리자 자원별 예약 이력을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @GetMapping("/resources/{resourceId}")
+    public ResponseCustom<AdminResourcesDetailsRes> getAdminResourcesDetails(
+            @Account User user,
+            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId) {
+        {
+            return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId));
+        }
     }
 }

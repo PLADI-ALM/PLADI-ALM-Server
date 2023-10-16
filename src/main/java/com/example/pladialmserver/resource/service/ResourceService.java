@@ -9,10 +9,7 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
-import com.example.pladialmserver.resource.dto.response.AdminResourceCategoryRes;
-import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
-import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
-import com.example.pladialmserver.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.resource.dto.response.*;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.resource.entity.ResourceCategory;
 import com.example.pladialmserver.resource.repository.ResourceCategoryRepository;
@@ -29,6 +26,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -183,4 +181,23 @@ public class ResourceService {
         // 자원 삭제
         resourceRepository.delete(resource);
     }
+
+    public AdminResourcesDetailsRes getAdminResourcesDetails(User user, Long resourceId) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() ->new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+
+        List<ResourceBooking> resourceBookings = resourceBookingRepository.findAllByResourceOrderByStartDateDesc(resource);
+
+        List<ResourcesList> resourcesLists = resourceBookings.stream()
+                .map(ResourcesList::toDto)
+                .collect(Collectors.toList());
+
+        return AdminResourcesDetailsRes.toDto(resource, resourcesLists);
+    }
+
+
+
 }
