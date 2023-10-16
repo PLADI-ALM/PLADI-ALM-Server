@@ -189,7 +189,7 @@ public class ResourceService {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() ->new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
-        List<ResourceBooking> resourceBookings = resourceBookingRepository.findAllByResource(resource);
+        List<ResourceBooking> resourceBookings = resourceBookingRepository.findAllByResourceOrderByStartDateDesc(resource);
 
         List<ResourcesList> resourcesLists = resourceBookings.stream()
                 .map(ResourcesList::toDto)

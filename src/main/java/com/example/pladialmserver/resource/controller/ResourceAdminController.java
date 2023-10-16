@@ -122,7 +122,8 @@ public class ResourceAdminController {
     @Operation(summary = "관리자 자원별 예약 이력을 조회 (이승학)", description = "관리자 자원별 예약 이력을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다.")
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("/resources/{resourceId}")
     public ResponseCustom<AdminResourcesDetailsRes> getAdminResourcesDetails(
