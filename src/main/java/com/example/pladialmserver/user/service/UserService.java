@@ -57,9 +57,28 @@ public class UserService {
     // 토큰 만료
     public void setExpiredToken(User user, HttpServletRequest request) {
         String bearerToken = request.getHeader(Constants.JWT.AUTHORIZATION_HEADER);
-        bearerToken = bearerToken.substring(Constants.JWT.BEARER_PREFIX.length());
+        bearerToken = JwtUtil.replaceBearerToken(bearerToken);
         jwtUtil.setBlackListToken(bearerToken, Constants.JWT.LOGOUT);
         jwtUtil.deleteRefreshToken(user.getUserId());
+    }
+
+    // 토큰 재발급
+    public TokenDto reissue(TokenDto tokenDto) {
+        // parsing
+        tokenDto.setAccessToken(JwtUtil.replaceBearerToken(tokenDto.getAccessToken()));
+        tokenDto.setRefreshToken(JwtUtil.replaceBearerToken(tokenDto.getRefreshToken()));
+
+        // user
+        Long userId = jwtUtil.getUserIdFromJWT(tokenDto.getAccessToken());
+        User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+
+        // refreshToken 검증 밀 db 삭제
+        jwtUtil.validateToken(tokenDto.getRefreshToken());
+        jwtUtil.validateRefreshToken(userId, tokenDto.getRefreshToken());
+        jwtUtil.deleteRefreshToken(userId);
+
+        // 재발급
+        return jwtUtil.createToken(user.getUserId(), user.getRole());
     }
 
     // ===================================================================================================================
