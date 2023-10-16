@@ -2,6 +2,7 @@
 FROM openjdk:11-jdk
 EXPOSE 8080
 ARG JAR_FILE=/build/libs/PLADI-ALM-Server-0.0.1-SNAPSHOT.jar
+RUN apk add tzdata
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","-Djasypt.encryptor.password=${JASYPT_PASSWORD}","-Dspring.profiles.active=dev","-Duser.timezone='Asia/Seoul'", "/app.jar"]
-RUN apk add tzdata
+
