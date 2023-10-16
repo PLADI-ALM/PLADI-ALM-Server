@@ -3,6 +3,7 @@ package com.example.pladialmserver.booking.repository.officeBooking;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
+import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.user.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,13 +14,11 @@ import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QOfficeBooking.officeBooking;
-import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
 
 @RequiredArgsConstructor
 public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
@@ -44,13 +43,19 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
     }
 
     @Override
-    public Boolean existsByDateAndTime(LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public Boolean existsByDateAndTime(Office office, LocalDate date, LocalTime startTime, LocalTime endTime) {
         Integer fetchOne = jpaQueryFactory.selectOne()
                 .from(officeBooking)
-                .where(officeBooking.date.eq(date).and(officeBooking.startTime.loe(startTime).and(officeBooking.endTime.gt(startTime)))
-                        .or(officeBooking.date.eq(date).and(officeBooking.startTime.lt(endTime).and(officeBooking.endTime.goe(endTime)))))
+                .where(officeBooking.date.eq(date)
+                        .and(checkStartTimeOrEndTime(startTime, endTime))
+                        .and(officeBooking.office.eq(office)))
                 .fetchFirst();
         return fetchOne != null;
+    }
+
+    private BooleanExpression checkStartTimeOrEndTime(LocalTime startTime, LocalTime endTime) {
+        return officeBooking.startTime.loe(startTime).and(officeBooking.endTime.gt(startTime)
+                .or(officeBooking.startTime.lt(endTime).and(officeBooking.endTime.goe(endTime))));
     }
 
     @Override
