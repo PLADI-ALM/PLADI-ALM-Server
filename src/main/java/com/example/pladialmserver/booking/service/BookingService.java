@@ -270,7 +270,7 @@ public class BookingService {
     public void rejectResourceBooking(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         // 예약대기가 아닌 경우
-        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
+        if(!resourceBooking.checkBookingStatus(BookingStatus.WAITING) || !resourceBooking.checkBookingStatus(BookingStatus.BOOKED)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
     }
