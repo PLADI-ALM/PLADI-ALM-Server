@@ -48,7 +48,8 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
                 .from(officeBooking)
                 .where(officeBooking.date.eq(date)
                         .and(checkStartTimeOrEndTime(startTime, endTime))
-                        .and(officeBooking.office.eq(office)))
+                        .and(officeBooking.office.eq(office))
+                        .and(officeBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
                 .fetchFirst();
         return fetchOne != null;
     }
