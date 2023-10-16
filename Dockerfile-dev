@@ -1,5 +1,8 @@
 ## Dockerfile-dev
 FROM openjdk:11-jdk
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+RUN apt-get install -y tzdata
 EXPOSE 8080
 ARG JAR_FILE=/build/libs/PLADI-ALM-Server-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
