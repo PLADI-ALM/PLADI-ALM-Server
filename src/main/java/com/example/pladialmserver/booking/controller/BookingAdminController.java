@@ -166,7 +166,8 @@ public class BookingAdminController {
     @GetMapping("/resources")
     public ResponseCustom<Page<AdminResourceRes>> getBookingResources(
             @Account User user,
+            @Parameter(description = "(Boolean) 오름차순/내림차순", example = "true / false") boolean active,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(bookingService.getBookingResources(user,pageable));
+        return ResponseCustom.OK(bookingService.getBookingResources(user,pageable,active));
     }
 }
