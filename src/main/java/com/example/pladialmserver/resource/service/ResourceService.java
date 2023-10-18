@@ -182,15 +182,20 @@ public class ResourceService {
         resourceRepository.delete(resource);
     }
 
-    public AdminResourcesDetailsRes getAdminResourcesDetails(User user, Long resourceId) {
+    public AdminResourcesDetailsRes getAdminResourcesDetails(User user, Long resourceId,boolean active) {
         // 관리자 권한 확인
         checkAdminRole(user);
 
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() ->new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
-        List<ResourceBooking> resourceBookings = resourceBookingRepository.findAllByResourceOrderByStartDateDesc(resource);
+        List<ResourceBooking> resourceBookings;
+        if(active) {
+            resourceBookings=resourceBookingRepository.findAllByResourceOrderByStartDateDesc(resource);
+        }else{
+            resourceBookings = resourceBookingRepository.findAllByResourceOrderByStartDateAsc(resource);
 
+        }
         List<ResourcesList> resourcesLists = resourceBookings.stream()
                 .map(ResourcesList::toDto)
                 .collect(Collectors.toList());

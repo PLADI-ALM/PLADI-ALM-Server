@@ -25,4 +25,6 @@ public interface ResourceBookingRepository extends JpaRepository<ResourceBooking
     List<ResourceBooking> findAllByResourceOrderByStartDateDesc(Resource resource);
 
     List<ResourceBooking> findByStartDateAndStatus(LocalDate now, BookingStatus bookingStatus);
+
+    List<ResourceBooking> findAllByResourceOrderByStartDateAsc(Resource resource);
 }

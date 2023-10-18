@@ -128,9 +128,10 @@ public class ResourceAdminController {
     @GetMapping("/resources/{resourceId}")
     public ResponseCustom<AdminResourcesDetailsRes> getAdminResourcesDetails(
             @Account User user,
+            @Parameter(description = "(Boolean) 오름차순/내림차순", example = "true / false") boolean active,
             @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId) {
         {
-            return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId));
+            return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId,active));
         }
     }
 }
