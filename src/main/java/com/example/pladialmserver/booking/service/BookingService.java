@@ -302,14 +302,17 @@ public class BookingService {
     /**
      * 관리자 자원 예약 목록을 조회
      */
-    public Page<AdminResourceRes> getBookingResources(User user,Pageable pageable) {
+    public <active> Page<AdminResourceRes> getBookingResources(User user, Pageable pageable,boolean active) {
         checkAdminRole(user);
-        Pageable sortedByDateAsc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                Sort.by(Sort.Order.asc("startDate")));
+
+        Sort.Order order = active ? Sort.Order.asc("startDate") : Sort.Order.desc("startDate");
+
+        Pageable sortedByDate = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(order));
 
         Page<ResourceBooking> resourceBookings=resourceBookingRepository.findByStatusIn(
                 Arrays.asList(BookingStatus.BOOKED, BookingStatus.USING,BookingStatus.WAITING),
-                sortedByDateAsc
+                sortedByDate
         );
 
         return resourceBookings.map(AdminResourceRes::toDto);
