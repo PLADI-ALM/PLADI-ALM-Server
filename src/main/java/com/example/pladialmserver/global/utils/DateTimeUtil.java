@@ -11,7 +11,7 @@ public class DateTimeUtil {
 
     // localDate + localTime => string(YYYY-MM-DD HH:MM)
     public static String dateAndTimeToString(LocalDate date, LocalTime time) {
-        return LocalDateTime.of(date, time).format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+        return localDateAndTimeToLocalDateTime(date, time).format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 
     // localDate => string(YYYY-MM-DD)
@@ -42,5 +42,10 @@ public class DateTimeUtil {
     // string(YYYY-MM) -> localDate (해당 월의 첫 날)
     public static LocalDate stringToFirstLocalDate(String stringDate) {
         return stringToLocalDate(stringDate + "-01");
+    }
+
+    // localDate and Local Time -> localDateTime
+    public static LocalDateTime localDateAndTimeToLocalDateTime(LocalDate localDate, LocalTime localTime){
+        return LocalDateTime.of(localDate, localTime);
     }
 }

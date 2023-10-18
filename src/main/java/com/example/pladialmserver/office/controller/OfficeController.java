@@ -4,6 +4,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
@@ -106,8 +108,8 @@ public class OfficeController {
             @Account User user,
             @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name = "officeId") Long officeId,
             @RequestBody @Valid OfficeReq officeReq){
-        // 현재보다 과거 날짜로 등록하는 경우
-        if(LocalDate.now().isAfter(officeReq.getDate())) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        // 현재보다 과거 날짜 및 시간로 등록하는 경우
+        if(LocalDateTime.now().isAfter(DateTimeUtil.localDateAndTimeToLocalDateTime(officeReq.getDate(), officeReq.getStartTime()))) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
         // 끝나는 시간이 시작시간보다 빠른경우
         if (!officeReq.getStartTime().isBefore(officeReq.getEndTime()) && !officeReq.getEndTime().equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
         officeService.bookOffice(user, officeId, officeReq);
