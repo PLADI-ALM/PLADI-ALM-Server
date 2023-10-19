@@ -186,7 +186,7 @@ public class OfficeService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
         // 회의실 예약 내역 상태 확인
         List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
-        if(officeBookingRepository.existsByOfficeAndStatusIn(office,bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
+        if(officeBookingRepository.existsByOfficeAndStatusIn(office,bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_OFFICE_DELETION);
 
         officeFacilityRepository.deleteAllByOffice(office);
 
