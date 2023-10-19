@@ -149,4 +149,27 @@ public class OfficeService {
     private void checkAdminRole(User user) {
         if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
+
+    /**
+     * 관리자 회의실 수정
+     */
+    @Transactional
+    public void updateOffice(User user, Long officeId, CreateOfficeReq request) {
+        checkAdminRole(user);
+
+        Office office = officeRepository.findById(officeId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+
+        office.updateOffice(request);
+
+        officeFacilityRepository.deleteAllByOffice(office);
+
+        for (String facilityName : request.getFacility()) {
+            Facility facility = facilityRepository.findByName(facilityName)
+                    .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_FACILITY_NOT_FOUND));
+
+            OfficeFacility officeFacility = OfficeFacility.toDto(office, facility);
+            officeFacilityRepository.save(officeFacility);
+        }
+    }
 }
