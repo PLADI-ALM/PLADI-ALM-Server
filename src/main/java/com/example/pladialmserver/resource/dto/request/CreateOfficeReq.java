@@ -22,7 +22,7 @@ public class CreateOfficeReq {
     @NotBlank(message = "O0006")
     private String location;
 
-    @Schema(type = "List<String>", description = "시설(큰 따움표 단어 양쪽에 있어야함)", example = "빔 프로젝터 , 대형 모니터 , 마이크")
+    @Schema(type = "List<String>", description = "시설(단어 사이에 큰 따움표 붙혀야함)", example = "[빔 프로젝터 , 대형 모니터 , 마이크]")
     @NotEmpty(message = "O0007")
     private List<String> facility;
 

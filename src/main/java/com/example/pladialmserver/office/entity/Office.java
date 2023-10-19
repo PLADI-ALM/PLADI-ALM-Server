@@ -60,4 +60,11 @@ public class Office extends BaseEntity {
                 .build();
      }
 
+    public void updateOffice(CreateOfficeReq request) {
+        if(!request.getName().equals(name)) name=request.getName();
+        if(!request.getLocation().equals(location)) name=request.getLocation();
+        if(!request.getCapacity().equals(capacity)) capacity=request.getCapacity();
+        if(!request.getDescription().equals(description)) description=request.getDescription();
+        if(!request.getImgUrl().equals(imgKey)) imgKey=request.getImgUrl();
+    }
 }
