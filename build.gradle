@@ -68,6 +68,14 @@ dependencies {
 
 	// spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// verify email
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
+//	implementation 'javax.mail:javax.mail-api:1.6.2'
+//	implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+
+	// random
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 }
 
 tasks.named('test') {

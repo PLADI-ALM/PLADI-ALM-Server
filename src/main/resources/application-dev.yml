@@ -37,3 +37,19 @@ redis:
   host: ENC(wIh6kiQ7W/qgHC1zR1Vb7ZanSpzgLsT7)
   port: ENC(52XQ9OWXFVilIpOWtV217g==)
   password: ENC(12sPod7cSJbwOScRscRp3A==)
+
+mail:
+  host: ENC(F7BVsqd9srDV/4lSgUF1yrXYGVHsvQg2)
+  port: ENC(4mqI/1VUqzdoVgpd1I6FMA==)
+  username: ENC(HYa+tr4bvLYjqaecMpix5xQNExcB6aQeJ/IUUez1ZTM=)
+  password: ENC(TRzfPZTtdx0jYZHcnGv99sk3DDGW0NZ/PqahQxtlcWE=)
+  properties:
+    mail:
+      smtp:
+        auth: ENC(XkLAZzN43xy3iHa/q56JHQ==)
+        starttls:
+          enable: ENC(7K2T/JAjc7gXwuv+hdCSsA==)
+          required: ENC(ztv8V+SF/fxcDIBTdomKfQ==)
+        connectiontimeout: ENC(2vF/XFIabqnpmt2AHXrt1Q==)
+        timeout: ENC(pIyVruK9q7e0sbp/RYiOMA==)
+        writetimeout: ENC(Fph5WXbCFE+ObW3Ap0/EOg==)

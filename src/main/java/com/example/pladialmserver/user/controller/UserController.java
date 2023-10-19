@@ -4,6 +4,7 @@ import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
@@ -28,9 +29,6 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     * [토큰 X] 로그인
-     */
     @Operation(summary = "로그인 (장채은)", description = "로그인을 한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)로그인 성공"),
@@ -42,9 +40,6 @@ public class UserController {
         return ResponseCustom.OK(userService.login(loginReq));
     }
 
-    /**
-     * 사이드바 사용자 정보
-     */
     @Operation(summary = "사용자 정보 (장채은)", description = "사이드바에 필요한 사용자 정보를 불러온다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)사용자 정보 불러오기 성공"),
@@ -55,9 +50,6 @@ public class UserController {
         return ResponseCustom.OK(userService.getUserPosition(user));
     }
 
-    /**
-     * 로그아웃
-     */
     @Operation(summary = "로그아웃 (장채은)", description = "로그아웃을 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)로그아웃 성공"),
@@ -74,7 +66,19 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "(G0001)잘못된 요청입니다.")
     })
     @PostMapping("/reissuance")
-    public ResponseCustom reissue(@Valid TokenDto tokenDto){
+    public ResponseCustom reissue(@RequestBody @Valid TokenDto tokenDto){
         return ResponseCustom.OK(userService.reissue(tokenDto));
+    }
+
+    @Operation(summary = "이메일 인증번호 전송 (장채은)", description = "이메일 인증번호를 전송한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)이메일 인증번호 전송 성공"),
+            @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요."),
+            @ApiResponse(responseCode = "500", description = "(U0015)이메일을 보낼 수 없습니다.")
+    })
+    @PostMapping("/email")
+    public ResponseCustom verifyEmail(@RequestBody @Valid VerifyEmailReq verifyEmailReq){
+        userService.verifyEmail(verifyEmailReq);
+        return ResponseCustom.OK();
     }
 }
