@@ -58,8 +58,26 @@ public enum BaseResponseCode {
 
     // Office
     OFFICE_NOT_FOUND("O0001", HttpStatus.NOT_FOUND, "존재하지 않는 회의실입니다."),
+    OFFICE_FACILITY_NOT_FOUND("O0002",HttpStatus.NOT_FOUND,"시설을 찾을 수 없습니다."),
+    NOT_EMPTY_OFFICE_NAME("O0003", HttpStatus.BAD_REQUEST, "회의실명을 입력해주세요."),
+    OFFICE_DESCRIPTION_SIZE_OVER("O0004", HttpStatus.BAD_REQUEST, "설명은 255자 이하로 작성해주세요."),
+    OFFICE_NAME_SIZE_OVER("O0005", HttpStatus.BAD_REQUEST, "50자 이하로 작성해주세요."),
+    NOT_EMPTY_OFFICE_LOCATION("O0006", HttpStatus.BAD_REQUEST, "회의실 위치를 입력해주세요."),
+    NOT_EMPTY_OFFICE_FACILITY("O0007", HttpStatus.BAD_REQUEST, "회의실 시설을 입력해주세요."),
+    NOT_EMPTY_OFFICE_CAPACITY("O0008", HttpStatus.BAD_REQUEST, "수용인원을 입력해주세요."),
+    NOT_EMPTY_OFFICE_DESCRIPTION("O0009", HttpStatus.BAD_REQUEST, "회의실 설명을 입력해주세요."),
 
-   //Resource
+
+
+
+
+
+
+
+
+
+
+    //Resource
     NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"자원 이름과 예약 날짜를 모두 입력해주세요."),
     END_DATE_BEFORE_START_DATE("R0002",HttpStatus.BAD_REQUEST,"종료일은 시작일보다 빠를 수 없습니다."),
     RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 자원입니다."),

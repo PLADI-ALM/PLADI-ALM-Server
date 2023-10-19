@@ -12,7 +12,11 @@ import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeFacility;
+import com.example.pladialmserver.office.repository.FacilityRepository;
+import com.example.pladialmserver.office.repository.OfficeFacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
+import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +35,8 @@ import java.util.stream.Collectors;
 public class OfficeService {
     private final OfficeRepository officeRepository;
     private final OfficeBookingRepository officeBookingRepository;
+    private final FacilityRepository facilityRepository;
+    private final OfficeFacilityRepository officeFacilityRepository;
 
 
     /**
@@ -116,5 +122,31 @@ public class OfficeService {
         // 이미 예약되어 있는 시간인지 확인
         if(officeBookingRepository.existsByDateAndTime(office, officeReq.getDate(), officeReq.getStartTime(), officeReq.getEndTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         officeBookingRepository.save(OfficeBooking.toDto(user, office, officeReq));
+    }
+
+    // ===================================================================================================================
+    // [관리자]
+    // ===================================================================================================================
+
+    /**
+     * 관리자 회의실 추가
+     */
+    @Transactional
+    public void createOfficeByAdmin(User user, CreateOfficeReq request) {
+        checkAdminRole(user);
+
+        Office savedOffice = officeRepository.save(Office.toDto(request));
+
+        // 2. 시설 리스트를 가져와서 각 시설을 OfficeFacility에 연결
+        for (String facilityName : request.getFacility()) {
+            Facility facility = facilityRepository.findByName(facilityName)
+                    .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_FACILITY_NOT_FOUND));
+
+            officeFacilityRepository.save(OfficeFacility.toDto(savedOffice, facility));
+        }
+    }
+    //관리자 권한 확인
+    private void checkAdminRole(User user) {
+        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 }
