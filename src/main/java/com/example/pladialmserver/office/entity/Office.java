@@ -1,7 +1,9 @@
 package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
+import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
@@ -39,6 +41,23 @@ public class Office extends BaseEntity {
 
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();
+    @Builder
+     public Office(String name, String location, Integer capacity, String description, String imgKey){
+         this.name=name;
+         this.location=location;
+         this.capacity=capacity;
+         this.description=description;
+         this.imgKey=imgKey;
+     }
 
+     public static Office toDto(CreateOfficeReq req){
+        return Office.builder()
+                .name(req.getName())
+                .location(req.getLocation())
+                .capacity(req.getCapacity())
+                .description(req.getDescription())
+                .imgKey(req.getImgUrl())
+                .build();
+     }
 
 }
