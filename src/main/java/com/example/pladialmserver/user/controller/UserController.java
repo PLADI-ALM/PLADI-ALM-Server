@@ -4,7 +4,7 @@ import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.CheckEmailCodeReq;
-import com.example.pladialmserver.user.dto.request.LoginReq;
+import com.example.pladialmserver.user.dto.request.EmailPWReq;
 import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.entity.User;
@@ -37,7 +37,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PostMapping("/login")
-    public ResponseCustom<TokenDto> login(@RequestBody @Valid LoginReq loginReq){
+    public ResponseCustom<TokenDto> login(@RequestBody @Valid EmailPWReq loginReq){
         return ResponseCustom.OK(userService.login(loginReq));
     }
 
@@ -64,7 +64,7 @@ public class UserController {
     @Operation(summary = "토큰 재발급 (장채은)", description = "토큰 재발급을 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)토큰 재발급 성공"),
-            @ApiResponse(responseCode = "403", description = "(G0001)잘못된 요청입니다.")
+            @ApiResponse(responseCode = "403", description = "(G0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PostMapping("/reissuance")
     public ResponseCustom reissue(@RequestBody @Valid TokenDto tokenDto){
@@ -74,8 +74,9 @@ public class UserController {
     @Operation(summary = "이메일 인증번호 전송 (장채은)", description = "이메일 인증번호를 전송한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)이메일 인증번호 전송 성공"),
-            @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요."),
-            @ApiResponse(responseCode = "500", description = "(U0015)이메일을 보낼 수 없습니다.")
+            @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "500", description = "(U0015)이메일을 보낼 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PostMapping("/email")
     public ResponseCustom verifyEmail(@RequestBody @Valid VerifyEmailReq verifyEmailReq){
@@ -87,12 +88,24 @@ public class UserController {
     @Operation(summary = "이메일 인증번호 코드 확인 (장채은)", description = "이메일에 전송된 코드가 맞는지 확인한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)이메일 인증번호 확인 성공"),
-            @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요.\n (U0016)이메일 코드를 입력해주세요."),
-            @ApiResponse(responseCode = "500", description = "(U0017)이메일 코드가 일치하지 않습니다.\n (U0018)없거나 이미 만료된 이메일 코드입니다.")
+            @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요.\n (U0016)이메일 코드를 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "500", description = "(U0017)이메일 코드가 일치하지 않습니다.\n (U0018)없거나 이미 만료된 이메일 코드입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PostMapping("/email-code")
     public ResponseCustom checkEmailCode(@RequestBody @Valid CheckEmailCodeReq checkEmailCodeReq){
         userService.checkEmailCode(checkEmailCodeReq);
+        return ResponseCustom.OK();
+    }
+
+    @Operation(summary = "비밀번호 재설정 (장채은)", description = "비밀번호를 재설정한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)비밀번호 재설정 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @PatchMapping("/password")
+    public ResponseCustom resetPassword(@RequestBody @Valid EmailPWReq resetPasswordReq){
+        userService.resetPassword(resetPasswordReq);
         return ResponseCustom.OK();
     }
 }

@@ -96,6 +96,10 @@ public class User extends BaseEntity {
         Role reqRole = Role.getRoleByName(req.getRole());
         if(!reqRole.equals(role)) role = reqRole;
     }
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
   
     public boolean checkRole(Role role) {
         return this.role == role;
