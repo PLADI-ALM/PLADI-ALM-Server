@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class LoginReq {
+public class EmailPWReq {
     @Schema(type = "String", description = "이메일", example = "1234@email.com", required = true)
     @Email(message = "U0002")
     @NotBlank(message = "U0004")

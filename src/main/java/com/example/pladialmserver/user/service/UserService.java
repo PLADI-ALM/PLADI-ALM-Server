@@ -43,7 +43,7 @@ public class UserService {
     private final EmailUtil emailUtil;
 
     // 로그인
-    public TokenDto login(LoginReq loginReq) {
+    public TokenDto login(EmailPWReq loginReq) {
         User user = userRepository.findByEmail(loginReq.getEmail()).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(!passwordEncoder.matches(loginReq.getPassword(), user.getPassword())) throw new BaseException(INVALID_PASSWORD);
         return jwtUtil.createToken(user.getUserId(), user.getRole());
@@ -91,6 +91,15 @@ public class UserService {
     public void checkEmailCode(CheckEmailCodeReq checkEmailCodeReq) {
         userRepository.findByEmail(checkEmailCodeReq.getEmail()).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(!checkEmailCodeReq.getCode().equals(emailUtil.verifiedCode(checkEmailCodeReq.getEmail()))) throw new BaseException(EMAIL_CODE_NOT_FOUND);
+    }
+
+
+    // 비밀번호 재설정
+    @Transactional
+    public void resetPassword(EmailPWReq resetPasswordReq) {
+        User user = userRepository.findByEmail(resetPasswordReq.getEmail()).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+        user.updatePassword(passwordEncoder.encode(resetPasswordReq.getPassword()));
+        userRepository.save(user);
     }
 
     // ===================================================================================================================
@@ -153,6 +162,5 @@ public class UserService {
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
     }
-
 
 }
