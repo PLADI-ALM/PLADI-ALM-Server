@@ -6,10 +6,7 @@ import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
-import com.example.pladialmserver.user.dto.request.CreateUserReq;
-import com.example.pladialmserver.user.dto.request.LoginReq;
-import com.example.pladialmserver.user.dto.request.UpdateUserReq;
-import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
+import com.example.pladialmserver.user.dto.request.*;
 import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
@@ -90,6 +87,12 @@ public class UserService {
         emailUtil.sendEmail(verifyEmailReq.getEmail());
     }
 
+    // 이메일 인증 코드 확인
+    public void checkEmailCode(CheckEmailCodeReq checkEmailCodeReq) {
+        userRepository.findByEmail(checkEmailCodeReq.getEmail()).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+        if(!checkEmailCodeReq.getCode().equals(emailUtil.verifiedCode(checkEmailCodeReq.getEmail()))) throw new BaseException(EMAIL_CODE_NOT_FOUND);
+    }
+
     // ===================================================================================================================
     // [관리자-사용자]
     // ===================================================================================================================
@@ -150,5 +153,6 @@ public class UserService {
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
     }
+
 
 }
