@@ -184,13 +184,13 @@ public class OfficeService {
 
         Office office = officeRepository.findById(officeId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
-        // 회의실 예약 내역 상태 확인
-        List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
-        if(officeBookingRepository.existsByOfficeAndStatusIn(office,bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_OFFICE_DELETION);
+
+        if(officeBookingRepository.existsByOfficeAndStatusIn(office,BookingStatus.getActiveStatuses())) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_OFFICE_DELETION);
 
         officeFacilityRepository.deleteAllByOffice(office);
 
         officeRepository.delete(office);
 
     }
+
 }

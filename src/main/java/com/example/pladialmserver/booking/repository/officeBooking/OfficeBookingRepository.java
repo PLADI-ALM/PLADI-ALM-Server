@@ -22,4 +22,5 @@ public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Lo
     List<OfficeBooking> findByOfficeAndDateAndStatusNot(Office office, LocalDate date, BookingStatus bookingStatus);
 
     boolean existsByOfficeAndStatusIn(Office office, List<BookingStatus> bookingStatus);
+
 }
