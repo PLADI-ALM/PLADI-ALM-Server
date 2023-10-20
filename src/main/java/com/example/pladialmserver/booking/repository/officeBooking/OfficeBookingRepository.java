@@ -23,4 +23,5 @@ public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Lo
 
     boolean existsByOfficeAndStatusIn(Office office, List<BookingStatus> bookingStatus);
 
+    List<OfficeBooking> findAllByOfficeOrderByStartTimeDesc(Office office);
 }

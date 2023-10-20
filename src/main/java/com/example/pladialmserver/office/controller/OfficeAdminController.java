@@ -2,6 +2,7 @@ package com.example.pladialmserver.office.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.office.dto.response.AdminOfficesDetailsRes;
 import com.example.pladialmserver.office.service.OfficeService;
 import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
 import com.example.pladialmserver.user.entity.User;
@@ -77,5 +78,23 @@ public class OfficeAdminController {
             @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name="officeId") Long officeId) {
         officeService.deleteOfficeByAdmin(user, officeId);
         return ResponseCustom.OK();
+    }
+
+    /**
+     * 관리자 회의실별 예약 이력을 조회한다.
+     */
+    @Operation(summary = "관리자 회의실별 예약 이력을 조회 (이승학)", description = "관리자 회의실별 예약 이력을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실 입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @GetMapping("/offices/{officeId}")
+    public ResponseCustom<AdminOfficesDetailsRes> getAdminOfficesDetails(
+            @Account User user,
+            @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name = "officeId") Long officeId) {
+        {
+            return ResponseCustom.OK(officeService.getAdminOfficesDetails(user, officeId));
+        }
     }
 }

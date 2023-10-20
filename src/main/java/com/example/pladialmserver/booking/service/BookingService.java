@@ -302,7 +302,7 @@ public class BookingService {
     /**
      * 관리자 자원 예약 목록을 조회
      */
-    public <active> Page<AdminResourceRes> getBookingResources(User user, Pageable pageable,boolean active) {
+    public Page<AdminResourceRes> getBookingResources(User user, Pageable pageable,boolean active) {
         checkAdminRole(user);
 
         Sort.Order order = active ? Sort.Order.asc("startDate") : Sort.Order.desc("startDate");
