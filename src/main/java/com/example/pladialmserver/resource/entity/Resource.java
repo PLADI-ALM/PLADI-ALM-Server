@@ -2,6 +2,7 @@ package com.example.pladialmserver.resource.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
+import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,6 @@ import javax.validation.constraints.Size;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
 @SQLDelete(sql = "UPDATE resource SET is_enable = false, update_at = current_timestamp WHERE resource_id = ?")
 public class Resource extends BaseEntity {
 
@@ -28,9 +28,8 @@ public class Resource extends BaseEntity {
   @Size(max = 50)
   private String name;
 
-  @ManyToOne
-  @JoinColumn(nullable = false, name = "resource_category_id")
-  private ResourceCategory resourceCategory;
+  @Size(max = 30)
+  private String location;
 
   @NotNull
   @Size(max = 255)
@@ -39,26 +38,32 @@ public class Resource extends BaseEntity {
   @Size(max = 255)
   private String imgUrl;
 
+  private Boolean isActive;
+
+  @ManyToOne
+  @JoinColumn(nullable = false, name = "user_id")
+  private User user;
+
   @Builder
-  public Resource(String name, ResourceCategory resourceCategory, String description, String imgUrl) {
+  public Resource(String name, String description, String imgUrl, String location, Boolean isActive, User user) {
     this.name = name;
-    this.resourceCategory = resourceCategory;
     this.description = description;
     this.imgUrl = imgUrl;
+    this.location=location;
+    this.isActive=isActive;
+    this.user=user;
   }
 
-  public static Resource toDto(CreateResourceReq request, ResourceCategory category) {
+  public static Resource toDto(CreateResourceReq request) {
     return Resource.builder()
             .name(request.getName())
-            .resourceCategory(category)
             .description(request.getDescription())
             .imgUrl((request.getImgUrl()==null) ? null : request.getImgUrl())
             .build();
   }
 
-  public void updateResource(CreateResourceReq request, ResourceCategory category) {
+  public void updateResource(CreateResourceReq request) {
     if(!request.getName().equals(name)) name = request.getName();
-    if(!category.equals(resourceCategory)) resourceCategory = category;
     if(!request.getDescription().equals(description)) description = request.getDescription();
     if(!request.getImgUrl().equals(imgUrl)) imgUrl = request.getImgUrl();
   }

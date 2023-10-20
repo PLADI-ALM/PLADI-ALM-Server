@@ -1,5 +1,6 @@
 package com.example.pladialmserver.equipment.entity;
 
+import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,33 +19,29 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
-@Where(clause = "is_enable = true")
-public class Equipment {
+public class Equipment extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long equipmentId;
 
-  @NotNull
-  @Size(max = 30)
-  private String name;
-
-  @NotNull
-  private Category category;
-
-  @NotNull
-  private Integer price;
-
-  @NotNull
-  private Integer quantity;
-
-  @NotNull
-  private LocalDate purchaseDate;
-
   @ManyToOne
   @JoinColumn(nullable = false, name = "user_id")
   private User user;
 
+  @NotNull
+  @Size(max = 30)
+  private String name;
 
+  @Size(max = 30)
+  private String location;
+
+  @Size(max = 30)
+  private String description;
+
+  private String imgKey;
+
+  @NotNull
+  private Integer quantity;
 }
 

@@ -1,7 +1,6 @@
 package com.example.pladialmserver.user.dto.response;
 
 import com.example.pladialmserver.user.entity.Department;
-import com.example.pladialmserver.user.entity.Position;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

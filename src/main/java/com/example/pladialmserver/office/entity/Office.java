@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
 public class Office extends BaseEntity {
 
     @Id
@@ -39,15 +38,18 @@ public class Office extends BaseEntity {
 
     private String imgKey;
 
+    private Boolean isActive;
+
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();
     @Builder
-     public Office(String name, String location, Integer capacity, String description, String imgKey){
+     public Office(String name, String location, Integer capacity, String description, String imgKey,Boolean isActive){
          this.name=name;
          this.location=location;
          this.capacity=capacity;
          this.description=description;
          this.imgKey=imgKey;
+         this.isActive=isActive;
      }
 
      public static Office toDto(CreateOfficeReq req){

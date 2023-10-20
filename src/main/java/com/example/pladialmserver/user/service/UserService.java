@@ -11,7 +11,6 @@ import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Department;
-import com.example.pladialmserver.user.entity.Position;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.DepartmentRepository;

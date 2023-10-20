@@ -11,7 +11,6 @@ import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.*;
 import com.example.pladialmserver.resource.entity.Resource;
-import com.example.pladialmserver.resource.entity.ResourceCategory;
 import com.example.pladialmserver.resource.repository.ResourceCategoryRepository;
 import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;

@@ -1,6 +1,5 @@
 package com.example.pladialmserver.resource.dto.response;
 
-import com.example.pladialmserver.resource.entity.ResourceCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
