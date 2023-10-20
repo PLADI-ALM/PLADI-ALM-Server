@@ -6,9 +6,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
-import com.example.pladialmserver.office.dto.response.BookedTimeRes;
-import com.example.pladialmserver.office.dto.response.BookingStateRes;
-import com.example.pladialmserver.office.dto.response.OfficeRes;
+import com.example.pladialmserver.office.dto.response.*;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeFacility;
@@ -16,6 +14,7 @@ import com.example.pladialmserver.office.repository.FacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeFacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
 import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
+import com.example.pladialmserver.resource.dto.response.ResourcesList;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -193,4 +192,26 @@ public class OfficeService {
 
     }
 
+    /**
+     * 관리자 회의실별 예약 이력을 조회한다.
+     */
+    public AdminOfficesDetailsRes getAdminOfficesDetails(User user, Long officeId) {
+        checkAdminRole(user);
+
+        Office office = officeRepository.findByOfficeId(officeId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+
+        List<Facility> facilities = office.getFacilityList().stream()
+                .map(OfficeFacility::getFacility)
+                .collect(Collectors.toList());
+
+        List<OfficeBooking> officeBookings=officeBookingRepository.findAllByOfficeOrderByStartTimeDesc(office);
+
+        List<OfficesList> officesLists = officeBookings.stream()
+                .map(OfficesList::toDto)
+                .collect(Collectors.toList());
+
+        return AdminOfficesDetailsRes.toDto(office,facilities,officesLists);
+
+    }
 }
