@@ -192,9 +192,6 @@ public class OfficeService {
 
     }
 
-    /**
-     * 관리자 회의실별 예약 이력을 조회한다.
-     */
     public AdminOfficesDetailsRes getAdminOfficesDetails(User user, Long officeId) {
         checkAdminRole(user);
 
@@ -202,7 +199,7 @@ public class OfficeService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         List<Facility> facilities = office.getFacilityList().stream()
-                .map(officeFacility -> officeFacility.getFacility())
+                .map(OfficeFacility::getFacility)
                 .collect(Collectors.toList());
 
         List<OfficeBooking> officeBookings=officeBookingRepository.findAllByOfficeOrderByStartTimeDesc(office);
