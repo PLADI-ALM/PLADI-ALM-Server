@@ -42,6 +42,7 @@ public enum BaseResponseCode {
     POSITION_NOT_FOUND("U0013", HttpStatus.NOT_FOUND, "직위를 찾을 수 없습니다."),
     ROLE_NOT_FOUND("U0013", HttpStatus.NOT_FOUND, "역할을 찾을 수 없습니다."),
     EXISTS_EMAIL("U0014", HttpStatus.CONFLICT, "존재하는 이메일입니다."),
+    CAN_NOT_SEND_EMAIL("U0015", HttpStatus.INTERNAL_SERVER_ERROR, "이메일을 보낼 수 없습니다."),
 
     // Booking
     DATE_OR_TIME_IS_NULL("B0001", HttpStatus.BAD_REQUEST, "날짜와 시간을 모두 입력해주세요."),
