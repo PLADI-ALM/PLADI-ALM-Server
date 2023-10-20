@@ -1,11 +1,9 @@
 package com.example.pladialmserver.office.controller;
 
-import com.example.pladialmserver.booking.dto.response.AdminBookingRes;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.office.service.OfficeService;
 import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
-import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -66,5 +61,21 @@ public class OfficeAdminController {
         return ResponseCustom.OK();
     }
 
-
+    /**
+     * 관리자 회의실 삭제
+     */
+    @Operation(summary = "관리자 회의실 삭제 (이승학)", description = "관리자가 회의실을 삭제한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실 입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(O0010)해당 자원의 예약 현황 수정이 필요합니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @DeleteMapping("/{officeId}")
+    public ResponseCustom deleteResource(
+            @Account User user,
+            @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name="officeId") Long officeId) {
+        officeService.deleteOfficeByAdmin(user, officeId);
+        return ResponseCustom.OK();
+    }
 }

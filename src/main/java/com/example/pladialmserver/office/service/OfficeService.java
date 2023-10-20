@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -172,4 +174,23 @@ public class OfficeService {
             officeFacilityRepository.save(officeFacility);
         }
     }
+
+    /**
+     * 관리자 회의실 삭제
+     */
+    @Transactional
+    public void deleteOfficeByAdmin(User user, Long officeId) {
+        checkAdminRole(user);
+
+        Office office = officeRepository.findById(officeId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+
+        if(officeBookingRepository.existsByOfficeAndStatusIn(office,BookingStatus.getActiveStatuses())) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_OFFICE_DELETION);
+
+        officeFacilityRepository.deleteAllByOffice(office);
+
+        officeRepository.delete(office);
+
+    }
+
 }

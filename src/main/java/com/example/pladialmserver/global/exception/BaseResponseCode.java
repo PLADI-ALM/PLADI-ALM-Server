@@ -67,6 +67,7 @@ public enum BaseResponseCode {
     NOT_EMPTY_OFFICE_FACILITY("O0007", HttpStatus.BAD_REQUEST, "회의실 시설을 입력해주세요."),
     NOT_EMPTY_OFFICE_CAPACITY("O0008", HttpStatus.BAD_REQUEST, "수용인원을 입력해주세요."),
     NOT_EMPTY_OFFICE_DESCRIPTION("O0009", HttpStatus.BAD_REQUEST, "회의실 설명을 입력해주세요."),
+    INVALID_STATUS_BY_OFFICE_DELETION("O0010", HttpStatus.CONFLICT,"해당 회의실의 예약 현황 수정이 필요합니다."),
 
 
 

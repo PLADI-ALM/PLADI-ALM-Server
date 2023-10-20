@@ -20,4 +20,7 @@ public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Lo
     List<Long> findBookedOfficeIdsByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
     Page<OfficeBooking> findByStatusIn(List<BookingStatus> list, Pageable pageable);
     List<OfficeBooking> findByOfficeAndDateAndStatusNot(Office office, LocalDate date, BookingStatus bookingStatus);
+
+    boolean existsByOfficeAndStatusIn(Office office, List<BookingStatus> bookingStatus);
+
 }

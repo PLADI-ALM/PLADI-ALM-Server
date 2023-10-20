@@ -15,6 +15,7 @@ public class BookedTimeRes {
     @Schema(type = "LocalTime(String)", description = "예약종료시간", example = "12:00")
     private String endTime;
 
+
     public static BookedTimeRes toDto(LocalTime startTime, LocalTime endTime){
         return BookedTimeRes.builder()
                 .startTime(DateTimeUtil.timeToString(startTime))
