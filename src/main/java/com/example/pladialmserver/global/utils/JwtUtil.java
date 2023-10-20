@@ -102,7 +102,6 @@ public class JwtUtil {
 
     public void validateRefreshToken(Long userId, String refreshToken){
         String validToken = redisUtil.getValue(userId.toString());
-        System.out.println(validToken);
         if(validToken == null || !validToken.equals(refreshToken)) throw new BaseException(BaseResponseCode.INVALID_TOKEN);
     }
 

@@ -3,12 +3,15 @@ package com.example.pladialmserver.global.utils;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
+
+import static com.example.pladialmserver.global.exception.BaseResponseCode.BLACKLIST_EMAIL_CODE;
 
 @Component
 @RequiredArgsConstructor
@@ -40,6 +43,8 @@ public class EmailUtil {
     }
 
     public String verifiedCode(String toEmail){
-        return redisUtil.getValue(toEmail);
+        String key = redisUtil.getValue(toEmail);
+        if(ObjectUtils.isEmpty(key)) throw new BaseException(BLACKLIST_EMAIL_CODE);
+        return key;
     }
 }

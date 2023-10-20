@@ -3,6 +3,7 @@ package com.example.pladialmserver.user.controller;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.TokenDto;
+import com.example.pladialmserver.user.dto.request.CheckEmailCodeReq;
 import com.example.pladialmserver.user.dto.request.LoginReq;
 import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
 import com.example.pladialmserver.user.dto.response.UserPositionRes;
@@ -79,6 +80,19 @@ public class UserController {
     @PostMapping("/email")
     public ResponseCustom verifyEmail(@RequestBody @Valid VerifyEmailReq verifyEmailReq){
         userService.verifyEmail(verifyEmailReq);
+        return ResponseCustom.OK();
+    }
+
+
+    @Operation(summary = "이메일 인증번호 코드 확인 (장채은)", description = "이메일에 전송된 코드가 맞는지 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)이메일 인증번호 확인 성공"),
+            @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요.\n (U0016)이메일 코드를 입력해주세요."),
+            @ApiResponse(responseCode = "500", description = "(U0017)이메일 코드가 일치하지 않습니다.\n (U0018)없거나 이미 만료된 이메일 코드입니다.")
+    })
+    @PostMapping("/email-code")
+    public ResponseCustom checkEmailCode(@RequestBody @Valid CheckEmailCodeReq checkEmailCodeReq){
+        userService.checkEmailCode(checkEmailCodeReq);
         return ResponseCustom.OK();
     }
 }
