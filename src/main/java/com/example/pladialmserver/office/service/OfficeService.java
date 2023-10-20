@@ -192,6 +192,9 @@ public class OfficeService {
 
     }
 
+    /**
+     * 관리자 회의실별 예약 이력을 조회한다.
+     */
     public AdminOfficesDetailsRes getAdminOfficesDetails(User user, Long officeId) {
         checkAdminRole(user);
 
