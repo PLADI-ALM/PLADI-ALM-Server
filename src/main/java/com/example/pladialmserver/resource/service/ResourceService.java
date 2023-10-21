@@ -110,19 +110,6 @@ public class ResourceService {
     // ===================================================================================================================
 
     /**
-     * 자원 카테고리
-     */
-    // TODO 기획 변경으로 인한 수정
-    public AdminResourceCategoryRes getResourceCategory(User user) {
-        // 관리자 권한 확인
-        checkAdminRole(user);
-
-//        List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
-//        return AdminResourceCategoryRes.toDto(resourceCategories);
-        return null;
-    }
-
-    /**
      * 관리자 자원 목록 조회
      */
     public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
