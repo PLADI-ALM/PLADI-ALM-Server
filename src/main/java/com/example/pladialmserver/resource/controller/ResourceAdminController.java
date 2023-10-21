@@ -32,9 +32,9 @@ public class ResourceAdminController {
     private final ResourceService resourceService;
 
     /**
-     * 관리자 자원 목록 조회
+     * 관리자 장비 목록 조회
      */
-    @Operation(summary = "관리자 자원 목록 조회 (박소정)", description = "관리자가 자원 목록을 조회 및 검색한다.")
+    @Operation(summary = "관리자 장비 목록 조회 (박소정)", description = "관리자가 장비 목록을 조회 및 검색한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -42,7 +42,7 @@ public class ResourceAdminController {
     @GetMapping("")
     public ResponseCustom<Page<AdminResourcesRes>> getResources(
             @Account User user,
-            @Parameter(description = "(String) 이름 검색어", example = "'MacBook'") @RequestParam(required = false) String keyword,
+            @Parameter(description = "(String) 장비명 검색어", example = "'MacBook'") @RequestParam(required = false) String keyword,
             @PageableDefault(size = 8) Pageable pageable) {
         return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
     }

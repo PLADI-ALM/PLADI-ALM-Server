@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -110,16 +111,16 @@ public class ResourceService {
     // ===================================================================================================================
 
     /**
-     * 관리자 자원 목록 조회
+     * 관리자 장비 목록 조회
      */
     public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 자원 조회
+        // 장비 조회
         Page<Resource> resources = null;
-        if(keyword == "" || keyword == null) {
+        if(StringUtils.hasText(keyword)) {
             resources = resourceRepository.findAll(pageable);
-        }else {
+        } else {
             resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
         }
         return resources.map(AdminResourcesRes::toDto);
