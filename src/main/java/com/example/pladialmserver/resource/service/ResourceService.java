@@ -188,5 +188,8 @@ public class ResourceService {
     }
 
 
-
+    public AdminResponsibilityListRes getResponsibilityList(User admin, String name) {
+        checkAdminRole(admin);
+        return AdminResponsibilityListRes.toDto(userRepository.findAllByName(name));
+    }
 }

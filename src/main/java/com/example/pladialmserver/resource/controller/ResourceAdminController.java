@@ -5,6 +5,7 @@ import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesDetailsRes;
 import com.example.pladialmserver.resource.dto.response.AdminResourcesRes;
+import com.example.pladialmserver.resource.dto.response.AdminResponsibilityListRes;
 import com.example.pladialmserver.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
@@ -119,5 +120,20 @@ public class ResourceAdminController {
         {
             return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId));
         }
+    }
+
+    /**
+     * 관리자 장비 관리 책임자 리스트
+     */
+    @Operation(summary = "관리자 장비관리책임자 리스트 (장채은)", description = "관리자 장비관리책임자 리스트를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/resources/responsibilities")
+    public ResponseCustom<AdminResponsibilityListRes> getResponsibilityList(
+            @Account User user,
+            @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
+        return ResponseCustom.OK(resourceService.getResponsibilityList(user, name));
     }
 }
