@@ -1,7 +1,6 @@
 package com.example.pladialmserver.user.dto.response;
 
 import com.example.pladialmserver.user.entity.Department;
-import com.example.pladialmserver.user.entity.Position;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +16,11 @@ public class CompanyRankListRes {
     @Schema(type = "Arrays", description = "직책 리스트")
     private List<String> positionList;
 
-    public static CompanyRankListRes toDto(List<Department> departments, List<Position> positions){
-        return CompanyRankListRes.builder()
-                .departmentList(departments.stream().map(Department::getName).collect(Collectors.toList()))
-                .positionList(positions.stream().map(Position::getName).collect(Collectors.toList()))
-                .build();
-    }
+    // TODO 기획 변경으로 인한 수정
+//    public static CompanyRankListRes toDto(List<Department> departments, List<Position> positions){
+//        return CompanyRankListRes.builder()
+//                .departmentList(departments.stream().map(Department::getName).collect(Collectors.toList()))
+//                .positionList(positions.stream().map(Position::getName).collect(Collectors.toList()))
+//                .build();
+//    }
 }

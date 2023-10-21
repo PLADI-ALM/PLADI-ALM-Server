@@ -18,12 +18,13 @@ public class ResourceDetailRes {
     @Schema(type = "String", description = "이미지 url", example = "https://secret-s3-bucket.s3.ap-northeast-2.amazonaws.com/img.key")
     private String imgUrl;
 
+    // TODO 기획 변경으로 인한 수정
     public static ResourceDetailRes toDto(Resource resource) {
         return ResourceDetailRes.builder()
                 .name(resource.getName())
-                .category(resource.getResourceCategory().getName())
+//                .category(resource.getResourceCategory().getName())
                 .description(resource.getDescription())
-                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgUrl()))
+                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgKey()))
                 .build();
     }
 }

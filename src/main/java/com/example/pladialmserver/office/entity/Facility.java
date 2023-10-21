@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
 public class Facility extends BaseEntity {
 
     @Id

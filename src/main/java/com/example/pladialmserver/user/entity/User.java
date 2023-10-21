@@ -25,7 +25,6 @@ import java.util.List;
 @DynamicUpdate
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
 @SQLDelete(sql = "UPDATE user SET is_enable = false, update_at = current_timestamp WHERE user_id = ?")
 @EntityListeners(UserEntityListener.class)
 public class User extends BaseEntity {
@@ -46,17 +45,13 @@ public class User extends BaseEntity {
     @Size(max = 255)
     private String password;
 
+    @NotNull
+    @Size(max = 20)
+    private String phone;
+
     @ManyToOne
     @JoinColumn(nullable = false, name = "department_id")
     private Department department;
-
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "position_id")
-    private Position position;
-
-    @NotNull
-    @Size(max = 30)
-    private String officeJob;
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
@@ -66,33 +61,28 @@ public class User extends BaseEntity {
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, Position position, String officeJob, Role role) {
+    public User(String name, String email, String password, Department department, String phone, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.department = department;
-        this.position = position;
-        this.officeJob = officeJob;
+        this.phone=phone;
         this.role = role;
     }
 
-    public static User toEntity(CreateUserReq req, Department department, Position position){
+    public static User toEntity(CreateUserReq req, Department department){
         return User.builder()
                 .name(req.getName())
                 .email(req.getEmail())
                 .password(req.getPassword())
                 .department(department)
-                .position(position)
-                .officeJob(req.getOfficeJob())
                 .role(Role.getRoleByName(req.getRole()))
                 .build();
     }
 
-    public void updateUser(UpdateUserReq req, Department department, Position position){
+    public void updateUser(UpdateUserReq req, Department department){
         if(!req.getName().equals(name)) name = req.getName();
         if(!department.equals(this.department)) this.department = department;
-        if(!position.equals(this.position)) this.position = position;
-        if(!req.getOfficeJob().equals(officeJob)) officeJob = req.getOfficeJob();
         Role reqRole = Role.getRoleByName(req.getRole());
         if(!reqRole.equals(role)) role = reqRole;
     }

@@ -1,7 +1,6 @@
 package com.example.pladialmserver.resource.dto.response;
 
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
-import com.example.pladialmserver.office.dto.response.BookedTimeRes;
 import com.example.pladialmserver.resource.entity.Resource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -23,7 +22,7 @@ public class AdminResourcesDetailsRes {
     public static AdminResourcesDetailsRes toDto(Resource resource, List<ResourcesList> resourcesLists){
         return AdminResourcesDetailsRes.builder()
                 .resourceId(resource.getResourceId())
-                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgUrl()))
+                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgKey()))
                 .description(resource.getDescription())
                 .resourcesLists(resourcesLists)
                 .build();

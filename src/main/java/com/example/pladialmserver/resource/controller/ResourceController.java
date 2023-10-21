@@ -110,8 +110,9 @@ public class ResourceController {
             @RequestBody @Valid ResourceReq resourceReq) {
 
         // 현재 보다 과거 날짜로 등록 하는 경우
-        if (LocalDate.now().isAfter(resourceReq.getStartDate()))
-            throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        // TODO 기획 변경으로 인한 수정
+//        if (LocalDate.now().isAfter(resourceReq.getStartDate()))
+//            throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
         // 종료일이 시작일 보다 빠른 경우
         if (resourceReq.getEndDate().isBefore(resourceReq.getStartDate()))
             throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);

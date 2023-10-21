@@ -35,13 +35,14 @@ public class BookingRes {
                 .build();
     }
 
+    // TODO 기획 변경으로 인한 수정
     public static BookingRes toDto(ResourceBooking resourceBooking) {
         return BookingRes.builder()
                 .id(resourceBooking.getResourceBookingId())
                 .name(resourceBooking.getResource().getName())
-                .detailInfo(resourceBooking.getResource().getResourceCategory().getName())
-                .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
-                .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
+//                .detailInfo(resourceBooking.getResource().getResourceCategory().getName())
+//                .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
+//                .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
                 .status(resourceBooking.getStatus().getValue())
                 .build();
     }

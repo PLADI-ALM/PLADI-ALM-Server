@@ -20,11 +20,12 @@ public class AdminResourcesRes {
     @Schema(type = "String", description = "자원 설명", example = "맥북프로사줘")
     private String description;
 
+    // TODO 기획 변경으로 인한 수정
     public static AdminResourcesRes toDto(Resource resource) {
         return AdminResourcesRes.builder()
                 .resourceId(resource.getResourceId())
                 .name(resource.getName())
-                .category(resource.getResourceCategory().getName())
+//                .category(resource.getResourceCategory().getName())
                 .description(resource.getDescription())
                 .build();
     }

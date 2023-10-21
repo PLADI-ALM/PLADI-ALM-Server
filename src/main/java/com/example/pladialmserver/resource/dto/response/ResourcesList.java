@@ -22,12 +22,13 @@ public class ResourcesList {
     @Schema(type = "String", description = "예약상태", example = "예약중")
     private String bookingStatus;
 
+    // TODO 기획 변경으로 인한 수정
     public static ResourcesList toDto(ResourceBooking resourceBooking){
         return ResourcesList.builder()
                 .requester(resourceBooking.getUser().getName())
-                .position(resourceBooking.getUser().getPosition().getName())
-                .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
-                .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
+//                .position(resourceBooking.getUser().getPosition().getName())
+//                .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
+//                .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
                 .goal(resourceBooking.getMemo())
                 .bookingStatus(resourceBooking.getStatus().getValue())
                 .build();

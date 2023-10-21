@@ -13,10 +13,11 @@ public class UserPositionRes {
     @Schema(type = "String", description = "직급", example = "사원")
     private String position;
 
+    // TODO 기획 변경으로 인한 수정
     public static UserPositionRes toDto (User user){
         return UserPositionRes.builder()
                 .name(user.getName())
-                .position(user.getPosition().getName())
+//                .position(user.getPosition().getName())
                 .build();
     }
 }

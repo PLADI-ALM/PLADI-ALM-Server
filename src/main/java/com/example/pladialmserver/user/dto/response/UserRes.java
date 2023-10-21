@@ -23,14 +23,15 @@ public class UserRes {
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반")
     private String role;
 
+    // TODO 기획 변경으로 인한 수정
     public static UserRes toDto (User user){
         return UserRes.builder()
                 .userId(user.getUserId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .department(user.getDepartment().getName())
-                .position(user.getPosition().getName())
-                .officeJob(user.getOfficeJob())
+//                .position(user.getPosition().getName())
+//                .officeJob(user.getOfficeJob())
                 .role(user.getRole().getValue())
                 .build();
     }
