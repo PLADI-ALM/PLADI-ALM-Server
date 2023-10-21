@@ -24,7 +24,7 @@ public class UserRepositoryImpl implements UserCustom {
     @Override
     public Page<User> findAllByName(String name, Pageable pageable) {
         List<User> content = jpaQueryFactory.selectFrom(user)
-                .where(findKeyword(name))
+                .where(user.isEnable.eq(true).and(findKeyword(name)))
                 .fetch();
 
         int start = (int) pageable.getOffset();
