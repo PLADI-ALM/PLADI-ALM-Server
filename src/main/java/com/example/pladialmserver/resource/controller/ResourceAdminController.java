@@ -104,18 +104,18 @@ public class ResourceAdminController {
     }
 
     /**
-     * 관리자 자원별 예약 이력을 조회한다.
+     * 관리자 장비별 예약 이력을 조회한다.
      */
-    @Operation(summary = "관리자 자원별 예약 이력을 조회 (이승학)", description = "관리자 자원별 예약 이력을 조회한다.")
+    @Operation(summary = "관리자 장비별 예약 이력을 조회 (이승학)", description = "관리자 장비별 예약 이력을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 장비입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("/resources/{resourceId}")
     public ResponseCustom<AdminResourcesDetailsRes> getAdminResourcesDetails(
             @Account User user,
-            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId) {
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId) {
         {
             return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId));
         }

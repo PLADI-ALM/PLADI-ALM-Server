@@ -157,9 +157,9 @@ public class BookingAdminController {
     }
 
     /**
-     * 관리자 자원 예약 목록을 조회
+     * 관리자 장비 예약 목록을 조회
      */
-    @Operation(summary = "관리자 자원 예약 목록 조회 (이승학)", description = "관리자 페이지에서 자원 예약 내역을 전체 조회한다.")
+    @Operation(summary = "관리자 장비 예약 목록 조회 (이승학)", description = "관리자 페이지에서 장비 예약 내역을 전체 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
     })

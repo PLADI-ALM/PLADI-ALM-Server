@@ -296,7 +296,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 목록을 조회
+     * 관리자 장비 예약 목록을 조회
      */
     public Page<AdminResourceRes> getBookingResources(User user, Pageable pageable,boolean active) {
         checkAdminRole(user);

@@ -20,10 +20,10 @@ public class AdminBookingRes {
     private String startDateTime;
     @Schema(type = "String", description = "예약일자(종료일)", example = "'2023-10-01 13:00' / '2023-10-03'")
     private String endDateTime;
-    @Schema(type = "String", description = "요청자", example = "이승학")
-    private String requester;
-    @Schema(type = "String", description = "직위", example = "대리")
-    private String position;
+    @Schema(type = "String", description = "예약자 이름", example = "이승학")
+    private String reservatorName;
+    @Schema(type = "String", description = "예약자 전화번호", example = "010-4158-8124")
+    private String reservatorPhone;
     @Schema(type = "String", description = "상태", example = "'예약중' / '사용중'")
     private String status;
 
@@ -34,9 +34,9 @@ public class AdminBookingRes {
                 .detailInfo(officeBooking.getOffice().getLocation())
                 .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getStartTime()))
                 .endDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getEndTime()))
-                .requester(officeBooking.getUser().getName())
+                .reservatorName(officeBooking.getUser().getName())
                 // TODO 기획 변경으로 인한 수정
-//                .position(officeBooking.getUser().getPosition().getName())
+                .reservatorPhone(officeBooking.getUser().getPhone())
                 .status(officeBooking.getStatus().getValue())
                 .build();
     }
