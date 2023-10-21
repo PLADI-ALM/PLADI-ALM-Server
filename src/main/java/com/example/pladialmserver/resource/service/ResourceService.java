@@ -68,7 +68,7 @@ public class ResourceService {
 
 
     /**
-     * 자원 개별 조회
+     * 장비 개별 조회
      */
     public ResourceDetailRes getResourceDetail(Long resourceId) {
         Resource resource = resourceRepository.findById(resourceId)

@@ -62,16 +62,16 @@ public class ResourceController {
 
 
     /**
-     * 자원 개별 조회
+     * 장비 개별 조회
      */
-    @Operation(summary = "자원 개별 조회 (박소정)", description = "자원 개별 조회를 진행한다.")
+    @Operation(summary = "장비 개별 조회 (박소정)", description = "장비 개별 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 자원입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{resourceId}")
     public ResponseCustom<ResourceDetailRes> getResourceDetail(
-            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId
     ) {
         return ResponseCustom.OK(resourceService.getResourceDetail(resourceId));
     }
