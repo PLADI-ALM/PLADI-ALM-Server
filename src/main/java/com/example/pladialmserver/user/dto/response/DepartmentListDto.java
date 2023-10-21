@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 
 @Data
 @Builder
-public class CompanyRankListRes {
+public class DepartmentListDto {
     @Schema(type = "Arrays", description = "부서 리스트")
     private List<String> departmentList;
 
-    public static CompanyRankListRes toDto(List<Department> departments){
-        return CompanyRankListRes.builder()
+    public static DepartmentListDto toDto(List<Department> departments){
+        return DepartmentListDto.builder()
                 .departmentList(departments.stream().map(Department::getName).collect(Collectors.toList()))
                 .build();
     }

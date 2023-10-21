@@ -7,8 +7,8 @@ import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.*;
-import com.example.pladialmserver.user.dto.response.CompanyRankListRes;
-import com.example.pladialmserver.user.dto.response.UserPositionRes;
+import com.example.pladialmserver.user.dto.response.DepartmentListDto;
+import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
@@ -46,8 +46,8 @@ public class UserService {
     }
 
     // 사용자 정보
-    public UserPositionRes getUserPosition(User user) {
-        return UserPositionRes.toDto(user);
+    public UserNameRes getUserName(User user) {
+        return UserNameRes.toDto(user);
     }
 
     // 토큰 만료
@@ -130,9 +130,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // 부서 및 직책 리스트
-    public CompanyRankListRes getCompanyRankList() {
-        return CompanyRankListRes.toDto(departmentRepository.findAll());
+    // 부서 리스트
+    public DepartmentListDto getDepartmentList() {
+        return DepartmentListDto.toDto(departmentRepository.findAll());
     }
 
     // 직원 계정 목록 조회

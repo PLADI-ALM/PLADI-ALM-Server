@@ -6,7 +6,7 @@ import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.CheckEmailCodeReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
 import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
-import com.example.pladialmserver.user.dto.response.UserPositionRes;
+import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -47,8 +47,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/position")
-    public ResponseCustom<UserPositionRes> getUserPosition(@Account User user){
-        return ResponseCustom.OK(userService.getUserPosition(user));
+    public ResponseCustom<UserNameRes> getUserName(@Account User user){
+        return ResponseCustom.OK(userService.getUserName(user));
     }
 
     @Operation(summary = "로그아웃 (장채은)", description = "로그아웃을 진행한다.")

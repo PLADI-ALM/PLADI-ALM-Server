@@ -7,12 +7,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserPositionRes {
+public class UserNameRes {
     @Schema(type = "String", description = "사용자 이름", example = "홍길동")
     private String name;
 
-    public static UserPositionRes toDto (User user){
-        return UserPositionRes.builder()
+    public static UserNameRes toDto (User user){
+        return UserNameRes.builder()
                 .name(user.getName())
                 .build();
     }
