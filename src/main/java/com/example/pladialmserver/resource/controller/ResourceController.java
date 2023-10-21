@@ -48,6 +48,7 @@ public class ResourceController {
     })
     @GetMapping
     public ResponseCustom<Page<ResourceRes>> selectResource(
+            @Account User user,
             @Parameter(description = "자원 이름",example = "벤츠") @RequestParam(required = false) String resourceName,
             @Parameter(description = "시작 예약 날짜",example = "2023-10-02") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate startDate,
             @Parameter(description = "종료 예약 날짜",example = "2023-10-02") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate endDate,
@@ -71,6 +72,7 @@ public class ResourceController {
     })
     @GetMapping("/{resourceId}")
     public ResponseCustom<ResourceDetailRes> getResourceDetail(
+            @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId
     ) {
         return ResponseCustom.OK(resourceService.getResourceDetail(resourceId));
@@ -87,6 +89,7 @@ public class ResourceController {
     })
     @GetMapping("/{resourceId}/booking-state")
     public ResponseCustom<List<String>> getResourceBookedDate(
+            @Account User user,
             @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
             @Parameter(description = "자원 예약 현황 조회 년도월 (YYYY-MM)",example = "2023-10") @RequestParam String month) {
         return ResponseCustom.OK(resourceService.getResourceBookedDate(resourceId, month));
