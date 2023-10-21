@@ -110,7 +110,7 @@ public class UserService {
         if(userRepository.existsByEmailAndIsEnable(createUserReq.getEmail(), true)) throw new BaseException(EXISTS_EMAIL);
         if(userRepository.existsByPhoneAndIsEnable(createUserReq.getPhone(), true)) throw new BaseException(EXISTS_PHONE);
         // 회원 생성 리소스 접근
-        Department department = departmentRepository.findByName(createUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Department department = departmentRepository.findByNameAndIsEnable(createUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
@@ -124,7 +124,7 @@ public class UserService {
         // 정보 변경 사용자 정보 확인
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
-        Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
         // 수정 및 저장
         user.updateUser(updateUserReq, department);
         userRepository.save(user);
