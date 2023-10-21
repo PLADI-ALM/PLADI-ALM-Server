@@ -84,6 +84,7 @@ public class User extends BaseEntity {
     public void updateUser(UpdateUserReq req, Department department){
         if(!req.getName().equals(name)) name = req.getName();
         if(!department.equals(this.department)) this.department = department;
+        if(!req.getPhone().equals(phone)) phone = req.getPhone();
         Role reqRole = Role.getRoleByName(req.getRole());
         if(!reqRole.equals(role)) role = reqRole;
     }

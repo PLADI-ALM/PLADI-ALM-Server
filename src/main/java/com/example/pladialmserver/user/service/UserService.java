@@ -119,16 +119,15 @@ public class UserService {
     }
 
     // 직원 수정
-    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 정보 변경 사용자 정보 확인
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
+        if(userRepository.existsByPhoneAndUserIdNot(updateUserReq.getPhone(), user.getUserId())) throw new BaseException(EXISTS_PHONE);
         Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-//        Position position = positionRepository.findByName(updateUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
         // 수정 및 저장
-//        user.updateUser(updateUserReq, department, position);
+        user.updateUser(updateUserReq, department);
         userRepository.save(user);
     }
 

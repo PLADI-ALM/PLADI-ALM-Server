@@ -36,7 +36,7 @@ public enum BaseResponseCode {
     NOT_EMPTY_NAME("U0007", HttpStatus.BAD_REQUEST, "성명을 입력해주세요."),
     NOT_EMPTY_DEPARTMENT("U0008", HttpStatus.BAD_REQUEST, "부서를 입력해주세요."),
     NOT_EMPTY_PHONE("U0009", HttpStatus.BAD_REQUEST, "휴대폰 번호를 입력해주세요."),
-    NOT_EMPTY_OFFICE_JOB("U0010", HttpStatus.BAD_REQUEST, "직책을 입력해주세요."),
+//    NOT_EMPTY_OFFICE_JOB("U0010", HttpStatus.BAD_REQUEST, "직책을 입력해주세요."),
     NOT_EMPTY_ROLE("U0011", HttpStatus.BAD_REQUEST, "역할을 입력해주세요."),
     DEPARTMENT_NOT_FOUND("U0012", HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
     INVALID_PHONE_FORMAT("U0013", HttpStatus.BAD_REQUEST, "휴대폰 형식이 알맞지 않습니다."),
