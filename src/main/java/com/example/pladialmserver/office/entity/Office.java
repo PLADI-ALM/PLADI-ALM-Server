@@ -38,7 +38,8 @@ public class Office extends BaseEntity {
 
     private String imgKey;
 
-    private Boolean isActive;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean isActive = true;
 
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();

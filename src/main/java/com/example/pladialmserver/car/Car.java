@@ -39,7 +39,8 @@ public class Car extends BaseEntity {
     @Size(max = 255)
     private String imgUrl;
 
-    private Boolean isActive;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+    private Boolean isActive = true;
 
     @Builder
     public Car(String name, String description, String imgUrl, String location, Boolean isActive, User user) {

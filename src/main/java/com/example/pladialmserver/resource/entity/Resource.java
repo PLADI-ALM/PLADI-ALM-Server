@@ -38,7 +38,8 @@ public class Resource extends BaseEntity {
   @Size(max = 255)
   private String imgUrl;
 
-  private Boolean isActive;
+  @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
+  private Boolean isActive = true;
 
   @ManyToOne
   @JoinColumn(nullable = false, name = "user_id")
