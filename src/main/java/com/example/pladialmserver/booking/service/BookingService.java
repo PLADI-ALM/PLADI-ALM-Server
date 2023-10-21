@@ -35,22 +35,17 @@ public class BookingService {
     private final ResourceBookingRepository resourceBookingRepository;
 
 
-    /**
-     * 예약 목록 조회
-     */
-    public Page<BookingRes> getBookings(User user, String category, Pageable pageable) {
-        // TODO : QueryDSL로 상수 없애기
-        if(category.equals("office")) {
-            return officeBookingRepository.getBookingsByUser(user, pageable);
-        }
-        else if(category.equals("resource")) {
-            return resourceBookingRepository.getBookingsByUser(user, pageable);
-        } else {
-            throw new BaseException(BaseResponseCode.BAD_REQUEST);
-        }
+    // 회의실 예약 목록 조회
+    public Page<BookingRes> getOfficeBookings(User user, Pageable pageable) {
+        return officeBookingRepository.getBookingsByUser(user, pageable);
     }
 
-    // 자원 예약 권한 확인
+    // 장비 예약 목록 조회
+    public Page<BookingRes> getResourceBookings(User user, Pageable pageable) {
+        return resourceBookingRepository.getBookingsByUser(user, pageable);
+    }
+
+    // 장비 예약 권한 확인
     private ResourceBooking checkResourceBookingAuthentication(User user, Long resourceBookingId, Role role) {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
@@ -83,12 +78,12 @@ public class BookingService {
         if (!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 
-    // 자원 예약 반납 공통 메서드
+    // 장비 예약 반납 공통 메서드
     private void returnBookingResource(ResourceBooking resourceBooking) {
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if(!resourceBooking.checkBookingStatus(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
-        // 예약 반납
+        // 장비 반납
         resourceBooking.returnBookingResource();
         resourceBookingRepository.save(resourceBooking);
     }
@@ -150,11 +145,11 @@ public class BookingService {
 
 
     // ===================================================================================================================
-    // [일반-자원]
+    // [일반-장비]
     // ===================================================================================================================
 
     /**
-     * 자원 예약 개별 조회
+     * 장비 예약 개별 조회
      */
     public ResourceBookingDetailRes getResourceBookingDetail(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
@@ -256,7 +251,7 @@ public class BookingService {
     // ===================================================================================================================
 
     /**
-     * 관리자 자원 예약 개별 조회
+     * 관리자 장비 예약 개별 조회
      */
     public ResourceBookingDetailRes getResourceBookingDetailByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
@@ -264,7 +259,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 반려
+     * 관리자 장비 예약 반려
      */
     @Transactional
     public void rejectResourceBooking(User user, Long resourceBookingId) {
@@ -276,7 +271,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 허가
+     * 관리자 장비 예약 허가
      */
     @Transactional
     public void allowResourceBooking(User user, Long resourceBookingId) {
@@ -292,7 +287,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 반납
+     * 관리자 장비 예약 반납
      */
     @Transactional
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {

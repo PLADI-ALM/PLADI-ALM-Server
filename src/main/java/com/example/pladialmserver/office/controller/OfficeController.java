@@ -49,6 +49,7 @@ public class OfficeController {
     })
     @GetMapping
     public ResponseCustom<Page<OfficeRes>> searchOffice(
+            @Account User user,
             @Parameter(description = "예약 날짜",example = "2023-09-20") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
             @Parameter(description = "시작 예약 시간",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
             @Parameter(description = "종료 예약 시간",example = "13:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
@@ -72,7 +73,9 @@ public class OfficeController {
             @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("/{officeId}")
-    public ResponseCustom<OfficeRes> getOffice(@PathVariable(name="officeId") Long officeId){
+    public ResponseCustom<OfficeRes> getOffice(
+            @Account User user,
+            @PathVariable(name="officeId") Long officeId){
         return ResponseCustom.OK(officeService.getOffice(officeId));
     }
 
@@ -87,6 +90,7 @@ public class OfficeController {
     })
     @GetMapping("/{officeId}/booking-state")
     public ResponseCustom<BookingStateRes> getOfficeBookedTimes(
+            @Account User user,
             @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable Long officeId,
             @Parameter(description = "(String) 일자", example = "2023-10-02") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date
     ) {

@@ -29,6 +29,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
     private final JPAQueryFactory jpaQueryFactory;
     private final EntityManager entityManager;
 
+    // 장비 예약 목록 조회
     @Override
     public Page<BookingRes> getBookingsByUser(User user, Pageable pageable) {
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
