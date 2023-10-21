@@ -78,12 +78,12 @@ public class BookingService {
         if (!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 
-    // 자원 예약 반납 공통 메서드
+    // 장비 예약 반납 공통 메서드
     private void returnBookingResource(ResourceBooking resourceBooking) {
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if(!resourceBooking.checkBookingStatus(BookingStatus.USING)) throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
-        // 예약 반납
+        // 장비 반납
         resourceBooking.returnBookingResource();
         resourceBookingRepository.save(resourceBooking);
     }
@@ -259,7 +259,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 반려
+     * 관리자 장비 예약 반려
      */
     @Transactional
     public void rejectResourceBooking(User user, Long resourceBookingId) {
@@ -271,7 +271,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 허가
+     * 관리자 장비 예약 허가
      */
     @Transactional
     public void allowResourceBooking(User user, Long resourceBookingId) {
@@ -287,7 +287,7 @@ public class BookingService {
     }
 
     /**
-     * 관리자 자원 예약 반납
+     * 관리자 장비 예약 반납
      */
     @Transactional
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
