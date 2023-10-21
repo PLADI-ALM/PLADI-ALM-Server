@@ -11,11 +11,11 @@ import lombok.Getter;
 @Builder
 public class BookingRes {
 
-    @Schema(type = "Long", description = "회의실 Id / 자원 Id", example = "1")
+    @Schema(type = "Long", description = "회의실 Id / 장비 Id", example = "1")
     private Long id;
-    @Schema(type = "String", description = "회의실명 / 자원명", example = "'회의실1' / '카메라1'")
+    @Schema(type = "String", description = "회의실명 / 장비명", example = "'회의실1' / '카메라1'")
     private String name;
-    @Schema(type = "String", description = "회의실 위치 / 카테고리", example = "'401호' / '촬영장비'")
+    @Schema(type = "String", description = "회의실 위치 / 보관장소", example = "'401호' / '3층 A홀'")
     private String detailInfo;
     @Schema(type = "String", description = "예약일자(시작일)", example = "'2023-10-01 12:00' / '2023-10-01'")
     private String startDateTime;
@@ -35,14 +35,13 @@ public class BookingRes {
                 .build();
     }
 
-    // TODO 기획 변경으로 인한 수정
     public static BookingRes toDto(ResourceBooking resourceBooking) {
         return BookingRes.builder()
                 .id(resourceBooking.getResourceBookingId())
                 .name(resourceBooking.getResource().getName())
-//                .detailInfo(resourceBooking.getResource().getResourceCategory().getName())
-//                .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
-//                .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
+                .detailInfo(resourceBooking.getResource().getLocation())
+                .startDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getStartDate()))
+                .endDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getEndDate()))
                 .status(resourceBooking.getStatus().getValue())
                 .build();
     }

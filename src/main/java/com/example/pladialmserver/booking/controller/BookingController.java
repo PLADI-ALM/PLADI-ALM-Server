@@ -29,21 +29,35 @@ public class BookingController {
     private final BookingService bookingService;
 
     /**
-     * 예약 목록 조회
+     * 회의실 예약 목록 조회
      */
-    @Operation(summary = "예약 목록 조회", description = "회의실 및 비품 예약 내역을 전체 조회한다.")
+    @Operation(summary = "회의실 예약 목록 조회 (박소정)", description = "회의실 예약 내역을 전체 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(G0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @GetMapping
-    public ResponseCustom<Page<BookingRes>> getBookings(
+    @GetMapping("/offices")
+    public ResponseCustom<Page<BookingRes>> getOfficeBookings(
             @Account User user,
-            @Parameter(description = "(String) 카테고리 선택", example = "'office' / 'resource'") @RequestParam(required = false) String category,
             @PageableDefault(size = 8) Pageable pageable){
-        // category 검증 추가 (queryDSL 변경 후 적용)
-        return ResponseCustom.OK(bookingService.getBookings(user, category, pageable));
+        return ResponseCustom.OK(bookingService.getOfficeBookings(user, pageable));
+    }
+
+    /**
+     * 장비 예약 목록 조회
+     */
+    @Operation(summary = "장비 예약 목록 조회 (박소정)", description = "장비 예약 내역을 전체 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(G0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/resources")
+    public ResponseCustom<Page<BookingRes>> getResourceBookings(
+            @Account User user,
+            @PageableDefault(size = 8) Pageable pageable){
+        return ResponseCustom.OK(bookingService.getResourceBookings(user, pageable));
     }
 
     /**

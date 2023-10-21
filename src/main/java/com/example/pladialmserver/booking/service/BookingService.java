@@ -35,19 +35,14 @@ public class BookingService {
     private final ResourceBookingRepository resourceBookingRepository;
 
 
-    /**
-     * 예약 목록 조회
-     */
-    public Page<BookingRes> getBookings(User user, String category, Pageable pageable) {
-        // TODO : QueryDSL로 상수 없애기
-        if(category.equals("office")) {
-            return officeBookingRepository.getBookingsByUser(user, pageable);
-        }
-        else if(category.equals("resource")) {
-            return resourceBookingRepository.getBookingsByUser(user, pageable);
-        } else {
-            throw new BaseException(BaseResponseCode.BAD_REQUEST);
-        }
+    // 회의실 예약 목록 조회
+    public Page<BookingRes> getOfficeBookings(User user, Pageable pageable) {
+        return officeBookingRepository.getBookingsByUser(user, pageable);
+    }
+
+    // 장비 예약 목록 조회
+    public Page<BookingRes> getResourceBookings(User user, Pageable pageable) {
+        return resourceBookingRepository.getBookingsByUser(user, pageable);
     }
 
     // 자원 예약 권한 확인
