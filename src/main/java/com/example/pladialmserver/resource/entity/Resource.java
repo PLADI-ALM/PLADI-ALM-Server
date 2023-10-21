@@ -45,28 +45,28 @@ public class Resource extends BaseEntity {
   private User user;
 
   @Builder
-  public Resource(String name, String description, String imgKey, String location, Boolean isActive, User user) {
+  public Resource(String name, String description, String imgKey, String location, User user) {
     this.name = name;
     this.description = description;
     this.imgKey = imgKey;
     this.location=location;
-    this.isActive=isActive;
     this.user=user;
   }
 
-  public static Resource toDto(CreateResourceReq request) {
+  public static Resource toDto(CreateResourceReq request, User responsibility) {
     return Resource.builder()
             .name(request.getName())
+            .location(request.getLocation())
             .description(request.getDescription())
-            // TODO 기획 변경으로 인한 수정
-//            .imgUrl((request.getImgUrl()==null) ? null : request.getImgUrl())
+            .imgKey((request.getImgKey()==null) ? null : request.getImgKey())
+            .user(responsibility)
             .build();
   }
 
   public void updateResource(CreateResourceReq request) {
     if(!request.getName().equals(name)) name = request.getName();
     if(!request.getDescription().equals(description)) description = request.getDescription();
-    if(!request.getImgUrl().equals(imgKey)) imgKey = request.getImgUrl();
+    if(!request.getImgKey().equals(imgKey)) imgKey = request.getImgKey();
   }
 
 }

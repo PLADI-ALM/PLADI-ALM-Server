@@ -14,6 +14,7 @@ import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class ResourceService {
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
+    private final UserRepository userRepository;
 
 
     // 관리자 권한 확인
@@ -140,13 +142,12 @@ public class ResourceService {
      * 관리자 자원 추가
      */
     @Transactional
-    // TODO 기획 변경으로 인한 수정
     public void createResourceByAdmin(User user, CreateResourceReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
-//        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
-//                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
-//        resourceRepository.save(Resource.toDto(request, category));
+        User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        resourceRepository.save(Resource.toDto(request, responsibility));
     }
 
     /**
