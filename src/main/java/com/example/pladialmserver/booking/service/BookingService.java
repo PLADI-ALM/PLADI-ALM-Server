@@ -45,7 +45,7 @@ public class BookingService {
         return resourceBookingRepository.getBookingsByUser(user, pageable);
     }
 
-    // 자원 예약 권한 확인
+    // 장비 예약 권한 확인
     private ResourceBooking checkResourceBookingAuthentication(User user, Long resourceBookingId, Role role) {
         ResourceBooking resourceBooking = resourceBookingRepository.findById(resourceBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
@@ -145,11 +145,11 @@ public class BookingService {
 
 
     // ===================================================================================================================
-    // [일반-자원]
+    // [일반-장비]
     // ===================================================================================================================
 
     /**
-     * 자원 예약 개별 조회
+     * 장비 예약 개별 조회
      */
     public ResourceBookingDetailRes getResourceBookingDetail(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
