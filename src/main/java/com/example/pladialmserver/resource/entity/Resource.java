@@ -63,10 +63,12 @@ public class Resource extends BaseEntity {
             .build();
   }
 
-  public void updateResource(CreateResourceReq request) {
+  public void updateResource(CreateResourceReq request, User responsibility) {
     if(!request.getName().equals(name)) name = request.getName();
+    if(!request.getLocation().equals(location)) location = request.getLocation();
     if(!request.getDescription().equals(description)) description = request.getDescription();
     if(!request.getImgKey().equals(imgKey)) imgKey = request.getImgKey();
+    if(!responsibility.equals(user)) user = responsibility;
   }
 
 }

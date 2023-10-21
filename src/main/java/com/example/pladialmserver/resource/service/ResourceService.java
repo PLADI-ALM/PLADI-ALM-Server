@@ -139,7 +139,7 @@ public class ResourceService {
     }
 
     /**
-     * 관리자 자원 추가
+     * 관리자 장비 추가
      */
     @Transactional
     public void createResourceByAdmin(User user, CreateResourceReq request) {
@@ -151,9 +151,8 @@ public class ResourceService {
     }
 
     /**
-     * 관리자 자원 수정
+     * 관리자 장비 수정
      */
-    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void updateResourceByAdmin(User user, Long resourceId, CreateResourceReq request) {
         // 관리자 권한 확인
@@ -161,10 +160,10 @@ public class ResourceService {
         // 자원 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-//        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
-//                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
+        User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         // 자원 수정
-//        resource.updateResource(request, category);
+        resource.updateResource(request, responsibility);
     }
 
     /**
