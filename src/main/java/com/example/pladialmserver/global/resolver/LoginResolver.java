@@ -39,6 +39,6 @@ public class LoginResolver implements HandlerMethodArgumentResolver {
         jwtUtil.validateToken(token);
         // 이미 로그아웃 & 회원 탈퇴가 된 토큰인지 확인
         if(!ObjectUtils.isEmpty(jwtUtil.getTokenInRedis(token))) throw new BaseException(BaseResponseCode.BLACKLIST_TOKEN);
-        return userRepository.findById(jwtUtil.getUserIdFromJWT(token)).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        return userRepository.findByUserIdAndIsEnable(jwtUtil.getUserIdFromJWT(token), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
     }
 }
