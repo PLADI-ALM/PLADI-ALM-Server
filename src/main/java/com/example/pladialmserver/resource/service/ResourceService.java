@@ -71,7 +71,7 @@ public class ResourceService {
      * 장비 개별 조회
      */
     public ResourceDetailRes getResourceDetail(Long resourceId) {
-        Resource resource = resourceRepository.findById(resourceId)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         return ResourceDetailRes.toDto(resource);
     }
@@ -158,7 +158,7 @@ public class ResourceService {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 자원 유무 확인
-        Resource resource = resourceRepository.findById(resourceId)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
