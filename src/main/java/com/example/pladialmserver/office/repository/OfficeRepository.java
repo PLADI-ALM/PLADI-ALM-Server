@@ -27,4 +27,5 @@ public interface OfficeRepository extends JpaRepository<Office, Long> {
     Page<Office> findByFacilityNameAndOfficeIdNotIn(@Param("facilityName") String facilityName, @Param("bookedOfficeIds") List<Long> bookedOfficeIds, Pageable pageable);
 
 
+    Optional<Office> findByOfficeIdAndIsEnable(Long officeId, boolean b);
 }

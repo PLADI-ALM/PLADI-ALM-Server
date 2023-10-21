@@ -158,7 +158,7 @@ public class OfficeService {
     public void updateOffice(User user, Long officeId, CreateOfficeReq request) {
         checkAdminRole(user);
 
-        Office office = officeRepository.findById(officeId)
+        Office office = officeRepository.findByOfficeIdAndIsEnable(officeId,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         office.updateOffice(request);
@@ -181,7 +181,7 @@ public class OfficeService {
     public void deleteOfficeByAdmin(User user, Long officeId) {
         checkAdminRole(user);
 
-        Office office = officeRepository.findById(officeId)
+        Office office = officeRepository.findByOfficeIdAndIsEnable(officeId,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         if(officeBookingRepository.existsByOfficeAndStatusIn(office,BookingStatus.getActiveStatuses())) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_OFFICE_DELETION);
