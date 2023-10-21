@@ -145,29 +145,29 @@ public class ResourceService {
     public void updateResourceByAdmin(User user, Long resourceId, CreateResourceReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 자원 유무 확인
+        // 장비 유무 확인
         Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
-        // 자원 수정
+        // 장비 수정
         resource.updateResource(request, responsibility);
     }
 
     /**
-     * 관리자 자원 삭제
+     * 관리자 장비 삭제
      */
     @Transactional
     public void deleteResourceByAdmin(User user, Long resourceId) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 자원 유무 확인
+        // 장비 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-        // 자원 예약 내역 상태 확인
+        // 장비 예약 내역 상태 확인
         List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
         if(resourceBookingRepository.existsByResourceAndStatusIn(resource, bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
-        // 자원 삭제
+        // 장비 삭제
         resourceRepository.delete(resource);
     }
 
