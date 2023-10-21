@@ -66,7 +66,7 @@ public class AdminUserController {
             @ApiResponse(responseCode = "200", description = "(S0001)부서 리스트 확인 성공")
     })
     @GetMapping("/departments")
-    public ResponseCustom<DepartmentListDto> getDepartmentList() {
+    public ResponseCustom<DepartmentListDto> getDepartmentList(@Account User user) {
         return ResponseCustom.OK(userService.getDepartmentList());
     }
 

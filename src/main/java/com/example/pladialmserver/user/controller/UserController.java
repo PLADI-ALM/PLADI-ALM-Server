@@ -30,7 +30,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "로그인 (장채은)", description = "로그인을 한다.")
+    @Operation(summary = "로그인 (장채은) [토큰 X]", description = "로그인을 한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)로그인 성공"),
             @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0003)비밀번호 형식을 확인해주세요. \n (U0004)이메일을 입력해주세요.\n (U0005)비밀번호를 입력해주세요. \n (U0006)비밀번호가 일치하지 않습니다. ", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -61,7 +61,7 @@ public class UserController {
         return ResponseCustom.OK();
     }
 
-    @Operation(summary = "토큰 재발급 (장채은)", description = "토큰 재발급을 진행한다.")
+    @Operation(summary = "토큰 재발급 (장채은) [토큰 X]", description = "토큰 재발급을 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)토큰 재발급 성공"),
             @ApiResponse(responseCode = "403", description = "(G0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
@@ -71,7 +71,7 @@ public class UserController {
         return ResponseCustom.OK(userService.reissue(tokenDto));
     }
 
-    @Operation(summary = "이메일 인증번호 전송 (장채은)", description = "이메일 인증번호를 전송한다.")
+    @Operation(summary = "이메일 인증번호 전송 (장채은) [토큰 X]", description = "이메일 인증번호를 전송한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)이메일 인증번호 전송 성공"),
             @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -85,7 +85,7 @@ public class UserController {
     }
 
 
-    @Operation(summary = "이메일 인증번호 코드 확인 (장채은)", description = "이메일에 전송된 코드가 맞는지 확인한다.")
+    @Operation(summary = "이메일 인증번호 코드 확인 (장채은) [토큰 X]", description = "이메일에 전송된 코드가 맞는지 확인한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)이메일 인증번호 확인 성공"),
             @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요.\n (U0004)이메일을 입력해주세요.\n (U0016)이메일 코드를 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
@@ -98,7 +98,7 @@ public class UserController {
         return ResponseCustom.OK();
     }
 
-    @Operation(summary = "비밀번호 재설정 (장채은)", description = "비밀번호를 재설정한다.")
+    @Operation(summary = "비밀번호 재설정 (장채은) [토큰 X]", description = "비밀번호를 재설정한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)비밀번호 재설정 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
