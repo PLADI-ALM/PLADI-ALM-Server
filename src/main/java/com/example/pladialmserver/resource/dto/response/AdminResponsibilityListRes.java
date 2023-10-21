@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Data
 @Builder
 public class AdminResponsibilityListRes {
-    @Schema(type = "Long", description = "자원 Id", example = "1")
+    @Schema(type = "Arrays", description = "책임자 리스트")
     private List<AdminResponsibilityRes> responsibilityList;
 
     public static AdminResponsibilityListRes toDto(List<User> users){
