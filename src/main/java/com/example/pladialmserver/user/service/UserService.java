@@ -133,11 +133,7 @@ public class UserService {
 
     // 부서 및 직책 리스트
     public CompanyRankListRes getCompanyRankList() {
-        List<Department> departments = departmentRepository.findAll();
-        // TODO 기획 변경으로 인한 수정
-//        List<Position> positions = positionRepository.findAll();
-//        return CompanyRankListRes.toDto(departments, positions);
-        return null;
+        return CompanyRankListRes.toDto(departmentRepository.findAll());
     }
 
     // 직원 계정 목록 조회

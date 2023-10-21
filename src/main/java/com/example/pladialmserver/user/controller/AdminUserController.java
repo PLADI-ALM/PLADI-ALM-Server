@@ -61,9 +61,9 @@ public class AdminUserController {
         return ResponseCustom.OK();
     }
 
-    @Operation(summary = "부서 및 직책 리스트 (장채은)", description = "부서 및 직책 리스트를 확인한다.")
+    @Operation(summary = "부서 리스트 (장채은)", description = "부서 리스트를 확인한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)부서 및 직책 리스트 확인 성공")
+            @ApiResponse(responseCode = "200", description = "(S0001)부서 리스트 확인 성공")
     })
     @GetMapping("/ranks")
     public ResponseCustom<CompanyRankListRes> getCompanyRankList() {
