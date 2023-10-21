@@ -15,7 +15,7 @@ public class UpdateUserReq {
     @NotBlank(message = "U0008")
     private String department;
     @Schema(type = "String", description = "휴대폰", example = "010-0000-0000", required = true)
-    @Pattern(message = "U0010", regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})\\$")
+    @Pattern(message = "U0010", regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$")
     @NotBlank(message = "U0009")
     private String phone;
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", required = true)
