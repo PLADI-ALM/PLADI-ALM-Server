@@ -83,7 +83,7 @@ public enum BaseResponseCode {
 
 
     //Resource
-    NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"자원원 이름과 예약 날짜를 모두 입력해주세요."),
+    NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"장비 이름과 예약 날짜를 모두 입력해주세요."),
     END_DATE_BEFORE_START_DATE("R0002",HttpStatus.BAD_REQUEST,"종료일은 시작일보다 빠를 수 없습니다."),
     RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 장비입니다."),
     DESCRIPTION_SIZE_OVER("R0004", HttpStatus.BAD_REQUEST, "설명은 255자 이하로 작성해주세요."),

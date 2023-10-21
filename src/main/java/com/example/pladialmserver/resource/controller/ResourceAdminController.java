@@ -42,7 +42,7 @@ public class ResourceAdminController {
     @GetMapping("")
     public ResponseCustom<Page<AdminResourcesRes>> getResources(
             @Account User user,
-            @Parameter(description = "(String) 장비명 검색어", example = "'MacBook'") @RequestParam(required = false) String keyword,
+            @Parameter(description = "(String) 장비명 검색어", example = "MacBook") @RequestParam(required = false) String keyword,
             @PageableDefault(size = 8) Pageable pageable) {
         return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
     }
