@@ -24,10 +24,11 @@ public class OfficesList {
     @Schema(type = "String", description = "예약상태", example = "예약중")
     private String bookingStatus;
 
+    // TODO 기획 변경으로 인한 수정
     public static OfficesList toDto(OfficeBooking officeBooking){
         return OfficesList.builder()
                 .requester(officeBooking.getUser().getName())
-                .position(officeBooking.getUser().getPosition().getName())
+//                .position(officeBooking.getUser().getPosition().getName())
                 .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getStartTime()))
                 .endDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getEndTime()))
                 .goal(officeBooking.getMemo())

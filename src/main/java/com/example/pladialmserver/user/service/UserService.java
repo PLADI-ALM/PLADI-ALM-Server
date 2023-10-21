@@ -14,7 +14,6 @@ import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
-import com.example.pladialmserver.user.repository.PositionRepository;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +34,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
-    private final PositionRepository positionRepository;
     private final ArchivingServerClient archivingServerClient;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -106,6 +104,7 @@ public class UserService {
     // ===================================================================================================================
 
     // 직원 등록
+    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void createUser(User admin, CreateUserReq createUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
@@ -113,31 +112,34 @@ public class UserService {
         if(userRepository.existsByEmail(createUserReq.getEmail())) throw new BaseException(EXISTS_EMAIL);
         // 회원 생성 리소스 접근
         Department department = departmentRepository.findByName(createUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        Position position = positionRepository.findByName(createUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
+//        Position position = positionRepository.findByName(createUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
-        userRepository.save(User.toEntity(createUserReq, department, position));
+//        userRepository.save(User.toEntity(createUserReq, department, position));
     }
 
     // 직원 수정
+    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         // 정보 변경 사용자 정보 확인
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         Department department = departmentRepository.findByName(updateUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        Position position = positionRepository.findByName(updateUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
+//        Position position = positionRepository.findByName(updateUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
         // 수정 및 저장
-        user.updateUser(updateUserReq, department, position);
+//        user.updateUser(updateUserReq, department, position);
         userRepository.save(user);
     }
 
     // 부서 및 직책 리스트
     public CompanyRankListRes getCompanyRankList() {
         List<Department> departments = departmentRepository.findAll();
-        List<Position> positions = positionRepository.findAll();
-        return CompanyRankListRes.toDto(departments, positions);
+        // TODO 기획 변경으로 인한 수정
+//        List<Position> positions = positionRepository.findAll();
+//        return CompanyRankListRes.toDto(departments, positions);
+        return null;
     }
 
     // 직원 계정 목록 조회

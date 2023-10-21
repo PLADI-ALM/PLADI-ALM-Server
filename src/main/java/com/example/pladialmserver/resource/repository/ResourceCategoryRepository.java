@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface ResourceCategoryRepository extends JpaRepository<ResourceCategory, Long> {
-
-    Optional<ResourceCategory> findByName(String category);
-}
+// TODO 기획 변경으로 인한 수정
+//@Repository
+//public interface ResourceCategoryRepository extends JpaRepository<ResourceCategory, Long> {
+//
+//    Optional<ResourceCategory> findByName(String category);
+//}

@@ -58,7 +58,8 @@ public class Resource extends BaseEntity {
     return Resource.builder()
             .name(request.getName())
             .description(request.getDescription())
-            .imgUrl((request.getImgUrl()==null) ? null : request.getImgUrl())
+            // TODO 기획 변경으로 인한 수정
+//            .imgUrl((request.getImgUrl()==null) ? null : request.getImgUrl())
             .build();
   }
 

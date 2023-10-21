@@ -26,8 +26,9 @@ public class ResourceBookingDetailRes {
         return ResourceBookingDetailRes.builder()
                 .resourceId(resourceBooking.getResource().getResourceId())
                 .status(resourceBooking.getStatus().getValue())
-                .startDate(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
-                .endDate(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
+                // TODO 기획 변경으로 인한 수정
+//                .startDate(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
+//                .endDate(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
                 .returnDateTime(DateTimeUtil.dateTimeToStringNullable(resourceBooking.getReturnDate()))
                 .memo(resourceBooking.getMemo())
                 .build();

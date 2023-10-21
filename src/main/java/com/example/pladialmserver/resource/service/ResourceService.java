@@ -11,7 +11,6 @@ import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.*;
 import com.example.pladialmserver.resource.entity.Resource;
-import com.example.pladialmserver.resource.repository.ResourceCategoryRepository;
 import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -33,7 +32,6 @@ import java.util.stream.Collectors;
 public class ResourceService {
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
-    private final ResourceCategoryRepository resourceCategoryRepository;
 
 
     // 관리자 권한 확인
@@ -93,13 +91,14 @@ public class ResourceService {
     /**
      * 자원 예약
      */
+    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void bookResource(User user, Long resourceId, ResourceReq resourceReq) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
         // 이미 예약된 날짜 여부 확인
-        if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
+//        if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, resourceReq));
 
     }
@@ -111,13 +110,14 @@ public class ResourceService {
     /**
      * 자원 카테고리
      */
+    // TODO 기획 변경으로 인한 수정
     public AdminResourceCategoryRes getResourceCategory(User user) {
         // 관리자 권한 확인
         checkAdminRole(user);
 
-        List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
-        return AdminResourceCategoryRes.toDto(resourceCategories);
-
+//        List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
+//        return AdminResourceCategoryRes.toDto(resourceCategories);
+        return null;
     }
 
     /**
@@ -140,17 +140,19 @@ public class ResourceService {
      * 관리자 자원 추가
      */
     @Transactional
+    // TODO 기획 변경으로 인한 수정
     public void createResourceByAdmin(User user, CreateResourceReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
-                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
-        resourceRepository.save(Resource.toDto(request, category));
+//        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
+//                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
+//        resourceRepository.save(Resource.toDto(request, category));
     }
 
     /**
      * 관리자 자원 수정
      */
+    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void updateResourceByAdmin(User user, Long resourceId, CreateResourceReq request) {
         // 관리자 권한 확인
@@ -158,10 +160,10 @@ public class ResourceService {
         // 자원 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
-                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
+//        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
+//                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
         // 자원 수정
-        resource.updateResource(request, category);
+//        resource.updateResource(request, category);
     }
 
     /**

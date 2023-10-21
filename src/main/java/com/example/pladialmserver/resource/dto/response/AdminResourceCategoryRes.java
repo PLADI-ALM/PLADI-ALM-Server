@@ -13,10 +13,10 @@ public class AdminResourceCategoryRes {
     @Schema(type = "[String]", description = "자원 카테고리 이름", example = "[전자기기, 문구류, 차량, 기타]")
     private List<String> category;
 
-
-    public static AdminResourceCategoryRes toDto(List<ResourceCategory> resourceCategories) {
-        return AdminResourceCategoryRes.builder()
-                .category(resourceCategories.stream().map(ResourceCategory::getName).collect(Collectors.toList()))
-                .build();
-    }
+    // TODO 기획 변경으로 인한 수정
+//    public static AdminResourceCategoryRes toDto(List<ResourceCategory> resourceCategories) {
+//        return AdminResourceCategoryRes.builder()
+//                .category(resourceCategories.stream().map(ResourceCategory::getName).collect(Collectors.toList()))
+//                .build();
+//    }
 }

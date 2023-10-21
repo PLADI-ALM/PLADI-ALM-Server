@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface PositionRepository extends JpaRepository<Position, Long> {
-    Optional<Position> findByName(String name);
-}
+// TODO 기획 변경으로 인한 수정
+//public interface PositionRepository extends JpaRepository<Position, Long> {
+//    Optional<Position> findByName(String name);
+//}
