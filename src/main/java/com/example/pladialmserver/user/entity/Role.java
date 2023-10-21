@@ -15,7 +15,6 @@ public enum Role {
 
   private final String value;
 
-  // todo: enumeration exception 처리 필요
   public static Role getRoleByName(String value) {
     return Arrays.stream(Role.values())
             .filter(r -> r.getValue().equals(value))

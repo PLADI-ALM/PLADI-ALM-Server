@@ -104,19 +104,18 @@ public class UserService {
     // ===================================================================================================================
 
     // 직원 등록
-    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void createUser(User admin, CreateUserReq createUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
-        // 이메일 중복 확인
+        // 이메일 및 휴대폰번호 중복 확인
         if(userRepository.existsByEmail(createUserReq.getEmail())) throw new BaseException(EXISTS_EMAIL);
+        if(userRepository.existsByPhone(createUserReq.getPhone())) throw new BaseException(EXISTS_PHONE);
         // 회원 생성 리소스 접근
         Department department = departmentRepository.findByName(createUserReq.getDepartment()).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-//        Position position = positionRepository.findByName(createUserReq.getPosition()).orElseThrow(() -> new BaseException(POSITION_NOT_FOUND));
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
-//        userRepository.save(User.toEntity(createUserReq, department, position));
+        userRepository.save(User.toEntity(createUserReq, department));
     }
 
     // 직원 수정

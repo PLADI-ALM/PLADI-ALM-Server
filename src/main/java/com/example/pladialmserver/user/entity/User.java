@@ -75,6 +75,7 @@ public class User extends BaseEntity {
                 .name(req.getName())
                 .email(req.getEmail())
                 .password(req.getPassword())
+                .phone(req.getPhone())
                 .department(department)
                 .role(Role.getRoleByName(req.getRole()))
                 .build();
