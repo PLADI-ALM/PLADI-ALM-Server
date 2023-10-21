@@ -1,6 +1,6 @@
 package com.example.pladialmserver.booking.entity;
 
-import com.example.pladialmserver.car.Car;
+import com.example.pladialmserver.car.entity.Car;
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.user.entity.User;

@@ -1,4 +1,4 @@
-package com.example.pladialmserver.car;
+package com.example.pladialmserver.car.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.user.entity.User;
@@ -37,16 +37,16 @@ public class Car extends BaseEntity {
     private String description;
 
     @Size(max = 255)
-    private String imgUrl;
+    private String imgKey;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
     private Boolean isActive = true;
 
     @Builder
-    public Car(String name, String description, String imgUrl, String location, Boolean isActive, User user) {
+    public Car(String name, String description, String imgKey, String location, Boolean isActive, User user) {
         this.name = name;
         this.description = description;
-        this.imgUrl = imgUrl;
+        this.imgKey = imgKey;
         this.location=location;
         this.isActive=isActive;
         this.user=user;

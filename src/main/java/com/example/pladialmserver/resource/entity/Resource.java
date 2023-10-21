@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,7 +35,7 @@ public class Resource extends BaseEntity {
   private String description;
 
   @Size(max = 255)
-  private String imgUrl;
+  private String imgKey;
 
   @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT true")
   private Boolean isActive = true;
@@ -46,10 +45,10 @@ public class Resource extends BaseEntity {
   private User user;
 
   @Builder
-  public Resource(String name, String description, String imgUrl, String location, Boolean isActive, User user) {
+  public Resource(String name, String description, String imgKey, String location, Boolean isActive, User user) {
     this.name = name;
     this.description = description;
-    this.imgUrl = imgUrl;
+    this.imgKey = imgKey;
     this.location=location;
     this.isActive=isActive;
     this.user=user;
@@ -66,7 +65,7 @@ public class Resource extends BaseEntity {
   public void updateResource(CreateResourceReq request) {
     if(!request.getName().equals(name)) name = request.getName();
     if(!request.getDescription().equals(description)) description = request.getDescription();
-    if(!request.getImgUrl().equals(imgUrl)) imgUrl = request.getImgUrl();
+    if(!request.getImgUrl().equals(imgKey)) imgKey = request.getImgUrl();
   }
 
 }
