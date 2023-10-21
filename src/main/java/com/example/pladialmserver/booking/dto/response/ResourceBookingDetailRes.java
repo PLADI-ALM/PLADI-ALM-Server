@@ -13,6 +13,10 @@ public class ResourceBookingDetailRes {
     private Long resourceId;
     @Schema(type = "String", description = "상태", example = "'예약대기' / '예약중' / '사용중' / '사용완료' / '예약취소'")
     private String status;
+    @Schema(type = "String", description = "예약자 이름", example = "박소정")
+    private String reservatorName;
+    @Schema(type = "String", description = "예약자 연락처", example = "010-1111-1004")
+    private String reservatorPhone;
     @Schema(type = "String", description = "예약일자(시작일)", example = "2023-10-01 10:00")
     private String startDate;
     @Schema(type = "String", description = "예약일자(종료일)", example = "2023-10-02 11:00")
@@ -26,6 +30,8 @@ public class ResourceBookingDetailRes {
         return ResourceBookingDetailRes.builder()
                 .resourceId(resourceBooking.getResource().getResourceId())
                 .status(resourceBooking.getStatus().getValue())
+                .reservatorName(resourceBooking.getUser().getName())
+                .reservatorPhone(resourceBooking.getUser().getPhone())
                 .startDate(DateTimeUtil.dateTimeToString(resourceBooking.getStartDate()))
                 .endDate(DateTimeUtil.dateTimeToString(resourceBooking.getEndDate()))
                 .returnDateTime(DateTimeUtil.dateTimeToStringNullable(resourceBooking.getReturnDate()))

@@ -251,7 +251,7 @@ public class BookingService {
     // ===================================================================================================================
 
     /**
-     * 관리자 자원 예약 개별 조회
+     * 관리자 장비 예약 개별 조회
      */
     public ResourceBookingDetailRes getResourceBookingDetailByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
