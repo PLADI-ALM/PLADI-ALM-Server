@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -140,9 +141,11 @@ public class UserService {
     }
 
     // 직원 계정 목록 조회
-    public Page<UserRes> getUserList(User admin, String name, Pageable pageable) {
+    public Page<UserRes> getUserList(User admin, String name, String department, Pageable pageable) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
-        return userRepository.findAllByName(name, pageable).map(UserRes::toDto);
+        Department dpmEntity = null;
+        if(StringUtils.hasText(department)) dpmEntity = departmentRepository.findByNameAndIsEnable(department, true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        return userRepository.findAllByName(name, dpmEntity, pageable).map(UserRes::toDto);
     }
 
     // 직원 개별 정보

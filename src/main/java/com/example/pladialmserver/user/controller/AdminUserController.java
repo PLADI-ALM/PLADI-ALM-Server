@@ -73,13 +73,15 @@ public class AdminUserController {
     @Operation(summary = "직원 계정 목록 조회 (장채은)", description = "직원 계정 목록을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)직원 계정 목록 조회 성공"),
-            @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+            @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0012)부서를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("")
     public ResponseCustom<Page<UserRes>> getUserList(@Account User user,
                                                      Pageable pageable,
-                                                     @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
-        return ResponseCustom.OK(userService.getUserList(user, name, pageable));
+                                                     @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name,
+                                                     @Parameter(description = "(String) 부서 검색", example = "마케팅") @RequestParam(name = "department", required = false) String department) {
+        return ResponseCustom.OK(userService.getUserList(user, name, department, pageable));
     }
 
     @Operation(summary = "직원 개별 조회 (장채은)", description = "개별 직원의 정보를 조회한다.")
