@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 @Builder
 public class ResourcesList {
-    @Schema(type="String", description="요청자", example ="이승학")
-    private String requester;
-    @Schema(type = "String", description = "직위", example = "대리")
-    private String position;
+    @Schema(type = "String", description = "예약자 이름", example = "이승학")
+    private String reservatorName;
+    @Schema(type = "String", description = "예약자 전화번호", example = "010-0000-0000")
+    private String reservatorPhone;
     @Schema(type = "String", description = "예약일자(시작일)", example = "'2023-10-01 12:00' / '2023-10-01'")
     private String startDateTime;
     @Schema(type = "String", description = "예약일자(종료일)", example = "'2023-10-01 13:00' / '2023-10-03'")
@@ -22,12 +22,13 @@ public class ResourcesList {
     @Schema(type = "String", description = "예약상태", example = "예약중")
     private String bookingStatus;
 
+    // TODO 기획 변경으로 인한 수정
     public static ResourcesList toDto(ResourceBooking resourceBooking){
         return ResourcesList.builder()
-                .requester(resourceBooking.getUser().getName())
-                .position(resourceBooking.getUser().getPosition().getName())
-                .startDateTime(DateTimeUtil.dateToString(resourceBooking.getStartDate()))
-                .endDateTime(DateTimeUtil.dateToString(resourceBooking.getEndDate()))
+                .reservatorName(resourceBooking.getUser().getName())
+                .reservatorPhone(resourceBooking.getUser().getPhone())
+                .startDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getStartDate()))
+                .endDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getEndDate()))
                 .goal(resourceBooking.getMemo())
                 .bookingStatus(resourceBooking.getStatus().getValue())
                 .build();

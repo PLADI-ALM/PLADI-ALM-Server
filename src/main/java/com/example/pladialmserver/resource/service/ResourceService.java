@@ -11,16 +11,16 @@ import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.resource.dto.response.*;
 import com.example.pladialmserver.resource.entity.Resource;
-import com.example.pladialmserver.resource.entity.ResourceCategory;
-import com.example.pladialmserver.resource.repository.ResourceCategoryRepository;
 import com.example.pladialmserver.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class ResourceService {
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
-    private final ResourceCategoryRepository resourceCategoryRepository;
+    private final UserRepository userRepository;
 
 
     // 관리자 권한 확인
@@ -69,10 +69,10 @@ public class ResourceService {
 
 
     /**
-     * 자원 개별 조회
+     * 장비 개별 조회
      */
     public ResourceDetailRes getResourceDetail(Long resourceId) {
-        Resource resource = resourceRepository.findById(resourceId)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         return ResourceDetailRes.toDto(resource);
     }
@@ -94,13 +94,14 @@ public class ResourceService {
     /**
      * 자원 예약
      */
+    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void bookResource(User user, Long resourceId, ResourceReq resourceReq) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
         // 이미 예약된 날짜 여부 확인
-        if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
+//        if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, resourceReq));
 
     }
@@ -110,75 +111,63 @@ public class ResourceService {
     // ===================================================================================================================
 
     /**
-     * 자원 카테고리
-     */
-    public AdminResourceCategoryRes getResourceCategory(User user) {
-        // 관리자 권한 확인
-        checkAdminRole(user);
-
-        List<ResourceCategory> resourceCategories = resourceCategoryRepository.findAll();
-        return AdminResourceCategoryRes.toDto(resourceCategories);
-
-    }
-
-    /**
-     * 관리자 자원 목록 조회
+     * 관리자 장비 목록 조회
      */
     public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 자원 조회
+        // 장비 조회
         Page<Resource> resources = null;
-        if(keyword == "" || keyword == null) {
+        if(StringUtils.hasText(keyword)) {
             resources = resourceRepository.findAll(pageable);
-        }else {
+        } else {
             resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
         }
         return resources.map(AdminResourcesRes::toDto);
     }
 
     /**
-     * 관리자 자원 추가
+     * 관리자 장비 추가
      */
     @Transactional
     public void createResourceByAdmin(User user, CreateResourceReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
-                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
-        resourceRepository.save(Resource.toDto(request, category));
+        User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        resourceRepository.save(Resource.toDto(request, responsibility));
     }
 
     /**
-     * 관리자 자원 수정
+     * 관리자 장비 수정
      */
     @Transactional
     public void updateResourceByAdmin(User user, Long resourceId, CreateResourceReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 자원 유무 확인
-        Resource resource = resourceRepository.findById(resourceId)
+        // 장비 유무 확인
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-        ResourceCategory category = resourceCategoryRepository.findByName(request.getCategory())
-                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_CATEGORY_NOT_FOUND));
-        // 자원 수정
-        resource.updateResource(request, category);
+        User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        // 장비 수정
+        resource.updateResource(request, responsibility);
     }
 
     /**
-     * 관리자 자원 삭제
+     * 관리자 장비 삭제
      */
     @Transactional
     public void deleteResourceByAdmin(User user, Long resourceId) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 자원 유무 확인
+        // 장비 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-        // 자원 예약 내역 상태 확인
+        // 장비 예약 내역 상태 확인
         List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
         if(resourceBookingRepository.existsByResourceAndStatusIn(resource, bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
-        // 자원 삭제
+        // 장비 삭제
         resourceRepository.delete(resource);
     }
 
@@ -199,5 +188,8 @@ public class ResourceService {
     }
 
 
-
+    public AdminResponsibilityListRes getResponsibilityList(User admin, String name) {
+        checkAdminRole(admin);
+        return AdminResponsibilityListRes.toDto(userRepository.findAllByName(name));
+    }
 }

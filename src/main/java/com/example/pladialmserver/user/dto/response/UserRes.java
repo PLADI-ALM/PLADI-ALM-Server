@@ -16,10 +16,8 @@ public class UserRes {
     private String email;
     @Schema(type = "String", description = "부서", example = "마케팅")
     private String department;
-    @Schema(type = "String", description = "직위", example = "팀장")
-    private String position;
-    @Schema(type = "String", description = "직책", example = "마케팅 팀장")
-    private String officeJob;
+    @Schema(type = "String", description = "휴대폰번호", example = "010-0000-0000")
+    private String phone;
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반")
     private String role;
 
@@ -29,8 +27,7 @@ public class UserRes {
                 .name(user.getName())
                 .email(user.getEmail())
                 .department(user.getDepartment().getName())
-                .position(user.getPosition().getName())
-                .officeJob(user.getOfficeJob())
+                .phone(user.getPhone())
                 .role(user.getRole().getValue())
                 .build();
     }

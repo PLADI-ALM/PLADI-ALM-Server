@@ -1,12 +1,9 @@
-package com.example.pladialmserver.user.entity;
+package com.example.pladialmserver.equipment.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,15 +15,12 @@ import javax.validation.constraints.Size;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DynamicInsert
-@DynamicUpdate
-public class Department extends BaseEntity {
-  // 부서 (미디어/마케팅)
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long departmentId;
+public class EquipmentCategory extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long equipmentCategoryId;
 
-  @NotNull
-  @Size(max = 30)
-  private String name;
+    @NotNull
+    @Size(max = 30)
+    private String name;
 }

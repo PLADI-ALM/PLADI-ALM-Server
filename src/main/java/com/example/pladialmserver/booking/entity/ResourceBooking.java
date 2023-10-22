@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
-@Where(clause = "is_enable = true")
 public class ResourceBooking extends BaseEntity {
 
   @Id
@@ -40,10 +39,10 @@ public class ResourceBooking extends BaseEntity {
   private Resource resource;
 
   @NotNull
-  private LocalDate startDate;
+  private LocalDateTime startDate;
 
   @NotNull
-  private LocalDate endDate;
+  private LocalDateTime endDate;
 
   private LocalDateTime returnDate;
 
@@ -55,7 +54,7 @@ public class ResourceBooking extends BaseEntity {
   private BookingStatus status = BookingStatus.WAITING;
 
   @Builder
-  public ResourceBooking(User user, Resource resource, LocalDate startDate, LocalDate endDate, String memo) {
+  public ResourceBooking(User user, Resource resource, LocalDateTime startDate, LocalDateTime endDate, String memo) {
     this.user = user;
     this.resource = resource;
     this.startDate = startDate;

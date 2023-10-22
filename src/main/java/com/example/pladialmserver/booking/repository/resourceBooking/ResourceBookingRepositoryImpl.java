@@ -29,6 +29,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
     private final JPAQueryFactory jpaQueryFactory;
     private final EntityManager entityManager;
 
+    // 장비 예약 목록 조회
     @Override
     public Page<BookingRes> getBookingsByUser(User user, Pageable pageable) {
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
@@ -55,22 +56,24 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
         LocalDate endDate = standardDate.withDayOfMonth(standardDate.lengthOfMonth());
 
         // 해당 월의 예약 현황 조회
+        // TODO 기획 변경으로 인한 수정
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and((resourceBooking.startDate.between(startDate, endDate))
-                        .or(resourceBooking.endDate.between(startDate, endDate))))
+//                        .and((resourceBooking.startDate.between(startDate, endDate))
+//                        .or(resourceBooking.endDate.between(startDate, endDate))))
+                )
                 .orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
         // 예약 시작 ~ 끝 날짜 반환
         List<String> bookedDate = new ArrayList<>();
-        for (ResourceBooking b : bookings) {
-            List<String> date = b.getStartDate().datesUntil(b.getEndDate().plusDays(1))
-                    .map(DateTimeUtil::dateToString)
-                    .collect(Collectors.toList());
-            bookedDate.addAll(date);
-        }
+//        for (ResourceBooking b : bookings) {
+//            List<String> date = b.getStartDate().datesUntil(b.getEndDate().plusDays(1))
+//                    .map(DateTimeUtil::dateToString)
+//                    .collect(Collectors.toList());
+//            bookedDate.addAll(date);
+//        }
 
         return bookedDate;
     }
@@ -98,10 +101,11 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
                 .fetch();
 
         List<LocalDate> bookedDate = new ArrayList<>();
-        for (ResourceBooking b : bookings) {
-            List<LocalDate> date = b.getStartDate().datesUntil(b.getEndDate().plusDays(1)).collect(Collectors.toList());
-            bookedDate.addAll(date);
-        }
+        // TODO 기획 변경으로 인한 수정
+//        for (ResourceBooking b : bookings) {
+//            List<LocalDate> date = b.getStartDate().datesUntil(b.getEndDate().plusDays(1)).collect(Collectors.toList());
+//            bookedDate.addAll(date);
+//        }
 
         // 2. startDate ~ endDate
         List<LocalDate> date = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());

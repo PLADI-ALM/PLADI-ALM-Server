@@ -35,17 +35,17 @@ public enum BaseResponseCode {
     INVALID_PASSWORD("U0006", HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     NOT_EMPTY_NAME("U0007", HttpStatus.BAD_REQUEST, "성명을 입력해주세요."),
     NOT_EMPTY_DEPARTMENT("U0008", HttpStatus.BAD_REQUEST, "부서를 입력해주세요."),
-    NOT_EMPTY_POSITION("U0009", HttpStatus.BAD_REQUEST, "직위를 입력해주세요."),
-    NOT_EMPTY_OFFICE_JOB("U0010", HttpStatus.BAD_REQUEST, "직책을 입력해주세요."),
+    NOT_EMPTY_PHONE("U0009", HttpStatus.BAD_REQUEST, "휴대폰 번호를 입력해주세요."),
+    INVALID_PHONE_FORMAT("U0010", HttpStatus.BAD_REQUEST, "휴대폰 번호 형식을 확인해주세요."),
     NOT_EMPTY_ROLE("U0011", HttpStatus.BAD_REQUEST, "역할을 입력해주세요."),
     DEPARTMENT_NOT_FOUND("U0012", HttpStatus.NOT_FOUND, "부서를 찾을 수 없습니다."),
-    POSITION_NOT_FOUND("U0013", HttpStatus.NOT_FOUND, "직위를 찾을 수 없습니다."),
     ROLE_NOT_FOUND("U0013", HttpStatus.NOT_FOUND, "역할을 찾을 수 없습니다."),
     EXISTS_EMAIL("U0014", HttpStatus.CONFLICT, "존재하는 이메일입니다."),
     CAN_NOT_SEND_EMAIL("U0015", HttpStatus.INTERNAL_SERVER_ERROR, "이메일을 보낼 수 없습니다."),
     NOT_EMPTY_EMAIL_CODE("U0016", HttpStatus.BAD_REQUEST, "이메일 코드를 입력해주세요."),
     EMAIL_CODE_NOT_FOUND("U0017", HttpStatus.NOT_FOUND, "이메일 코드가 일치하지 않습니다."),
     BLACKLIST_EMAIL_CODE("U0018", HttpStatus.NOT_FOUND, "없거나 이미 만료된 이메일 코드입니다."),
+    EXISTS_PHONE("U0019", HttpStatus.CONFLICT, "존재하는 휴대폰번호입니다."),
 
     // Booking
     DATE_OR_TIME_IS_NULL("B0001", HttpStatus.BAD_REQUEST, "날짜와 시간을 모두 입력해주세요."),
@@ -83,16 +83,16 @@ public enum BaseResponseCode {
 
 
     //Resource
-    NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"자원 이름과 예약 날짜를 모두 입력해주세요."),
+    NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"장비 이름과 예약 날짜를 모두 입력해주세요."),
     END_DATE_BEFORE_START_DATE("R0002",HttpStatus.BAD_REQUEST,"종료일은 시작일보다 빠를 수 없습니다."),
-    RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 자원입니다."),
+    RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 장비입니다."),
     DESCRIPTION_SIZE_OVER("R0004", HttpStatus.BAD_REQUEST, "설명은 255자 이하로 작성해주세요."),
-    RESOURCE_NAME_SIZE_OVER("R0005", HttpStatus.BAD_REQUEST, "자원명은 50자 이하로 작성해주세요."),
-    RESOURCE_CATEGORY_NOT_FOUND("R0006", HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
-    NOT_EMPTY_RESOURCE_NAME("R0007", HttpStatus.BAD_REQUEST, "자원명을 입력해주세요."),
-    NOT_EMPTY_RESOURCE_CATEGORY("R0008", HttpStatus.BAD_REQUEST, "카테고리를 입력해주세요."),
+    RESOURCE_NAME_SIZE_OVER("R0005", HttpStatus.BAD_REQUEST, "장비명은 50자 이하로 작성해주세요."),
+    NOT_EMPTY_LOCATION("R0006", HttpStatus.BAD_REQUEST, "보관장소를 입력해주세요."),
+    NOT_EMPTY_RESOURCE_NAME("R0007", HttpStatus.BAD_REQUEST, "장비명을 입력해주세요."),
+    NOT_EMPTY_RESPONSIBILITY("R0008", HttpStatus.BAD_REQUEST, "책임자를 입력해주세요."),
     NOT_EMPTY_DESCRIPTION("R0009", HttpStatus.BAD_REQUEST, "설명을 입력해주세요."),
-    INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 자원의 예약 현황 수정이 필요합니다.")
+    INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 장비의 예약 현황 수정이 필요합니다.")
     ;
 
     public final String code;

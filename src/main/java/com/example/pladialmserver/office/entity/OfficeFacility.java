@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "is_enable = true")
 public class OfficeFacility extends BaseEntity {
 
     @Id

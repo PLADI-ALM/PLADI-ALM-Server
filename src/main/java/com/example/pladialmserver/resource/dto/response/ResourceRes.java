@@ -20,12 +20,13 @@ public class ResourceRes {
     @Schema(type = "String", description = "설명", example = "'승학이 보물'")
     private String description;
 
+    // TODO 기획 변경으로 인한 수정
     public static ResourceRes toDto(Resource resource){
         return ResourceRes.builder()
                 .resourceId(resource.getResourceId())
-                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgUrl()))
+                .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgKey()))
                 .name(resource.getName())
-                .category(resource.getResourceCategory().getName())
+//                .category(resource.getResourceCategory().getName())
                 .description(resource.getDescription())
                 .build();
     }

@@ -24,7 +24,6 @@ import java.time.LocalTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
-@Where(clause = "is_enable = true")
 public class OfficeBooking extends BaseEntity {
 
     @Id
