@@ -186,4 +186,15 @@ public class ResourceService {
 
         return AdminResourcesDetailsRes.toDto(resource, resourcesLists);
     }
+
+    // 관리자 장비 활성화/비활성화
+    @Transactional
+    public void activateResourceByAdmin(User user, Long resourceId) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 장비 유무 확인
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        resource.activateResource();
+    }
 }
