@@ -98,6 +98,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public ResponsibilityListRes getResponsibilityList(String name) {
+        return ResponsibilityListRes.toDto(userRepository.findAllByName(name));
+    }
+
     // ===================================================================================================================
     // [관리자-사용자]
     // ===================================================================================================================

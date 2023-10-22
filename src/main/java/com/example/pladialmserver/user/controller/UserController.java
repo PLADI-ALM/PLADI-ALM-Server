@@ -5,12 +5,14 @@ import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.CheckEmailCodeReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
+import com.example.pladialmserver.user.dto.request.ResponsibilityListRes;
 import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -107,5 +109,17 @@ public class UserController {
     public ResponseCustom resetPassword(@RequestBody @Valid EmailPWReq resetPasswordReq){
         userService.resetPassword(resetPasswordReq);
         return ResponseCustom.OK();
+    }
+
+    @Operation(summary = " 관리책임자 리스트 (장채은)", description = "관리책임자 리스트를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/responsibilities")
+    public ResponseCustom<ResponsibilityListRes> getResponsibilityList(
+            @Account User user,
+            @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
+        return ResponseCustom.OK(userService.getResponsibilityList(name));
     }
 }
