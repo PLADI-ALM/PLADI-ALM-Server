@@ -113,7 +113,7 @@ public class ResourceAdminController {
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 장비입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
-    @GetMapping("/resources/{resourceId}")
+    @GetMapping("/{resourceId}")
     public ResponseCustom<AdminResourcesDetailsRes> getAdminResourcesDetails(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId) {

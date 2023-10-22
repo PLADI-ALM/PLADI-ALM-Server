@@ -9,14 +9,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Data
 @Builder
 public class ResourceRes {
-    @Schema(type = "Long", description = "자원 Id", example = "1")
+    @Schema(type = "Long", description = "장비 Id", example = "1")
     private Long resourceId;
     @Schema(type = "String", description = "이미지 url", example = "'img.key'")
     private String imgUrl;
-    @Schema(type = "String", description = "자원 이름", example = "'벤츠'")
+    @Schema(type = "String", description = "장비 이름", example = "'벤츠'")
     private String name;
-    @Schema(type = "String", description = "카테고리", example = "'차량'")
-    private String category;
+    @Schema(type = "String", description = "보관장소", example = "'4층 창고'")
+    private String location;
     @Schema(type = "String", description = "설명", example = "'승학이 보물'")
     private String description;
 
@@ -26,7 +26,7 @@ public class ResourceRes {
                 .resourceId(resource.getResourceId())
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgKey()))
                 .name(resource.getName())
-//                .category(resource.getResourceCategory().getName())
+                .location(resource.getLocation())
                 .description(resource.getDescription())
                 .build();
     }
