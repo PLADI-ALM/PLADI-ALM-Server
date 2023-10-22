@@ -27,9 +27,6 @@ public class CreateUserReq {
     @Pattern(message = "U0010", regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})\\$")
     @NotBlank(message = "U0009")
     private String phone;
-    @Schema(type = "String", description = "직책", example = "마케팅 팀장", required = true)
-    @NotBlank(message = "U0010")
-    private String officeJob;
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", required = true)
     @NotBlank(message = "U0011")
     private String role;
