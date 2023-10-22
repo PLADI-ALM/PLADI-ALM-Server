@@ -49,7 +49,7 @@ public class ResourceController {
     @GetMapping
     public ResponseCustom<Page<ResourceRes>> selectResource(
             @Account User user,
-            @Parameter(description = "자원 이름",example = "벤츠") @RequestParam(required = false) String resourceName,
+            @Parameter(description = "장비 이름",example = "벤츠") @RequestParam(required = false) String resourceName,
             @Parameter(description = "시작 예약 날짜",example = "2023-10-02") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate startDate,
             @Parameter(description = "종료 예약 날짜",example = "2023-10-02") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate endDate,
             Pageable pageable
