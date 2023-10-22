@@ -118,7 +118,7 @@ public class ResourceService {
         checkAdminRole(user);
         // 장비 조회
         Page<Resource> resources = null;
-        if(StringUtils.hasText(keyword)) {
+        if(!StringUtils.hasText(keyword)) {
             resources = resourceRepository.findAll(pageable);
         } else {
             resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
