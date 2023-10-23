@@ -120,4 +120,21 @@ public class ResourceAdminController {
             return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId));
         }
     }
+
+    /**
+     * 관리자 장비 활성화/비활성화
+     */
+    @Operation(summary = "관리자 장비 활성화/비활성화 (박소정)", description = "관리자가 장비를 활성화/비활성화 한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 장비입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @PatchMapping("/{resourceId}/activation")
+    public ResponseCustom activateResource(
+            @Account User user,
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name="resourceId") Long resourceId) {
+        resourceService.activateResourceByAdmin(user, resourceId);
+        return ResponseCustom.OK();
+    }
 }

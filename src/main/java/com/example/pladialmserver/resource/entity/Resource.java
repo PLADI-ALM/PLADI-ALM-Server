@@ -71,4 +71,8 @@ public class Resource extends BaseEntity {
     if(!responsibility.equals(user)) user = responsibility;
   }
 
+  // 활성화/비활성화
+  public void activateResource() {
+    isActive = !isActive;
+  }
 }
