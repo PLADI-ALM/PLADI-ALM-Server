@@ -116,7 +116,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @GetMapping("/responsibilities")
+    @GetMapping("/managers")
     public ResponseCustom<ResponsibilityListRes> getResponsibilityList(
             @Account User user,
             @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
