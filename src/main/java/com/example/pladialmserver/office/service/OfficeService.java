@@ -88,7 +88,7 @@ public class OfficeService {
      * 회의실 개별 조회
      */
     public OfficeRes getOffice(Long officeId) {
-        Office office = officeRepository.findByOfficeId(officeId)
+        Office office = officeRepository.findByOfficeIdAndIsEnableAndIsActive(officeId,true,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         List<Facility> facilities = office.getFacilityList().stream()
@@ -212,6 +212,17 @@ public class OfficeService {
                 .collect(Collectors.toList());
 
         return AdminOfficesDetailsRes.toDto(office,facilities,officesLists);
+
+    }
+
+    // 관리자 회의실 활성화/비활성화
+    @Transactional
+    public void activateOfficeByAdmin(User user, Long officeId) {
+        checkAdminRole(user);
+
+        Office office=officeRepository.findById(officeId)
+                .orElseThrow(()->new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+        office.activateOffice();
 
     }
 }
