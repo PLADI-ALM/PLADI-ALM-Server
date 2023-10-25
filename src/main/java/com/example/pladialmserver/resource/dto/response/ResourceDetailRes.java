@@ -13,6 +13,8 @@ public class ResourceDetailRes {
     private String name;
     @Schema(type = "String", description = "보관장소", example = "S1350")
     private String location;
+    @Schema(type = "Long", description = "책임자 Id", example = "1")
+    private Long responsibilityId;
     @Schema(type = "String", description = "책임자 이름", example = "박소정")
     private String responsibilityName;
     @Schema(type = "String", description = "책임자 전화번호", example = "010-1234-1004")
@@ -26,6 +28,7 @@ public class ResourceDetailRes {
         return ResourceDetailRes.builder()
                 .name(resource.getName())
                 .location(resource.getLocation())
+                .responsibilityId(resource.getUser().getUserId())
                 .responsibilityName(resource.getUser().getName())
                 .responsibilityPhone(resource.getUser().getPhone())
                 .description(resource.getDescription())
