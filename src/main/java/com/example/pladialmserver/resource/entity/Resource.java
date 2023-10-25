@@ -1,6 +1,7 @@
 package com.example.pladialmserver.resource.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
+import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
@@ -67,7 +68,7 @@ public class Resource extends BaseEntity {
     if(!request.getName().equals(name)) name = request.getName();
     if(!request.getLocation().equals(location)) location = request.getLocation();
     if(!request.getDescription().equals(description)) description = request.getDescription();
-    if(!request.getImgKey().equals(imgKey)) imgKey = request.getImgKey();
+    if(!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();
     if(!responsibility.equals(user)) user = responsibility;
   }
 
