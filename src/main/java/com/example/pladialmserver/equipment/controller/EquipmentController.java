@@ -36,7 +36,8 @@ public class EquipmentController {
     @Operation(summary = "구매 비품 등록 (김민기)", description = "구매한 비품을 등록한다..")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(E0001)부적절한 비품 등록 요청입니다. 공백및 특수문자를 제외하고 다시 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PostMapping("")
     public ResponseCustom registerEquipment(
