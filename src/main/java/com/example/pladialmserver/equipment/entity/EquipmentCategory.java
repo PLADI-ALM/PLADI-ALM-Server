@@ -2,6 +2,7 @@ package com.example.pladialmserver.equipment.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,15 @@ public class EquipmentCategory extends BaseEntity {
     @NotNull
     @Size(max = 30)
     private String name;
+
+    @Builder
+    public EquipmentCategory(String name) {
+        this.name = name;
+    }
+
+    public static EquipmentCategory toEntity(String category) {
+        return EquipmentCategory.builder()
+                .name(category)
+                .build();
+    }
 }
