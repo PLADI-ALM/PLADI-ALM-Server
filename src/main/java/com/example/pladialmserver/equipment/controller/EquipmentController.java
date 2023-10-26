@@ -2,6 +2,7 @@ package com.example.pladialmserver.equipment.controller;
 
 
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
+import com.example.pladialmserver.equipment.dto.response.SearchEquipmentRes;
 import com.example.pladialmserver.equipment.service.EquipmentService;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -15,11 +16,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -57,7 +57,18 @@ public class EquipmentController {
     /*
     비품 목록을 조회한다.
      */
-
+    @Operation(summary = "비품 목록 조회 (김민기)", description = "비품 목록을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+    })
+    @GetMapping("")
+    public ResponseCustom<Page<SearchEquipmentRes>> searchEquipment(
+            String cond,
+            Pageable pageable
+    )
+    {
+        return ResponseCustom.OK(equipmentService.searchEquipment(cond, pageable));
+    }
     /*
     비품 정보를 수정한다.
      */
