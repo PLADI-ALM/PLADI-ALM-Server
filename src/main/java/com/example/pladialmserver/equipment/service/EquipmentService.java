@@ -20,9 +20,12 @@ public class EquipmentService {
 
     @Transactional
     public void registerEquipment(RegisterEquipmentReq registerEquipmentReq, User user) {
-        boolean empty = equipmentCategoryRepository.findByName(registerEquipmentReq.getCategory()).isEmpty();
-        EquipmentCategory category = EquipmentCategory.toEntity(registerEquipmentReq.getCategory());
-        if(empty) equipmentCategoryRepository.save(category);
+        EquipmentCategory category = equipmentCategoryRepository.findByName(registerEquipmentReq.getCategory());
+
+        if(category == null) {
+            category = EquipmentCategory.toEntity(registerEquipmentReq.getCategory());
+            equipmentCategoryRepository.save(category);
+        }
 
         equipmentRepository.save(Equipment.toEntity(registerEquipmentReq, category, user));
     }
