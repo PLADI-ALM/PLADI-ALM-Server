@@ -1,12 +1,16 @@
 package com.example.pladialmserver.equipment.service;
 
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
+import com.example.pladialmserver.equipment.dto.request.UpdateEquipmentReq;
 import com.example.pladialmserver.equipment.dto.response.SearchEquipmentRes;
 import com.example.pladialmserver.equipment.entity.Equipment;
 import com.example.pladialmserver.equipment.entity.EquipmentCategory;
 import com.example.pladialmserver.equipment.repository.EquipmentCategoryRepository;
 import com.example.pladialmserver.equipment.repository.EquipmentRepository;
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,16 +25,11 @@ public class EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
     private final EquipmentCategoryRepository equipmentCategoryRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void registerEquipment(RegisterEquipmentReq registerEquipmentReq, User user) {
-        EquipmentCategory category = equipmentCategoryRepository.findByName(registerEquipmentReq.getCategory());
-
-        if(category == null) {
-            category = EquipmentCategory.toEntity(registerEquipmentReq.getCategory());
-            equipmentCategoryRepository.save(category);
-        }
-
+        EquipmentCategory category = extractCategory(registerEquipmentReq.getCategory());
         equipmentRepository.save(Equipment.toEntity(registerEquipmentReq, category, user));
     }
 
@@ -40,5 +39,25 @@ public class EquipmentService {
         if(StringUtils.hasText(cond)) equipments = equipmentRepository.findByNameContains(cond, pageable);
         else equipments = equipmentRepository.findAll(pageable);
         return equipments.map(SearchEquipmentRes::toDto);
+    }
+
+    @Transactional
+    public void updateEquipment(Long equipmentId, UpdateEquipmentReq updateEquipmentReq, User user) {
+        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
+        if(!equipment.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+
+        User updateKeeper = userRepository.findById(updateEquipmentReq.getUserId()).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        EquipmentCategory updateCategory = extractCategory(updateEquipmentReq.getCategory());
+        equipment.toUpdateInfo(updateEquipmentReq, updateKeeper, updateCategory);
+    }
+
+    private EquipmentCategory extractCategory(String name) {
+        EquipmentCategory category = equipmentCategoryRepository.findByName(name);
+
+        if(category == null) {
+            category = EquipmentCategory.toEntity(name);
+            equipmentCategoryRepository.save(category);
+        }
+        return category;
     }
 }

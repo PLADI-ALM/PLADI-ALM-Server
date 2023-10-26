@@ -95,7 +95,10 @@ public enum BaseResponseCode {
     INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 장비의 예약 현황 수정이 필요합니다."),
 
     //Equipment
-    INVALID_REGISTER_EQUIPMENT_REQUEST("E0001", HttpStatus.BAD_REQUEST, "부적절한 비품 등록 요청입니다. 공백및 특수문자를 제외하고 다시 입력해주세요." );
+    INVALID_REGISTER_EQUIPMENT_REQUEST("E0001", HttpStatus.BAD_REQUEST, "부적절한 비품 등록 요청입니다. 공백및 특수문자를 제외하고 다시 입력해주세요." ),
+    EQUIPMENT_NOT_FOUND("E0002", HttpStatus.NOT_FOUND, "존재하지 않는 비품입니다." ),
+    INVALID_UPDATE_EQUIPMENT_REQUEST("E0003", HttpStatus.BAD_REQUEST, "부적절한 비품 수정 요청입니다. 공백및 특수문자를 제외하고 다시 입력해주세요." )
+    ;
 
     public final String code;
     public final HttpStatus status;

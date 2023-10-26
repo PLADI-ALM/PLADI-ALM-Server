@@ -1,6 +1,7 @@
 package com.example.pladialmserver.equipment.entity;
 
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
+import com.example.pladialmserver.equipment.dto.request.UpdateEquipmentReq;
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
@@ -71,6 +72,16 @@ public class Equipment extends BaseEntity {
             .category(category)
             .user(user)
             .build();
+  }
+
+  public void toUpdateInfo(UpdateEquipmentReq updateEquipmentReq, User updateKeeper, EquipmentCategory updateCategory) {
+    this.name = updateEquipmentReq.getName();
+    this.description = updateEquipmentReq.getDescription();
+    this.quantity = updateEquipmentReq.getQuantity();
+    this.imgKey = updateEquipmentReq.getImgKey();
+    this.location = updateEquipmentReq.getLocation();
+    this.equipmentCategory = updateCategory;
+    this.user = updateKeeper;
   }
 }
 
