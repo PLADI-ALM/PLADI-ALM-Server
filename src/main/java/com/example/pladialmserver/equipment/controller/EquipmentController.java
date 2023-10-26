@@ -69,6 +69,7 @@ public class EquipmentController {
     {
         return ResponseCustom.OK(equipmentService.searchEquipment(cond, pageable));
     }
+
     /*
     비품 정보를 수정한다.
      */
