@@ -72,4 +72,8 @@ public class Office extends BaseEntity {
         if(!request.getDescription().equals(description)) description=request.getDescription();
         if(!request.getImgUrl().equals(imgKey)) imgKey=request.getImgUrl();
     }
+
+    public void activateOffice() {
+        isActive = !isActive;
+    }
 }

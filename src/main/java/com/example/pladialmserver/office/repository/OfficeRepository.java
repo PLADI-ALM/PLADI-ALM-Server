@@ -28,4 +28,6 @@ public interface OfficeRepository extends JpaRepository<Office, Long> {
 
 
     Optional<Office> findByOfficeIdAndIsEnable(Long officeId, boolean isEnable);
+
+    Optional<Office> findByOfficeIdAndIsEnableAndIsActive(Long officeId, boolean isEnable, boolean isActive);
 }
