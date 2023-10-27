@@ -55,29 +55,32 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
         LocalDateTime startDateTime = standardDate.withDayOfMonth(1).atStartOfDay();
         // 다음 월의 첫 날 (00:00)
         LocalDateTime endDateTime = standardDate.plusMonths(1).atStartOfDay();
-
+        System.out.println("resource = " + resource.getResourceId());
         // 해당 월의 예약 현황 조회
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and(resourceBooking.startDate.between(startDateTime, endDateTime))
-                        .or(resourceBooking.endDate.between(startDateTime, endDateTime))
+                        .and((resourceBooking.startDate.between(startDateTime, endDateTime))
+                        .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
         // 예약이 모두 된 날짜(첫 날 0시 ~ 다음 날 0시) 반환
         List<String> bookedDate = new ArrayList<>();
-        LocalDateTime standard = bookings.get(0).getEndDate();
-        boolean isContinuity;
-
         int index = 0;
+        boolean isContinuity = false;
+        LocalDateTime standard = null;
+
         for (ResourceBooking b : bookings) {
             index++;
 
-            // 연속 유무 체크
-            isContinuity = (b.equals(bookings.get(0)) && bookings.get(0).getStartDate().toLocalTime().equals(LocalTime.MIN))
-                    || standard.isEqual(b.getStartDate())
-                || b.getStartDate().toLocalTime().equals(LocalTime.MIN);
+            // 연속 유무 및 연속 기준일 체크
+            if(index==1) {
+                standard = bookings.get(0).getEndDate();
+                if (bookings.get(0).getStartDate().toLocalTime().equals(LocalTime.MIN)) isContinuity = true;
+            } else {
+                isContinuity = (standard.isEqual(b.getStartDate()) || b.getStartDate().toLocalTime().equals(LocalTime.MIN));
+            }
 
             // 시작일 & 종료일 다른 경우
             if(!b.getStartDate().toLocalDate().isEqual(b.getEndDate().toLocalDate())) {
@@ -101,10 +104,8 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
                     if(bookings.size()>index) isContinuity = checkIsContinuity(bookings.get(index));
                 }
             }
-
             // 모두 수행
             standard = b.getEndDate();
-
         }
         return bookedDate;
     }
