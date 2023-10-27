@@ -77,17 +77,18 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
             // 연속 유무 및 연속 기준일 체크
             if(index==1) {
                 standard = bookings.get(0).getEndDate();
-                if (bookings.get(0).getStartDate().toLocalTime().equals(LocalTime.MIN)) isContinuity = true;
+                if (isMidnight(bookings.get(0).getStartDate())) isContinuity = true;
             } else {
-                isContinuity = (standard.isEqual(b.getStartDate()) || b.getStartDate().toLocalTime().equals(LocalTime.MIN));
+                isContinuity = (standard.isEqual(b.getStartDate()) || isMidnight(b.getStartDate()) );
             }
 
             // 시작일 & 종료일 다른 경우
-            if(!b.getStartDate().toLocalDate().isEqual(b.getEndDate().toLocalDate())) {
+            if(!DateTimeUtil.dateTimeToDate(b.getStartDate()).isEqual(DateTimeUtil.dateTimeToDate(b.getEndDate()))) {
                 // 연속인 경우
                 if(isContinuity) {
                     // 다음 날 00시 이상인 경우 -> startDate 더해주기
-                    if(b.getEndDate().isAfter(LocalDateTime.of(b.getEndDate().toLocalDate().plusDays(1), LocalTime.MIN)) || b.getEndDate().isEqual(LocalDateTime.of(b.getEndDate().toLocalDate().plusDays(1), LocalTime.MIN))) {
+                    if(b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))
+                            || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
                         bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
                     }
                 }
@@ -97,12 +98,9 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
                         .collect(Collectors.toList());
                 bookedDate.addAll(date);
             }
-
             // 시작일 & 종료일 동일한 경우
             else {
-                if(!isContinuity) {
-                    if(bookings.size()>index) isContinuity = checkIsContinuity(bookings.get(index));
-                }
+                if(!isContinuity && bookings.size()>index) isContinuity = isMidnight(bookings.get(index).getStartDate());
             }
             // 모두 수행
             standard = b.getEndDate();
@@ -110,8 +108,8 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
         return bookedDate;
     }
 
-    private boolean checkIsContinuity(ResourceBooking booking) {
-        return booking.getStartDate().toLocalTime().equals(LocalTime.MIN);
+    private boolean isMidnight(LocalDateTime localDateTime) {
+        return DateTimeUtil.dateTimeToTime(localDateTime).equals(LocalTime.MIN);
     }
 
     @Override
