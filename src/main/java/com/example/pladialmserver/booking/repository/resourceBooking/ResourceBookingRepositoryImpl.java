@@ -6,7 +6,6 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,12 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.pladialmserver.booking.entity.QOfficeBooking.officeBooking;
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
 
 
 @RequiredArgsConstructor
-public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
+public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
     private final JPAQueryFactory jpaQueryFactory;
     private final EntityManager entityManager;
 
@@ -55,13 +53,12 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
         LocalDateTime startDateTime = standardDate.withDayOfMonth(1).atStartOfDay();
         // 다음 월의 첫 날 (00:00)
         LocalDateTime endDateTime = standardDate.plusMonths(1).atStartOfDay();
-        System.out.println("resource = " + resource.getResourceId());
         // 해당 월의 예약 현황 조회
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
                         .and((resourceBooking.startDate.between(startDateTime, endDateTime))
-                        .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
+                                .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
@@ -75,19 +72,19 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
             index++;
 
             // 연속 유무 및 연속 기준일 체크
-            if(index==1) {
+            if (index == 1) {
                 standard = bookings.get(0).getEndDate();
                 if (isMidnight(bookings.get(0).getStartDate())) isContinuity = true;
             } else {
-                isContinuity = (standard.isEqual(b.getStartDate()) || isMidnight(b.getStartDate()) );
+                isContinuity = (standard.isEqual(b.getStartDate()) || isMidnight(b.getStartDate()));
             }
 
             // 시작일 & 종료일 다른 경우
-            if(!DateTimeUtil.dateTimeToDate(b.getStartDate()).isEqual(DateTimeUtil.dateTimeToDate(b.getEndDate()))) {
+            if (!DateTimeUtil.dateTimeToDate(b.getStartDate()).isEqual(DateTimeUtil.dateTimeToDate(b.getEndDate()))) {
                 // 연속인 경우
-                if(isContinuity) {
+                if (isContinuity) {
                     // 다음 날 00시 이상인 경우 -> startDate 더해주기
-                    if(b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))
+                    if (b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))
                             || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
                         bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
                     }
@@ -100,7 +97,8 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
             }
             // 시작일 & 종료일 동일한 경우
             else {
-                if(!isContinuity && bookings.size()>index) isContinuity = isMidnight(bookings.get(index).getStartDate());
+                if (!isContinuity && bookings.size() > index)
+                    isContinuity = isMidnight(bookings.get(index).getStartDate());
             }
             // 모두 수행
             standard = b.getEndDate();
@@ -146,7 +144,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
 
         // 2번이 1번에 있는지 여부
         for (LocalDate localDate : date) {
-            if(bookedDate.contains(localDate)) return true;
+            if (bookedDate.contains(localDate)) return true;
         }
 
         return false;
