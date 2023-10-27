@@ -86,7 +86,7 @@ public class ResourceAdminController {
 
 
     /**
-     * 관리자 자원 삭제
+     * 관리자 장비 삭제
      */
     @Operation(summary = "관리자 장비 삭제 (박소정)", description = "관리자가 장비를 삭제한다.")
     @ApiResponses(value = {

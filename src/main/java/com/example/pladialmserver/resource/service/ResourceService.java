@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class ResourceService {
 
 
     /**
-     * 전체 자원 목록 조회 and 예약 가능한 자원 목록 조회
+     * 전체 장비 목록 조회 and 예약 가능한 장비 목록 조회
      */
     public Page<ResourceRes> findAvailableResources(String resourceName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         Page<Resource> allResources;
@@ -79,7 +78,7 @@ public class ResourceService {
 
 
     /**
-     * 자원 기간별 예약 현황 조회
+     * 장비 기간별 예약 현황 조회
      */
     public List<String> getResourceBookedDate(Long resourceId, String month) {
         Resource resource = resourceRepository.findById(resourceId)
@@ -92,7 +91,7 @@ public class ResourceService {
 
 
     /**
-     * 자원 예약
+     * 장비 예약
      */
     // TODO 기획 변경으로 인한 수정
     @Transactional
@@ -113,17 +112,11 @@ public class ResourceService {
     /**
      * 관리자 장비 목록 조회
      */
-    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable) {
+    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String resourceName, Pageable pageable) {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 장비 조회
-        Page<Resource> resources = null;
-        if(!StringUtils.hasText(keyword)) {
-            resources = resourceRepository.findAll(pageable);
-        } else {
-            resources = resourceRepository.findByNameContainingOrderByName(keyword, pageable);
-        }
-        return resources.map(AdminResourcesRes::toDto);
+        return resourceRepository.search(resourceName, pageable);
     }
 
     /**
