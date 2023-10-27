@@ -198,7 +198,7 @@ public class OfficeService {
     public AdminOfficesDetailsRes getAdminOfficesDetails(User user, Long officeId) {
         checkAdminRole(user);
 
-        Office office = officeRepository.findById(officeId)
+        Office office = officeRepository.findByOfficeIdAndIsEnable(officeId,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         List<Facility> facilities = office.getFacilityList().stream()
