@@ -1,6 +1,7 @@
 package com.example.pladialmserver.resource.dto.response;
 
 import com.example.pladialmserver.resource.entity.Resource;
+import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,5 +40,16 @@ public class AdminResourcesRes {
                 .description(resource.getDescription())
                 .isActive(resource.getIsActive())
                 .build();
+    }
+
+    @QueryProjection
+    public AdminResourcesRes(Long resourceId, String name, String location, String responsibilityName, String responsibilityPhone, String description, Boolean isActive) {
+        this.resourceId = resourceId;
+        this.name = name;
+        this.location = location;
+        this.responsibilityName = responsibilityName;
+        this.responsibilityPhone = responsibilityPhone;
+        this.description = description;
+        this.isActive = isActive;
     }
 }
