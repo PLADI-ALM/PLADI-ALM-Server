@@ -47,7 +47,7 @@ public class EmailUtil {
             mimeMessageHelper.setText(setContext("emailCode", text, "email"), true);
             return mimeMessage;
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new BaseException(BaseResponseCode.CAN_NOT_SEND_EMAIL);
         }
     }
 
