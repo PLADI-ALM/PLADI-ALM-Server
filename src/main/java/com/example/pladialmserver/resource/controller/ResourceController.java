@@ -28,7 +28,7 @@ import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 
-@Api(tags = "자원 API")
+@Api(tags = "장비 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/resources")
@@ -37,12 +37,12 @@ public class ResourceController {
 
 
     /**
-     * 전체 자원 목록 조회 and 예약 가능한 자원 목록 조회
+     * 전체 장비 목록 조회 and 예약 가능한 장비 목록 조회
      */
-    @Operation(summary = "자원 목록 조회 (이승학)", description = "자원 목록 조회를 진행한다.")
+    @Operation(summary = "장비 목록 조회 (이승학)", description = "장비 목록 조회를 진행한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)자원 목록 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "(R0001)자원과 날짜를 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)장비 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "(R0001)장비와 날짜를 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "400", description = "(R0002)종료일은 시작일보다 빠를 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
 
     })
@@ -80,36 +80,36 @@ public class ResourceController {
 
 
     /**
-     * 자원 월별 예약 현황 조회
+     * 장비 월별 예약 현황 조회
      */
-    @Operation(summary = "자원 월별 예약 현황 조회 (박소정)", description = "월별로 자원 예약이 불가능한 날짜를 조회를 진행한다.")
+    @Operation(summary = "장비 월별 예약 현황 조회 (박소정)", description = "월별로 장비 예약이 불가능한 날짜를 조회를 진행한다. /n 일 기준 예약이 아예 불가한 날짜 반환")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 자원입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{resourceId}/booking-state")
     public ResponseCustom<List<String>> getResourceBookedDate(
             @Account User user,
-            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
-            @Parameter(description = "자원 예약 현황 조회 년도월 (YYYY-MM)",example = "2023-10") @RequestParam String month) {
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
+            @Parameter(description = "장비 예약 현황 조회 년도월 (YYYY-MM)",example = "2023-10") @RequestParam String month) {
         return ResponseCustom.OK(resourceService.getResourceBookedDate(resourceId, month));
     }
 
 
 
     /**
-     * 자원 예약
+     * 장비 예약
      */
-    @Operation(summary = "자원 예약 (박소정)", description = "자원을 예약한다.")
+    @Operation(summary = "장비 예약 (박소정)", description = "장비을 예약한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(B0010)날짜를 모두 입력해주세요. (B0002) 요청사항은 30자 이하로 작성해주세요. (B0003)시작시간보다 끝나는 시간이 더 앞에 있습니다. (B0004)미래의 날짜를 선택해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 자원입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 장비입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0005)이미 예약되어 있는 시간입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))})
     @PostMapping("/{resourceId}")
     public ResponseCustom bookResource(
             @Account User user,
-            @Parameter(description = "(Long) 자원 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
             @RequestBody @Valid ResourceReq resourceReq) {
 
         // 현재 보다 과거 날짜로 등록 하는 경우
