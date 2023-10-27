@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,35 +48,69 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom{
         return new PageImpl<>(res.subList(start, end), pageable, res.size());
     }
 
-    // 자원 월별 예약 현황 조회
+    // 장비 월별 예약 현황 조회
     @Override
     public List<String> getResourceBookedDate(Resource resource, LocalDate standardDate) {
-        // 해당 월의 첫 날
-        LocalDate startDate = standardDate.withDayOfMonth(1);
-        // 해당 월의 마지막 날
-        LocalDate endDate = standardDate.withDayOfMonth(standardDate.lengthOfMonth());
+        // 해당 월의 첫 날 (00:00)
+        LocalDateTime startDateTime = standardDate.withDayOfMonth(1).atStartOfDay();
+        // 다음 월의 첫 날 (00:00)
+        LocalDateTime endDateTime = standardDate.plusMonths(1).atStartOfDay();
 
         // 해당 월의 예약 현황 조회
-        // TODO 기획 변경으로 인한 수정
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-//                        .and((resourceBooking.startDate.between(startDate, endDate))
-//                        .or(resourceBooking.endDate.between(startDate, endDate))))
-                )
-                .orderBy(resourceBooking.startDate.asc())
+                        .and(resourceBooking.startDate.between(startDateTime, endDateTime))
+                        .or(resourceBooking.endDate.between(startDateTime, endDateTime))
+                ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
-        // 예약 시작 ~ 끝 날짜 반환
+        // 예약이 모두 된 날짜(첫 날 0시 ~ 다음 날 0시) 반환
         List<String> bookedDate = new ArrayList<>();
-//        for (ResourceBooking b : bookings) {
-//            List<String> date = b.getStartDate().datesUntil(b.getEndDate().plusDays(1))
-//                    .map(DateTimeUtil::dateToString)
-//                    .collect(Collectors.toList());
-//            bookedDate.addAll(date);
-//        }
+        LocalDateTime standard = bookings.get(0).getEndDate();
+        boolean isContinuity;
 
+        int index = 0;
+        for (ResourceBooking b : bookings) {
+            index++;
+
+            // 연속 유무 체크
+            isContinuity = (b.equals(bookings.get(0)) && bookings.get(0).getStartDate().toLocalTime().equals(LocalTime.MIN))
+                    || standard.isEqual(b.getStartDate())
+                || b.getStartDate().toLocalTime().equals(LocalTime.MIN);
+
+            // 시작일 & 종료일 다른 경우
+            if(!b.getStartDate().toLocalDate().isEqual(b.getEndDate().toLocalDate())) {
+                // 연속인 경우
+                if(isContinuity) {
+                    // 다음 날 00시 이상인 경우 -> startDate 더해주기
+                    if(b.getEndDate().isAfter(LocalDateTime.of(b.getEndDate().toLocalDate().plusDays(1), LocalTime.MIN)) || b.getEndDate().isEqual(LocalDateTime.of(b.getEndDate().toLocalDate().plusDays(1), LocalTime.MIN))) {
+                        bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
+                    }
+                }
+                // 중간 날짜 더해주기
+                List<String> date = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
+                        .map(DateTimeUtil::dateToString)
+                        .collect(Collectors.toList());
+                bookedDate.addAll(date);
+            }
+
+            // 시작일 & 종료일 동일한 경우
+            else {
+                if(!isContinuity) {
+                    if(bookings.size()>index) isContinuity = checkIsContinuity(bookings.get(index));
+                }
+            }
+
+            // 모두 수행
+            standard = b.getEndDate();
+
+        }
         return bookedDate;
+    }
+
+    private boolean checkIsContinuity(ResourceBooking booking) {
+        return booking.getStartDate().toLocalTime().equals(LocalTime.MIN);
     }
 
     @Override
