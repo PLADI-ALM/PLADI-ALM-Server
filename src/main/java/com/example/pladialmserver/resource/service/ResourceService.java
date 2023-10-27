@@ -43,7 +43,7 @@ public class ResourceService {
 
 
     /**
-     * 전체 자원 목록 조회 and 예약 가능한 자원 목록 조회
+     * 전체 장비 목록 조회 and 예약 가능한 장비 목록 조회
      */
     public Page<ResourceRes> findAvailableResources(String resourceName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         Page<Resource> allResources;
@@ -78,7 +78,7 @@ public class ResourceService {
 
 
     /**
-     * 자원 기간별 예약 현황 조회
+     * 장비 기간별 예약 현황 조회
      */
     public List<String> getResourceBookedDate(Long resourceId, String month) {
         Resource resource = resourceRepository.findById(resourceId)
@@ -91,7 +91,7 @@ public class ResourceService {
 
 
     /**
-     * 자원 예약
+     * 장비 예약
      */
     // TODO 기획 변경으로 인한 수정
     @Transactional
