@@ -81,13 +81,10 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
 
             // 시작일 & 종료일 다른 경우
             if (!DateTimeUtil.dateTimeToDate(b.getStartDate()).isEqual(DateTimeUtil.dateTimeToDate(b.getEndDate()))) {
-                // 연속인 경우
-                if (isContinuity) {
-                    // 다음 날 00시 이상인 경우 -> startDate 더해주기
-                    if (b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))
-                            || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
-                        bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
-                    }
+                // 연속인 경우 & 다음 날 00시 또는 이상인 경우 -> startDate 더해주기
+                if (isContinuity &&
+                        b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1))) || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
+                    bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
                 }
                 // 중간 날짜 더해주기
                 List<String> date = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
