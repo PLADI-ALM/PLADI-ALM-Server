@@ -87,4 +87,5 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
         // 영속성 컨텍스트를 DB 에 즉시 반영
         entityManager.flush();
     }
+
 }

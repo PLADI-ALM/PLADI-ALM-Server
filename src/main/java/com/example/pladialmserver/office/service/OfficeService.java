@@ -14,7 +14,6 @@ import com.example.pladialmserver.office.repository.FacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeFacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
 import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
-import com.example.pladialmserver.resource.dto.response.ResourcesList;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,24 +52,24 @@ public class OfficeService {
             if (!bookedOfficeIds.isEmpty()) {
                 if (facilityName != null && !facilityName.isEmpty()) {
                     // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                    allOffices = officeRepository.findByFacilityNameAndOfficeIdNotIn(facilityName, bookedOfficeIds, pageable);
+                    allOffices = officeRepository.findByFacilityNameAndOfficeIdNotInIAndIsEnableTrueAndIsActiveTrue(facilityName, bookedOfficeIds, pageable);
                 }else {
-                    allOffices = officeRepository.findAllByOfficeIdNotIn(bookedOfficeIds, pageable);
+                    allOffices = officeRepository.findAllByOfficeIdNotInAndIsEnableTrueAndIsActiveTrue(bookedOfficeIds, pageable);
                 }
             } else {
                 if (facilityName != null && !facilityName.isEmpty()) {
                     // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                    allOffices = officeRepository.findByFacilityName(facilityName, pageable);
+                    allOffices = officeRepository.findByFacilityNameAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
                 }else {
-                    allOffices = officeRepository.findAll(pageable);
+                    allOffices = officeRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
                 }
             }
         }else{
             if (facilityName != null && !facilityName.isEmpty()) {
                 // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                allOffices = officeRepository.findByFacilityName(facilityName, pageable);
+                allOffices = officeRepository.findByFacilityNameAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
             }else {
-                allOffices = officeRepository.findAll(pageable);
+                allOffices = officeRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
             }
         }
 
@@ -102,7 +99,7 @@ public class OfficeService {
      * 회의실 일자별 예약 현황 조회
      */
     public BookingStateRes getOfficeBookedTimes(Long officeId, LocalDate date) {
-        Office office = officeRepository.findById(officeId)
+        Office office = officeRepository.findByOfficeIdAndIsEnableAndIsActive(officeId,true,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         List<OfficeBooking> bookings = officeBookingRepository.findByOfficeAndDateAndStatusNot(office, date, BookingStatus.CANCELED);
@@ -117,7 +114,7 @@ public class OfficeService {
      */
     @Transactional
     public void bookOffice(User user, Long officeId, OfficeReq officeReq) {
-        Office office = officeRepository.findByOfficeId(officeId)
+        Office office = officeRepository.findByOfficeIdAndIsEnableAndIsActive(officeId,true,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
 
         // 이미 예약되어 있는 시간인지 확인
