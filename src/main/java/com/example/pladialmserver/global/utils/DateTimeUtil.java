@@ -48,4 +48,19 @@ public class DateTimeUtil {
     public static LocalDateTime localDateAndTimeToLocalDateTime(LocalDate localDate, LocalTime localTime){
         return LocalDateTime.of(localDate, localTime);
     }
+
+    // localDateTime -> LocalDate
+    public static LocalDate dateTimeToDate(LocalDateTime localDateTime) {
+        return localDateTime.toLocalDate();
+    }
+
+    // localDateTime -> LocalTime
+    public static LocalTime dateTimeToTime(LocalDateTime localDateTime) {
+        return localDateTime.toLocalTime();
+    }
+
+    // localDateTime -> localDate + 00:00
+    public static LocalDateTime getMidNightDateTime(LocalDateTime localDateTime) {
+        return LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.MIN);
+    }
 }
