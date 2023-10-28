@@ -5,6 +5,8 @@ import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import com.querydsl.core.annotations.QueryProjection;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,4 +40,16 @@ public class OfficeRes {
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(office.getImgKey()))
                 .build();
     }
+
+    @QueryProjection
+    public OfficeRes(Long officeId, String name, String location, Integer capacity, List<String> facilityList,String description, String imgUrl){
+        this.officeId=officeId;
+        this.name=name;
+        this.location=location;
+        this.capacity=capacity;
+        this.facilityList=facilityList;
+        this.description=description;
+        this.imgUrl=imgUrl;
+    }
+
 }
