@@ -16,7 +16,10 @@ import java.util.List;
 @Repository
 public interface ResourceBookingRepository extends JpaRepository<ResourceBooking, Long>, ResourceBookingCustom {
 
-    @Query("SELECT rb.resource.resourceId FROM ResourceBooking rb WHERE (rb.startDate <= :endDate AND rb.endDate >= :startDate) AND rb.resource.name LIKE %:resourceName%")
+    @Query("SELECT rb.resource.resourceId " +
+            "FROM ResourceBooking rb" +
+            " WHERE (rb.startDate <= :endDate AND rb.endDate >= :startDate) " +
+            "AND rb.resource.name LIKE %:resourceName%")
     List<Long> findBookedResourceIdsByDateAndResourceName(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("resourceName") String resourceName);
 
     Page<ResourceBooking> findByStatusIn(List<BookingStatus> list, Pageable pageable);
