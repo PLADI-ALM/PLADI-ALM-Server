@@ -40,16 +40,16 @@ public class OfficeRes {
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(office.getImgKey()))
                 .build();
     }
-
-    @QueryProjection
-    public OfficeRes(Long officeId, String name, String location, Integer capacity, List<String> facilityList,String description, String imgUrl){
-        this.officeId=officeId;
-        this.name=name;
-        this.location=location;
-        this.capacity=capacity;
-        this.facilityList=facilityList;
-        this.description=description;
-        this.imgUrl=imgUrl;
-    }
+//TODO query dsl적용
+//    @QueryProjection
+//    public OfficeRes(Long officeId, String name, String location, Integer capacity, List<String> facilityList,String description, String imgUrl){
+//        this.officeId=officeId;
+//        this.name=name;
+//        this.location=location;
+//        this.capacity=capacity;
+//        this.facilityList=facilityList;
+//        this.description=description;
+//        this.imgUrl=imgUrl;
+//    }
 
 }
