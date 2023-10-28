@@ -55,12 +55,12 @@ public class ResourceService {
             List<Long> bookedResourceIds = resourceBookingRepository.findBookedResourceIdsByDateAndResourceName(startDate, endDate, resourceName);
 
             if (!bookedResourceIds.isEmpty()) {
-                allResources = resourceRepository.findByNameAndResourceIdNotIn(resourceName,bookedResourceIds,pageable);
+                allResources = resourceRepository.findByNameAndResourceIdNotInAAndIsEnableTrueAAndIsActiveTrue(resourceName,bookedResourceIds,pageable);
             } else {
-                allResources = resourceRepository.findByNameContaining(resourceName,pageable);
+                allResources = resourceRepository.findByNameContainingAAndIsEnableTrueAndIsActiveTrue(resourceName,pageable);
             }
         } else {
-            allResources = resourceRepository.findAll(pageable);
+            allResources = resourceRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
         }
 
         return allResources.map(ResourceRes::toDto);
@@ -71,7 +71,7 @@ public class ResourceService {
      * 장비 개별 조회
      */
     public ResourceDetailRes getResourceDetail(Long resourceId) {
-        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnableAndIsActive(resourceId, true,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         return ResourceDetailRes.toDto(resource);
     }
@@ -155,7 +155,7 @@ public class ResourceService {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 장비 유무 확인
-        Resource resource = resourceRepository.findById(resourceId)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         // 장비 예약 내역 상태 확인
         List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
