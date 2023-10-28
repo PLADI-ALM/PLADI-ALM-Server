@@ -47,10 +47,6 @@ public class EquipmentController {
             @Account User user
     )
     {
-        if(!StringUtils.hasText(registerEquipmentReq.getName()) || !StringUtils.hasText(registerEquipmentReq.getCategory()) ||
-                !StringUtils.hasText(registerEquipmentReq.getDescription()) || !StringUtils.hasText(registerEquipmentReq.getLocation()) ||
-                !StringUtils.hasText(registerEquipmentReq.getImgKey()) || registerEquipmentReq.getQuantity() == 0)
-            throw new BaseException(BaseResponseCode.INVALID_REGISTER_EQUIPMENT_REQUEST);
 
         equipmentService.registerEquipment(registerEquipmentReq, user);
         return ResponseCustom.OK();
@@ -89,11 +85,6 @@ public class EquipmentController {
             @Account User user
     )
     {
-        if(!StringUtils.hasText(updateEquipmentReq.getName()) || !StringUtils.hasText(updateEquipmentReq.getCategory()) ||
-                !StringUtils.hasText(updateEquipmentReq.getDescription()) || !StringUtils.hasText(updateEquipmentReq.getLocation()) ||
-                !StringUtils.hasText(updateEquipmentReq.getImgKey()) || updateEquipmentReq.getUserId() == 0)
-            throw new BaseException(BaseResponseCode.INVALID_UPDATE_EQUIPMENT_REQUEST);
-
         equipmentService.updateEquipment(equipmentId, updateEquipmentReq, user);
         return ResponseCustom.OK();
     }

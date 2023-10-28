@@ -36,17 +36,17 @@ public class EquipmentService {
     public Page<SearchEquipmentRes> searchEquipment(String cond, Pageable pageable) {
         Page<Equipment> equipments;
 
-        if(StringUtils.hasText(cond)) equipments = equipmentRepository.findByNameContains(cond, pageable);
+        if(StringUtils.hasText(cond)) equipments = equipmentRepository.findByNameContainsAndIsEnable(cond, pageable, true);
         else equipments = equipmentRepository.findAll(pageable);
         return equipments.map(SearchEquipmentRes::toDto);
     }
 
     @Transactional
     public void updateEquipment(Long equipmentId, UpdateEquipmentReq updateEquipmentReq, User user) {
-        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
+        Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
         if(!equipment.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
-        User updateKeeper = userRepository.findById(updateEquipmentReq.getUserId()).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        User updateKeeper = userRepository.findByUserIdAndIsEnable(updateEquipmentReq.getUserId(), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         EquipmentCategory updateCategory = extractCategory(updateEquipmentReq.getCategory());
         equipment.toUpdateInfo(updateEquipmentReq, updateKeeper, updateCategory);
     }
