@@ -67,8 +67,8 @@ public class ResourceBooking extends BaseEntity {
     return ResourceBooking.builder()
             .user(user)
             .resource(resource)
-            .startDate(resourceReq.getStartDate())
-            .endDate(resourceReq.getEndDate())
+            .startDate(resourceReq.getStartDateTime())
+            .endDate(resourceReq.getEndDateTime())
             .memo(resourceReq.getMemo())
             .build();
   }

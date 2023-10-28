@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
@@ -113,11 +114,10 @@ public class ResourceController {
             @RequestBody @Valid ResourceReq resourceReq) {
 
         // 현재 보다 과거 날짜로 등록 하는 경우
-        // TODO 기획 변경으로 인한 수정
-//        if (LocalDate.now().isAfter(resourceReq.getStartDate()))
-//            throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        if (LocalDateTime.now().isAfter(resourceReq.getStartDateTime()))
+            throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
         // 종료일이 시작일 보다 빠른 경우
-        if (resourceReq.getEndDate().isBefore(resourceReq.getStartDate()))
+        if (resourceReq.getEndDateTime().isBefore(resourceReq.getStartDateTime()))
             throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
 
         resourceService.bookResource(user, resourceId, resourceReq);
