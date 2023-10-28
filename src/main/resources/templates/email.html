@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<table width="100%" style="padding: 20px 16px 82px; color: #191919; font-family: 'Noto Sans KR', sans-serif;" class="wrapper">
+  <tbody style="display: block; max-width: 600px; margin: 0 auto;">
+  <tr width="100%" style="display: block;">
+    <td width="100%" style="display: block;">
+      <!-- 본문 -->
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" bgColor="#FFFFFF" style="display: inline-block; padding: 32px; text-align: left; border-top: 5px solid #8741CB; border-collapse: collapse;" class="container">
+        <tbody style="display: block;">
+        <tr>
+          <td style="padding-bottom: 10px; font-size: 20px; font-weight: bold;">
+            <img width="92" src="/static/img/imgNameLogo.svg" />
+          </td>
+        </tr>
+        <tr>
+          <td style="font-size: 15px; padding-bottom: 10px">플래디 사내관리 페이지 이메일 인증 전송코드입니다. </td>
+        </tr>
+        <tr width="100%" style="display: block; margin-bottom: 32px;">
+          <td width="100%" style="display: block;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" bgColor="#F8F9FA" style="padding: 40px 20px; border-radius: 4px; text-align: center;" class="content">
+              <tbody style="display: block;">
+              <tr style="display: block;">
+                <td style="display: block; padding-bottom: 16px; font-size: 32px; font-weight: bold;"><span th:text="${emailCode}"></span></td>
+              </tr>
+              <tr style="display: block;">
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="font-size: 10px; padding-bottom: 10px; color: #A7A7A7;">본 메일은 발신 전용입니다. </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr width="100%" style="display:block; padding-top: 10px; border-top: 1px solid #e9e9e9;">
+          <td style="position: relative;">
+            <img height="16" style="vertical-align: middle; display: inline-block; padding: 0 5px 0 0;" src="/static/img/imgLogo.svg" />
+            <div style="display:inline-block; color: #A7A7A7; font-size: 12px; line-height: 20px;">© COPYRIGHTⓒPLADI, LTD. ALL RIGHTS</div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
