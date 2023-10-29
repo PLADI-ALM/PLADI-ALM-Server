@@ -83,5 +83,9 @@ public class Equipment extends BaseEntity {
     this.equipmentCategory = updateCategory;
     this.user = updateKeeper;
   }
+
+  public void delete() {
+    this.setIsEnable(false);
+  }
 }
 

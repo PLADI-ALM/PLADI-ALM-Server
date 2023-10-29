@@ -60,4 +60,12 @@ public class EquipmentService {
         }
         return category;
     }
+
+    @Transactional
+    public void deleteEquipment(Long equipmentId, User user) {
+        Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
+        if(!equipment.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+
+        equipment.delete();
+    }
 }

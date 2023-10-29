@@ -92,4 +92,13 @@ public class EquipmentController {
     /*
     비품 정보를 삭제한다.
      */
+    @DeleteMapping("{equipmentId}")
+    public ResponseCustom deleteEquipment(
+            @Parameter(description = "(Long) 비품 Id", example = "1") @PathVariable Long equipmentId,
+            @Account User user
+    )
+    {
+        equipmentService.deleteEquipment(equipmentId, user);
+        return ResponseCustom.OK();
+    }
 }
