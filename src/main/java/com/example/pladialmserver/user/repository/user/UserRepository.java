@@ -11,5 +11,4 @@ public interface UserRepository extends JpaRepository<User, Long>, UserCustom{
     Boolean existsByEmailAndIsEnable(String email, Boolean isEnable);
     Boolean existsByPhoneAndIsEnable(String phone, Boolean isEnable);
     Boolean existsByPhoneAndUserIdNotAndIsEnable(String phone, Long userId, Boolean isEnable);
-
 }
