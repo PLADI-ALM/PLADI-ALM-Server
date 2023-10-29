@@ -92,6 +92,12 @@ public class EquipmentController {
     /*
     비품 정보를 삭제한다.
      */
+    @Operation(summary = "비품 삭제 (김민기)", description = "비품을 삭제한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(E0002)존재하지 않는 비품입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
     @DeleteMapping("{equipmentId}")
     public ResponseCustom deleteEquipment(
             @Parameter(description = "(Long) 비품 Id", example = "1") @PathVariable Long equipmentId,
