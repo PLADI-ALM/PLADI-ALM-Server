@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ResourceService {
     /**
      * 전체 장비 목록 조회 and 예약 가능한 장비 목록 조회
      */
-    public Page<ResourceRes> findAvailableResources(String resourceName, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+    public Page<ResourceRes> findAvailableResources(String resourceName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         Page<Resource> allResources;
 
         if (startDate != null && endDate != null && endDate.isBefore(startDate)) {

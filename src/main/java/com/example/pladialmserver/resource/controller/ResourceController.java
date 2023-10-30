@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
+import static com.example.pladialmserver.global.Constants.DATE_TIME_PATTERN;
 
 @Api(tags = "장비 API")
 @RestController
@@ -49,11 +50,11 @@ public class ResourceController {
 
     })
     @GetMapping
-    public ResponseCustom<Page<ResourceRes>> selectResource(
+    public ResponseCustom<Page<ResourceRes>> getResource(
             @Account User user,
-            @Parameter(description = "장비 이름",example = "벤츠") @RequestParam(required = false) String resourceName,
-            @Parameter(description = "시작 예약 날짜",example = "2023-10-02") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate startDate,
-            @Parameter(description = "종료 예약 날짜",example = "2023-10-02") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate endDate,
+            @Parameter(description = "장비 이름",example = "맥북 프로") @RequestParam(required = false) String resourceName,
+            @Parameter(description = "시작 예약 날짜",example = "2023-10-22 15:00") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_PATTERN) LocalDateTime startDate,
+            @Parameter(description = "종료 예약 날짜",example = "2023-10-23 16:00") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_PATTERN) LocalDateTime endDate,
             Pageable pageable
     ) {
         if ((resourceName != null && (startDate == null || endDate == null)) ||
