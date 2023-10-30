@@ -14,7 +14,7 @@ import java.util.List;
 public interface ResourceBookingCustom {
     Page<BookingRes> getBookingsByUser(User user, Pageable pageable);
     boolean existsDateTime(Resource resource, LocalDateTime startDateTime, LocalDateTime endDateTime);
-    List<String> getResourceBookedDate(Resource resource, LocalDate standardDate);
+    List<String> getResourceBookedDate(Resource resource, LocalDate standardDate, LocalDate date);
     void updateBookingStatusForResigning(User user);
 
     List<ResourceBookingRes> findResourceBookingByDate(Resource resource, LocalDate date);
