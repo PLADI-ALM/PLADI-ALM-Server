@@ -1,6 +1,7 @@
 package com.example.pladialmserver.booking.repository.resourceBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
+import com.example.pladialmserver.resource.dto.response.ResourceBookingRes;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,6 @@ public interface ResourceBookingCustom {
     boolean existsDateTime(Resource resource, LocalDateTime startDateTime, LocalDateTime endDateTime);
     List<String> getResourceBookedDate(Resource resource, LocalDate standardDate);
     void updateBookingStatusForResigning(User user);
+
+    List<ResourceBookingRes> findResourceBookingByDate(Resource resource, LocalDate date);
 }

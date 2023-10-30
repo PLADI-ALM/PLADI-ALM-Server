@@ -189,4 +189,12 @@ public class ResourceService {
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         resource.activateResource();
     }
+
+    // 해당 날짜의 장비 예약 내역 조회
+    public List<ResourceBookingRes> getResourceBookingByDate(Long resourceId, LocalDate date) {
+        // 장비 유무 확인
+        Resource resource = resourceRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        return resourceBookingRepository.findResourceBookingByDate(resource, date);
+    }
 }
