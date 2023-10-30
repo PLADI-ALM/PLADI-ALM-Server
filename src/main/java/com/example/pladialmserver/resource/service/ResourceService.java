@@ -93,14 +93,13 @@ public class ResourceService {
     /**
      * 장비 예약
      */
-    // TODO 기획 변경으로 인한 수정
     @Transactional
     public void bookResource(User user, Long resourceId, ResourceReq resourceReq) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
         // 이미 예약된 날짜 여부 확인
-//        if(resourceBookingRepository.existsDate(resource, resourceReq.getStartDate(), resourceReq.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
+        if(resourceBookingRepository.existsDateTime(resource, resourceReq.getStartDateTime(), resourceReq.getEndDateTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, resourceReq));
 
     }

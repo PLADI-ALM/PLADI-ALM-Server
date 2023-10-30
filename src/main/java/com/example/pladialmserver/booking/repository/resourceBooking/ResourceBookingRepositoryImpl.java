@@ -142,7 +142,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
     }
 
     @Override
-    public boolean existsDate(Resource resource, LocalDate startDate, LocalDate endDate) {
+    public boolean existsDateTime(Resource resource, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
         // 1. 예약중 & 사용중인 날짜들
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
@@ -151,19 +151,11 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 .orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
-        List<LocalDate> bookedDate = new ArrayList<>();
-        // TODO 기획 변경으로 인한 수정
-//        for (ResourceBooking b : bookings) {
-//            List<LocalDate> date = b.getStartDate().datesUntil(b.getEndDate().plusDays(1)).collect(Collectors.toList());
-//            bookedDate.addAll(date);
-//        }
-
-        // 2. startDate ~ endDate
-        List<LocalDate> date = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
-
-        // 2번이 1번에 있는지 여부
-        for (LocalDate localDate : date) {
-            if (bookedDate.contains(localDate)) return true;
+        if (bookings.isEmpty()) return false;
+        for (ResourceBooking b : bookings) {
+            // 시작 날짜 또는 종료 날짜가 사이에 있다면
+            if (!startDateTime.isBefore(b.getStartDate()) && startDateTime.isBefore(b.getEndDate())) return true;
+            if (!endDateTime.isBefore(b.getStartDate()) && endDateTime.isBefore(b.getEndDate())) return true;
         }
 
         return false;
