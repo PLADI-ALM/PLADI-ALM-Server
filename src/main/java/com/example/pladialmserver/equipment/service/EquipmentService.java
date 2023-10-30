@@ -66,6 +66,6 @@ public class EquipmentService {
         Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
         if(!equipment.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
-        equipment.delete();
+        equipmentRepository.delete(equipment);
     }
 }
