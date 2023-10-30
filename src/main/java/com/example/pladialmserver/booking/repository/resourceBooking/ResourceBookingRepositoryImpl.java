@@ -4,6 +4,7 @@ import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
+import com.example.pladialmserver.resource.dto.response.ResourceBookingRes;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -117,6 +118,27 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
 
         // 영속성 컨텍스트를 DB 에 즉시 반영
         entityManager.flush();
+    }
+
+    @Override
+    public List<ResourceBookingRes> findResourceBookingByDate(Resource resource, LocalDate standardDate) {
+
+        // 해당 일의 00:00
+        LocalDateTime startDateTime = LocalDateTime.of(standardDate, LocalTime.MIN);
+        // 해당 일의 23:59
+        LocalDateTime endDateTime = LocalDateTime.of(standardDate, LocalTime.MAX);
+
+        // 해당 날짜가 포함된 예약
+        List<ResourceBooking> bookings = jpaQueryFactory
+                .selectFrom(resourceBooking)
+                .where(resourceBooking.resource.eq(resource),
+                        (resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
+                        ((resourceBooking.startDate.between(startDateTime, endDateTime))
+                                .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
+                ).orderBy(resourceBooking.startDate.asc())
+                .fetch();
+
+        return bookings.stream().map(ResourceBookingRes::toDto).collect(Collectors.toList());
     }
 
     @Override

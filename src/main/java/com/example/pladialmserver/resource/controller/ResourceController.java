@@ -5,6 +5,7 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.resource.dto.response.ResourceBookingRes;
 import com.example.pladialmserver.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.resource.service.ResourceService;
@@ -122,5 +123,21 @@ public class ResourceController {
 
         resourceService.bookResource(user, resourceId, resourceReq);
         return ResponseCustom.OK();
+    }
+
+    /**
+     * 해당 날짜의 장비 예약 내역 조회
+     */
+    @Operation(summary = "해당 날짜의 장비 예약 내역 조회 (박소정)", description = "해당 날짜의 장비 예약 내역을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/{resourceId}/booking")
+    public ResponseCustom<List<ResourceBookingRes>> getResourceBookingByDate(
+            @Account User user,
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
+            @Parameter(description = "장비 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-30") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {
+        return ResponseCustom.OK(resourceService.getResourceBookingByDate(resourceId, date));
     }
 }
