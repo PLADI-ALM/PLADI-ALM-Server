@@ -18,4 +18,7 @@ public interface ResourceBookingCustom {
     void updateBookingStatusForResigning(User user);
 
     List<ResourceBookingRes> findResourceBookingByDate(Resource resource, LocalDate date);
+
+    List<Long> findBookedResourceIdsByDateAndCarName(LocalDateTime startDate, LocalDateTime endDate, String resourceName);
+    List<Long> findBookedResourceIdsByDate(LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -45,7 +45,7 @@ public class ResourceController {
     @Operation(summary = "장비 목록 조회 (이승학)", description = "장비 목록 조회를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)장비 목록 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "(R0001)장비와 날짜를 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(R0011)시작,종료 날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "400", description = "(R0002)종료일은 시작일보다 빠를 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
 
     })
@@ -57,9 +57,8 @@ public class ResourceController {
             @Parameter(description = "종료 예약 날짜",example = "2023-10-23 16:00") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_PATTERN) LocalDateTime endDate,
             Pageable pageable
     ) {
-        if ((resourceName != null && (startDate == null || endDate == null)) ||
-                (resourceName == null && (startDate != null || endDate != null))) {
-            throw new BaseException(BaseResponseCode.NAME_OR_DATE_IS_NULL);
+        if ((startDate == null && endDate != null) || (startDate != null && endDate == null)) {
+            throw new BaseException(BaseResponseCode.START_DATE_OR_END_DATE_IS_NULL);
         }
         return ResponseCustom.OK(resourceService.findAvailableResources(resourceName, startDate, endDate, pageable));
     }
