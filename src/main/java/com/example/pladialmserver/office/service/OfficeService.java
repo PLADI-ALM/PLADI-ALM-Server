@@ -224,39 +224,19 @@ public class OfficeService {
 
     }
 
-    public Page<OfficeRes> findAvailableAdminOffices(User user,LocalDate date, LocalTime startTime, LocalTime endTime, String officeName, Pageable pageable) {
+    public Page<OfficeRes> findAvailableAdminOffices(User user,String officeName, Pageable pageable) {
         checkAdminRole(user);
 
         Page<Office> allOffices;
 
-        if (date != null && startTime != null && endTime != null) {
-            // 입력된 날짜와 시간에 이미 예약된 회의실의 ID 목록을 조회
-            List<Long> bookedOfficeIds = officeBookingRepository.findBookedOfficeIdsByDateAndTime(date, startTime, endTime);
 
-            // 예약된 회의실을 제외한 회의실 목록을 페이징 처리하여 조회
-            if (!bookedOfficeIds.isEmpty()) {
-                if (officeName != null && !officeName.isEmpty()) {
-                    // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                    allOffices = officeRepository.findByNameAndOfficeIdNotInAndIsEnableTrue(officeName, bookedOfficeIds, pageable);
-                }else {
-                    allOffices = officeRepository.findAllByOfficeIdNotInAndIsEnableTrue(bookedOfficeIds, pageable);
-                }
-            } else {
-                if (officeName != null && !officeName.isEmpty()) {
-                    // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                    allOffices = officeRepository.findByNameAndIsEnableTrue(officeName, pageable);
-                }else {
-                    allOffices = officeRepository.findAllByIsEnableTrue(pageable);
-                }
-            }
-        }else{
             if (officeName != null && !officeName.isEmpty()) {
                 // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
                 allOffices = officeRepository.findByNameAndIsEnableTrue(officeName, pageable);
             }else {
                 allOffices = officeRepository.findAllByIsEnableTrue(pageable);
             }
-        }
+
 
         return allOffices.map(office -> {
             List<Facility> facilities = office.getFacilityList().stream()
@@ -266,6 +246,4 @@ public class OfficeService {
         });
 
     }
-
-
 }

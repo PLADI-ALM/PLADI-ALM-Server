@@ -28,6 +28,8 @@ public class OfficeRes {
     private String description;
     @Schema(type = "String", description = "회의실 이미지", example = "/photo/ex.png")
     private String imgUrl;
+    @Schema(type = "Boolean", description = "활성화 유무", example = "'true' / 'false'")
+    private Boolean isActive;
 
     public static OfficeRes toDto(Office office, List<Facility> facilities){
         return OfficeRes.builder()
@@ -38,6 +40,7 @@ public class OfficeRes {
                 .facilityList(facilities.stream().map(Facility::getName).collect(Collectors.toList()))
                 .description(office.getDescription())
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(office.getImgKey()))
+                .isActive(office.getIsActive())
                 .build();
     }
 //TODO query dsl적용
