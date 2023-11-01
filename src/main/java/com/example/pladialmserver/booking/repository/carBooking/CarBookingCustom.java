@@ -11,6 +11,8 @@ public interface CarBookingCustom {
     boolean existsDateTime(Car car, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     List<ProductBookingRes> findResourceBookingByDate(Car car, LocalDate date);
+
+    List<String> getCarBookedDate(Car car, LocalDate standardDate, LocalDate date);
 //    List<Long> findBookedCarIdsByDateAndCarName(LocalDate startDate, LocalDate endDate, String carName);
 
 }

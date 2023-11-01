@@ -14,4 +14,6 @@ public interface ProductService {
     void bookProduct(User user, Long id, ProductReq request);
 
     List<ProductBookingRes> getProductBookingByDate(Long carId, LocalDate date);
+
+    List<String> getProductBookedDate(Long carId, String month, LocalDate date);
 }

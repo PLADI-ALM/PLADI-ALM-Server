@@ -4,6 +4,7 @@ import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.car.repository.CarRepository;
@@ -80,5 +81,14 @@ public class CarService implements ProductService {
         Car car = carRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
         return carBookingRepository.findResourceBookingByDate(car, date);
+    }
+
+    @Override
+    public List<String> getProductBookedDate(Long resourceId, String month, LocalDate date) {
+        Car car = carRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        // 예약 현황 조회할 월
+        LocalDate standardDate = DateTimeUtil.stringToFirstLocalDate(month);
+        return carBookingRepository.getCarBookedDate(car, standardDate, date);
     }
 }

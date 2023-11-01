@@ -71,7 +71,8 @@ public class ResourceService implements ProductService {
     /**
      * 장비 기간별 예약 현황 조회
      */
-    public List<String> getResourceBookedDate(Long resourceId, String month, LocalDate date) {
+    @Override
+    public List<String> getProductBookedDate(Long resourceId, String month, LocalDate date) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         // 예약 현황 조회할 월
