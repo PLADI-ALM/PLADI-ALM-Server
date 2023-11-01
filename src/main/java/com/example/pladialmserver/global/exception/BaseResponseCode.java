@@ -93,6 +93,8 @@ public enum BaseResponseCode {
     NOT_EMPTY_RESPONSIBILITY("R0008", HttpStatus.BAD_REQUEST, "책임자를 입력해주세요."),
     NOT_EMPTY_DESCRIPTION("R0009", HttpStatus.BAD_REQUEST, "설명을 입력해주세요."),
     INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 장비의 예약 현황 수정이 필요합니다."),
+    START_DATE_OR_END_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"시작,종료 날짜와 시간을 모두 입력해주세요."),
+
 
     //Equipment
     INVALID_REGISTER_EQUIPMENT_REQUEST("E0001", HttpStatus.BAD_REQUEST, "부적절한 비품 등록 요청입니다. 공백및 특수문자를 제외하고 다시 입력해주세요." ),

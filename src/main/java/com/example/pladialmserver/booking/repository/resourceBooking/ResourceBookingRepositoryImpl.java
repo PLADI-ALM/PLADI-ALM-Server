@@ -1,12 +1,15 @@
 package com.example.pladialmserver.booking.repository.resourceBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
+import com.example.pladialmserver.booking.entity.QResourceBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.resource.dto.response.ResourceBookingRes;
+import com.example.pladialmserver.resource.entity.QResource;
 import com.example.pladialmserver.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
+import static com.example.pladialmserver.resource.entity.QResource.resource;
+import static io.jsonwebtoken.lang.Strings.hasText;
 
 
 @RequiredArgsConstructor
@@ -163,6 +168,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         return bookings.stream().map(ResourceBookingRes::toDto).collect(Collectors.toList());
     }
 
+
     @Override
     public boolean existsDateTime(Resource resource, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
@@ -181,5 +187,18 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         }
 
         return false;
+    }
+
+
+    @Override
+    public List<Long> findBookedResourceIdsByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        //주어진 날짜와 시간 범위 내에 장비가 예약되었는지 확인
+        return jpaQueryFactory
+                .select(QResourceBooking.resourceBooking.resource.resourceId)
+                .from(QResourceBooking.resourceBooking)
+                .where(QResourceBooking.resourceBooking.startDate.before(endDate),
+                        QResourceBooking.resourceBooking.endDate.after(startDate),
+                        QResourceBooking.resourceBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED))
+                .fetch();
     }
 }
