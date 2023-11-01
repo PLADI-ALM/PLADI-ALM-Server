@@ -4,6 +4,7 @@ import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRe
 import com.example.pladialmserver.product.resource.dto.response.QAdminResourcesRes;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
 import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.QResourceRes;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
-import static com.example.pladialmserver.resource.entity.QResource.resource;
+import static com.example.pladialmserver.product.resource.entity.QResource.resource;
 import static io.jsonwebtoken.lang.Strings.hasText;
 
 
