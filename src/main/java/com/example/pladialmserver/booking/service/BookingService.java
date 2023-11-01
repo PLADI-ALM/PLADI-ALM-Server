@@ -11,7 +11,7 @@ import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBoo
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;

@@ -2,8 +2,8 @@ package com.example.pladialmserver.booking.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
-import com.example.pladialmserver.resource.dto.request.ResourceReq;
-import com.example.pladialmserver.resource.entity.Resource;
+import com.example.pladialmserver.product.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,12 +11,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

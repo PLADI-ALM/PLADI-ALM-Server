@@ -6,7 +6,7 @@ import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
 import com.example.pladialmserver.booking.service.BookingService;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.resource.dto.response.AdminResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;

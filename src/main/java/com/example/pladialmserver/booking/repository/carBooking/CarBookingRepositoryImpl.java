@@ -1,19 +1,9 @@
 package com.example.pladialmserver.booking.repository.carBooking;
 
-import com.example.pladialmserver.booking.entity.QCarBooking;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import static com.example.pladialmserver.car.entity.QCar.car;
-import static com.example.pladialmserver.resource.entity.QResource.resource;
-import static org.springframework.util.StringUtils.hasText;
-
 @RequiredArgsConstructor
-public class CarBookingRepositoryImpl implements CarBookingCustom{
+public class CarBookingRepositoryImpl implements CarBookingCustom {
 //    private final JPAQueryFactory jpaQueryFactory;
 //
 //

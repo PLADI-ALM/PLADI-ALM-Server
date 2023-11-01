@@ -1,13 +1,12 @@
 package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
-import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
+import com.example.pladialmserver.product.resource.dto.request.CreateOfficeReq;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

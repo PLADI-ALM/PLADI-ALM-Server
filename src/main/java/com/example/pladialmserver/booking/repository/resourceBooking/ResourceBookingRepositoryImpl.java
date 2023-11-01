@@ -5,9 +5,8 @@ import com.example.pladialmserver.booking.entity.QResourceBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
-import com.example.pladialmserver.resource.dto.response.ResourceBookingRes;
-import com.example.pladialmserver.resource.entity.QResource;
-import com.example.pladialmserver.resource.entity.Resource;
+import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
+import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,7 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
-import static com.example.pladialmserver.resource.entity.QResource.resource;
+import static com.example.pladialmserver.product.resource.entity.QResource.resource;
 import static io.jsonwebtoken.lang.Strings.hasText;
 
 

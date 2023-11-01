@@ -72,17 +72,7 @@ public enum BaseResponseCode {
     NOT_EMPTY_OFFICE_DESCRIPTION("O0009", HttpStatus.BAD_REQUEST, "회의실 설명을 입력해주세요."),
     INVALID_STATUS_BY_OFFICE_DELETION("O0010", HttpStatus.CONFLICT,"해당 회의실의 예약 현황 수정이 필요합니다."),
 
-
-
-
-
-
-
-
-
-
-
-    //Resource
+    // Resource
     NAME_OR_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"장비 이름과 예약 날짜를 모두 입력해주세요."),
     END_DATE_BEFORE_START_DATE("R0002",HttpStatus.BAD_REQUEST,"종료일은 시작일보다 빠를 수 없습니다."),
     RESOURCE_NOT_FOUND("R0003", HttpStatus.NOT_FOUND, "존재하지 않는 장비입니다."),
@@ -95,6 +85,9 @@ public enum BaseResponseCode {
     INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 장비의 예약 현황 수정이 필요합니다."),
     START_DATE_OR_END_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"시작,종료 날짜와 시간을 모두 입력해주세요."),
 
+
+    // Car
+    CAR_NOT_FOUND("C0001", HttpStatus.NOT_FOUND, "존재하지 않는 차량입니다."),
 
     //Equipment
     INVALID_REGISTER_EQUIPMENT_REQUEST("E0001", HttpStatus.BAD_REQUEST, "부적절한 비품 등록 요청입니다. 공백및 특수문자를 제외하고 다시 입력해주세요." ),
