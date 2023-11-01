@@ -4,8 +4,8 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.dto.request.ProductReq;
+import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
 import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
@@ -122,7 +122,7 @@ public class ResourceController {
         if (productReq.getEndDateTime().isBefore(productReq.getStartDateTime()))
             throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
 
-        resourceService.bookResource(user, resourceId, productReq);
+        resourceService.bookProduct(user, resourceId, productReq);
         return ResponseCustom.OK();
     }
 
