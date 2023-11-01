@@ -3,11 +3,15 @@ package com.example.pladialmserver.booking.repository.carBooking;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.product.car.entity.Car;
+import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
 
@@ -31,6 +35,27 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
             if (!endDateTime.isBefore(b.getStartDate()) && endDateTime.isBefore(b.getEndDate())) return true;
         }
         return false;
+    }
+
+    @Override
+    public List<ProductBookingRes> findResourceBookingByDate(Car car, LocalDate standardDate) {
+
+        // 해당 일의 00:00
+        LocalDateTime startDateTime = LocalDateTime.of(standardDate, LocalTime.MIN);
+        // 해당 일의 23:59
+        LocalDateTime endDateTime = LocalDateTime.of(standardDate, LocalTime.MAX);
+
+        // 해당 날짜가 포함된 예약
+        List<CarBooking> bookings = jpaQueryFactory
+                .selectFrom(carBooking)
+                .where(carBooking.car.eq(car),
+                        (carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
+                        ((carBooking.startDate.between(startDateTime, endDateTime))
+                                .or(carBooking.endDate.between(startDateTime, endDateTime)))
+                ).orderBy(carBooking.startDate.asc())
+                .fetch();
+
+        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());
     }
 
 //

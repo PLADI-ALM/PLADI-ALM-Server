@@ -8,10 +8,13 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.product.dto.request.ProductReq;
-import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
+import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
-import com.example.pladialmserver.product.resource.dto.response.*;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourcesDetailsRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
+import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.ResourcesList;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.resource.repository.ResourceRepository;
 import com.example.pladialmserver.product.service.ProductService;
@@ -180,7 +183,8 @@ public class ResourceService implements ProductService {
     }
 
     // 해당 날짜의 장비 예약 내역 조회
-    public List<ProductBookingRes> getResourceBookingByDate(Long resourceId, LocalDate date) {
+    @Override
+    public List<ProductBookingRes> getProductBookingByDate(Long resourceId, LocalDate date) {
         // 장비 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));

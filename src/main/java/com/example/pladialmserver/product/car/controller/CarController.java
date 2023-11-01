@@ -7,6 +7,7 @@ import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.service.CarService;
 import com.example.pladialmserver.product.dto.request.ProductReq;
+import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
@@ -23,8 +24,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 import static com.example.pladialmserver.global.Constants.DATE_TIME_PATTERN;
 
 @Api(tags = "차량 API")
@@ -82,7 +86,7 @@ public class CarController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(B0010)날짜를 모두 입력해주세요. (B0002) 요청사항은 30자 이하로 작성해주세요. (B0003)시작시간보다 끝나는 시간이 더 앞에 있습니다. (B0004)미래의 날짜를 선택해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 차량입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(C0001)존재하지 않는 차량입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0005)이미 예약되어 있는 시간입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))})
     @PostMapping("/{carId}")
     public ResponseCustom bookCar(
@@ -99,5 +103,22 @@ public class CarController {
 
         carService.bookProduct(user, carId, carReq);
         return ResponseCustom.OK();
+    }
+
+
+    /**
+     * 해당 날짜의 차량 예약 내역 조회
+     */
+    @Operation(summary = "해당 날짜의 차량 예약 내역 조회 (박소정)", description = "해당 날짜의 차량 예약 내역을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(C0001)존재하지 않는 차량입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/{carId}/booking")
+    public ResponseCustom<List<ProductBookingRes>> getCarBookingByDate(
+            @Account User user,
+            @Parameter(description = "(Long) 차량 Id", example = "1") @PathVariable(name = "carId") Long carId,
+            @Parameter(description = "차량 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-30") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {
+        return ResponseCustom.OK(carService.getProductBookingByDate(carId, date));
     }
 }
