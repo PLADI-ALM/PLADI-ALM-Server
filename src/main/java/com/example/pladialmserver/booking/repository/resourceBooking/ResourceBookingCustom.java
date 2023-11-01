@@ -1,8 +1,8 @@
 package com.example.pladialmserver.booking.repository.resourceBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
-import com.example.pladialmserver.resource.dto.response.ResourceBookingRes;
-import com.example.pladialmserver.resource.entity.Resource;
+import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
+import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
