@@ -189,21 +189,6 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         return false;
     }
 
-    private BooleanExpression resourceNameContaining(String resourceName) {
-        return hasText(resourceName) ? resource.name.contains(resourceName) : null;
-    }
-    @Override
-    public List<Long> findBookedResourceIdsByDateAndCarName(LocalDateTime startDate, LocalDateTime endDate, String resourceName) {
-        //주어진 날짜와 시간 범위 내에 장비가 예약되었는지 확인
-        return jpaQueryFactory
-                .select(QResourceBooking.resourceBooking.resource.resourceId)
-                .from(QResourceBooking.resourceBooking)
-                .where(
-                        QResourceBooking.resourceBooking.startDate.before(endDate),
-                        QResourceBooking.resourceBooking.endDate.after(startDate),
-                        resourceNameContaining(resourceName))
-                .fetch();
-    }
 
     @Override
     public List<Long> findBookedResourceIdsByDate(LocalDateTime startDate, LocalDateTime endDate) {
@@ -212,7 +197,8 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 .select(QResourceBooking.resourceBooking.resource.resourceId)
                 .from(QResourceBooking.resourceBooking)
                 .where(QResourceBooking.resourceBooking.startDate.before(endDate),
-                        QResourceBooking.resourceBooking.endDate.after(startDate))
+                        QResourceBooking.resourceBooking.endDate.after(startDate),
+                        QResourceBooking.resourceBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED))
                 .fetch();
     }
 }

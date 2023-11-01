@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 public interface ResourceCustom {
     Page<AdminResourcesRes> search(String keyword, Pageable pageable);
 
-    Page<ResourceRes> findAvailableResources(String resourceName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+    Page<ResourceRes> findAvailableResources(String resourceName, LocalDateTime startDate, LocalDateTime endDate, org.springframework.data.domain.Pageable pageable);
 }
