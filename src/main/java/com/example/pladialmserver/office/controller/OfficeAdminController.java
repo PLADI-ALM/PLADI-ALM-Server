@@ -1,8 +1,11 @@
 package com.example.pladialmserver.office.controller;
 
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.office.dto.response.AdminOfficesDetailsRes;
+import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
 import com.example.pladialmserver.product.resource.dto.request.CreateOfficeReq;
 import com.example.pladialmserver.user.entity.User;
@@ -14,6 +17,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -114,4 +119,23 @@ public class OfficeAdminController {
         officeService.activateOfficeByAdmin(user, officeId);
         return ResponseCustom.OK();
     }
+    /**
+     * 관리자 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
+     */
+    @Operation(summary = "관리자 회의실 목록 조회 (이승학)", description = "관리자 회의실 목록 조회를 진행한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @GetMapping
+    public ResponseCustom<Page<OfficeRes>> searchOffice(
+            @Account User user,
+            @Parameter(description = "회의실 이름",example = "회의실1")@RequestParam(required = false) String facilityName,
+            Pageable pageable
+    ) {
+        return ResponseCustom.OK(officeService.findAvailableAdminOffices(user,facilityName,pageable));
+    }
+
+
+
 }

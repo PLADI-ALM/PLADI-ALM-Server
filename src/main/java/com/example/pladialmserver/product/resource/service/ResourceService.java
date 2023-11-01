@@ -49,24 +49,7 @@ public class ResourceService implements ProductService {
      * 전체 장비 목록 조회 and 예약 가능한 장비 목록 조회
      */
     public Page<ResourceRes> findAvailableResources(String resourceName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        Page<Resource> allResources;
-
-        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new BaseException(BaseResponseCode.END_DATE_BEFORE_START_DATE);
-        }
-        if (resourceName != null && startDate != null && endDate != null) {
-            List<Long> bookedResourceIds = resourceBookingRepository.findBookedResourceIdsByDateAndResourceName(startDate, endDate, resourceName);
-
-            if (!bookedResourceIds.isEmpty()) {
-                allResources = resourceRepository.findByNameAndResourceIdNotInAAndIsEnableTrueAAndIsActiveTrue(resourceName,bookedResourceIds,pageable);
-            } else {
-                allResources = resourceRepository.findByNameContainingAAndIsEnableTrueAndIsActiveTrue(resourceName,pageable);
-            }
-        } else {
-            allResources = resourceRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
-        }
-
-        return allResources.map(ResourceRes::toDto);
+        return resourceRepository.findAvailableResources(resourceName, startDate, endDate, pageable);
     }
 
 

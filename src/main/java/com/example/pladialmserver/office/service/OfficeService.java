@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -220,6 +221,29 @@ public class OfficeService {
         Office office=officeRepository.findById(officeId)
                 .orElseThrow(()->new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
         office.activateOffice();
+
+    }
+
+    public Page<OfficeRes> findAvailableAdminOffices(User user,String officeName, Pageable pageable) {
+        checkAdminRole(user);
+
+        Page<Office> allOffices;
+
+
+            if (officeName != null && !officeName.isEmpty()) {
+                // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
+                allOffices = officeRepository.findByNameAndIsEnableTrue(officeName, pageable);
+            }else {
+                allOffices = officeRepository.findAllByIsEnableTrue(pageable);
+            }
+
+
+        return allOffices.map(office -> {
+            List<Facility> facilities = office.getFacilityList().stream()
+                    .map(OfficeFacility::getFacility)
+                    .collect(Collectors.toList());
+            return OfficeRes.toDto(office, facilities);
+        });
 
     }
 }

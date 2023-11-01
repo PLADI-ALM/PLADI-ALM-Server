@@ -2,6 +2,7 @@ package com.example.pladialmserver.product.resource.dto.response;
 
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.product.resource.entity.Resource;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +21,6 @@ public class ResourceRes {
     @Schema(type = "String", description = "설명", example = "'승학이 보물'")
     private String description;
 
-    // TODO 기획 변경으로 인한 수정
     public static ResourceRes toDto(Resource resource){
         return ResourceRes.builder()
                 .resourceId(resource.getResourceId())
@@ -29,6 +29,15 @@ public class ResourceRes {
                 .location(resource.getLocation())
                 .description(resource.getDescription())
                 .build();
+    }
+
+    @QueryProjection
+    public ResourceRes(Long resourceId, String imgUrl, String name, String location, String description){
+        this.resourceId=resourceId;
+        this.imgUrl=imgUrl;
+        this.name=name;
+        this.location=location;
+        this.description=description;
     }
 
 }
