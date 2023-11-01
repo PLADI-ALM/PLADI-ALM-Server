@@ -7,11 +7,13 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
+import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.product.resource.dto.response.*;
 import com.example.pladialmserver.product.resource.repository.ResourceRepository;
 import com.example.pladialmserver.product.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.product.resource.entity.Resource;
+import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.user.UserRepository;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ResourceService {
+public class ResourceService implements ProductService {
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
     private final UserRepository userRepository;
@@ -71,10 +73,11 @@ public class ResourceService {
     /**
      * 장비 개별 조회
      */
-    public ResourceDetailRes getResourceDetail(Long resourceId) {
+    @Override
+    public ProductDetailRes getProductDetail(Long resourceId) {
         Resource resource = resourceRepository.findByResourceIdAndIsEnableAndIsActive(resourceId, true,true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-        return ResourceDetailRes.toDto(resource);
+        return ProductDetailRes.toDto(resource);
     }
 
 

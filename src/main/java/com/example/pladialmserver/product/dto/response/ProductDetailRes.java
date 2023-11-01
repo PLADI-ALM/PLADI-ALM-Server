@@ -1,5 +1,6 @@
-package com.example.pladialmserver.product.resource.dto.response;
+package com.example.pladialmserver.product.dto.response;
 
+import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,10 +9,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ResourceDetailRes {
-    @Schema(type = "String", description = "장비명", example = "MacBook Pro")
+public class ProductDetailRes {
+    @Schema(type = "String", description = "이름", example = "벤츠")
     private String name;
-    @Schema(type = "String", description = "보관장소", example = "S1350")
+    @Schema(type = "String", description = "보관장소", example = "지하 3층 주차장")
     private String location;
     @Schema(type = "Long", description = "책임자 Id", example = "1")
     private Long responsibilityId;
@@ -19,13 +20,13 @@ public class ResourceDetailRes {
     private String responsibilityName;
     @Schema(type = "String", description = "책임자 전화번호", example = "010-1234-1004")
     private String responsibilityPhone;
-    @Schema(type = "String", description = "설명", example = "맥북 프로")
+    @Schema(type = "String", description = "설명", example = "차 키는 ")
     private String description;
     @Schema(type = "String", description = "이미지 url", example = "https://secret-s3-bucket.s3.ap-northeast-2.amazonaws.com/img.key")
     private String imgUrl;
 
-    public static ResourceDetailRes toDto(Resource resource) {
-        return ResourceDetailRes.builder()
+    public static ProductDetailRes toDto(Resource resource) {
+        return ProductDetailRes.builder()
                 .name(resource.getName())
                 .location(resource.getLocation())
                 .responsibilityId(resource.getUser().getUserId())
@@ -33,6 +34,18 @@ public class ResourceDetailRes {
                 .responsibilityPhone(resource.getUser().getPhone())
                 .description(resource.getDescription())
                 .imgUrl(AwsS3ImageUrlUtil.toUrl(resource.getImgKey()))
+                .build();
+    }
+
+    public static ProductDetailRes toDto(Car car) {
+        return ProductDetailRes.builder()
+                .name(car.getName())
+                .location(car.getLocation())
+                .responsibilityId(car.getUser().getUserId())
+                .responsibilityName(car.getUser().getName())
+                .responsibilityPhone(car.getUser().getPhone())
+                .description(car.getDescription())
+                .imgUrl(AwsS3ImageUrlUtil.toUrl(car.getImgKey()))
                 .build();
     }
 }

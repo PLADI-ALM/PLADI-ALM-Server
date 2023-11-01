@@ -1,7 +1,7 @@
 package com.example.pladialmserver.product.car.controller;
 
 import com.example.pladialmserver.product.car.dto.CarRes;
-import com.example.pladialmserver.product.car.dto.response.CarDetailRes;
+import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.car.service.CarService;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -66,10 +66,10 @@ public class CarController {
             @ApiResponse(responseCode = "400", description = "(C0001)존재하지 않는 차량입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{carId}")
-    public ResponseCustom<CarDetailRes> getCarDetail(
+    public ResponseCustom<ProductDetailRes> getCarDetail(
             @Account User user,
             @Parameter(description = "(Long) 차량 Id", example = "1") @PathVariable(name = "carId") Long carId
     ) {
-        return ResponseCustom.OK(carService.getCarDetail(carId));
+        return ResponseCustom.OK(carService.getProductDetail(carId));
     }
 }

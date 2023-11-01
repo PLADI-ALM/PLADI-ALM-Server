@@ -1,7 +1,7 @@
 package com.example.pladialmserver.product.resource.repository;
 
 import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
-import com.example.pladialmserver.resource.dto.response.QAdminResourcesRes;
+import com.example.pladialmserver.product.resource.dto.response.QAdminResourcesRes;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +11,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static com.example.pladialmserver.resource.entity.QResource.resource;
+import static com.example.pladialmserver.product.resource.entity.QResource.resource;
 import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
-public class ResourceRepositoryImpl implements ResourceCustom{
+public class ResourceRepositoryImpl implements ResourceCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 

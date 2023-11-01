@@ -4,11 +4,11 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.resource.dto.request.ResourceReq;
 import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
-import com.example.pladialmserver.product.resource.service.ResourceService;
-import com.example.pladialmserver.product.resource.dto.response.ResourceDetailRes;
 import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.product.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,11 +74,11 @@ public class ResourceController {
             @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{resourceId}")
-    public ResponseCustom<ResourceDetailRes> getResourceDetail(
+    public ResponseCustom<ProductDetailRes> getResourceDetail(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId
     ) {
-        return ResponseCustom.OK(resourceService.getResourceDetail(resourceId));
+        return ResponseCustom.OK(resourceService.getProductDetail(resourceId));
     }
 
 
