@@ -1,4 +1,4 @@
-package com.example.pladialmserver.product.resource.dto.request;
+package com.example.pladialmserver.product.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +13,7 @@ import static com.example.pladialmserver.global.Constants.DATE_HOUR_PATTERN;
 
 @Getter
 @NoArgsConstructor
-public class ResourceReq {
+public class ProductReq {
     @Schema(type = "LocalDateTime(String)", description = "예약 시작일", example = "2023-10-10 13", required = true, pattern = DATE_HOUR_PATTERN)
     @NotNull(message = "B0010")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_HOUR_PATTERN)

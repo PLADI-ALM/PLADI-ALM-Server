@@ -11,7 +11,7 @@ import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.product.resource.dto.response.*;
 import com.example.pladialmserver.product.resource.repository.ResourceRepository;
-import com.example.pladialmserver.product.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.Role;
@@ -81,13 +81,13 @@ public class ResourceService implements ProductService {
      * 장비 예약
      */
     @Transactional
-    public void bookResource(User user, Long resourceId, ResourceReq resourceReq) {
+    public void bookResource(User user, Long resourceId, ProductReq productReq) {
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
         // 이미 예약된 날짜 여부 확인
-        if(resourceBookingRepository.existsDateTime(resource, resourceReq.getStartDateTime(), resourceReq.getEndDateTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
-        resourceBookingRepository.save(ResourceBooking.toDto(user, resource, resourceReq));
+        if(resourceBookingRepository.existsDateTime(resource, productReq.getStartDateTime(), productReq.getEndDateTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
+        resourceBookingRepository.save(ResourceBooking.toDto(user, resource, productReq));
 
     }
 

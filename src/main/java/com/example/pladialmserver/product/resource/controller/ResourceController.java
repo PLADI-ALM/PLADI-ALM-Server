@@ -5,7 +5,7 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
 import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
@@ -113,16 +113,16 @@ public class ResourceController {
     public ResponseCustom bookResource(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
-            @RequestBody @Valid ResourceReq resourceReq) {
+            @RequestBody @Valid ProductReq productReq) {
 
         // 현재 보다 과거 날짜로 등록 하는 경우
-        if (LocalDateTime.now().isAfter(resourceReq.getStartDateTime()))
+        if (LocalDateTime.now().isAfter(productReq.getStartDateTime()))
             throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
         // 종료일이 시작일 보다 빠른 경우
-        if (resourceReq.getEndDateTime().isBefore(resourceReq.getStartDateTime()))
+        if (productReq.getEndDateTime().isBefore(productReq.getStartDateTime()))
             throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
 
-        resourceService.bookResource(user, resourceId, resourceReq);
+        resourceService.bookResource(user, resourceId, productReq);
         return ResponseCustom.OK();
     }
 
