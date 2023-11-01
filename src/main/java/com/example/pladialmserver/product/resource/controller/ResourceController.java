@@ -6,7 +6,7 @@ import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
+import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
@@ -135,7 +135,7 @@ public class ResourceController {
             @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{resourceId}/booking")
-    public ResponseCustom<List<ResourceBookingRes>> getResourceBookingByDate(
+    public ResponseCustom<List<ProductBookingRes>> getResourceBookingByDate(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
             @Parameter(description = "장비 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-30") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {

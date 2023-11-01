@@ -9,6 +9,7 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
+import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
 import com.example.pladialmserver.product.resource.dto.response.*;
 import com.example.pladialmserver.product.resource.entity.Resource;
@@ -179,7 +180,7 @@ public class ResourceService implements ProductService {
     }
 
     // 해당 날짜의 장비 예약 내역 조회
-    public List<ResourceBookingRes> getResourceBookingByDate(Long resourceId, LocalDate date) {
+    public List<ProductBookingRes> getResourceBookingByDate(Long resourceId, LocalDate date) {
         // 장비 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));

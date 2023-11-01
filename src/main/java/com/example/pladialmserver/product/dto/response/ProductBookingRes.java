@@ -1,4 +1,4 @@
-package com.example.pladialmserver.product.resource.dto.response;
+package com.example.pladialmserver.product.dto.response;
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ResourceBookingRes {
+public class ProductBookingRes {
     @Schema(type = "String", description = "예약 시작 시간", example = "2023-10-23 13:00")
     private String startDateTime;
     @Schema(type = "String", description = "예약 종료 시간", example = "2023-10-24 15:00")
@@ -20,8 +20,8 @@ public class ResourceBookingRes {
     @Schema(type = "String", description = "예약자 연락처", example = "010-1212-1111")
     private String reservatorPhone;
 
-    public static ResourceBookingRes toDto(ResourceBooking booking) {
-        return ResourceBookingRes.builder()
+    public static ProductBookingRes toDto(ResourceBooking booking) {
+        return ProductBookingRes.builder()
                 .startDateTime(DateTimeUtil.dateTimeToString(booking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateTimeToString(booking.getEndDate()))
                 .reservatorName(booking.getUser().getName())
