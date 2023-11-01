@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarRepository extends JpaRepository<Car, Long>,CarCustom {
     @Query("SELECT c " +
@@ -24,5 +25,5 @@ public interface CarRepository extends JpaRepository<Car, Long>,CarCustom {
             "WHERE c.isEnable = true AND c.isActive = true")
     Page<Car> findAllByIsEnableTrueAndIsActiveTrue(Pageable pageable);
 
-
+    Optional<Car> findByCarIdAndIsEnableAndIsActive(Long carId, boolean isEnable, boolean isActive);
 }
