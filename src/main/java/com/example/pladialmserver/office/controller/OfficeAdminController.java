@@ -8,7 +8,6 @@ import com.example.pladialmserver.office.dto.response.AdminOfficesDetailsRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
 import com.example.pladialmserver.resource.dto.request.CreateOfficeReq;
-import com.example.pladialmserver.resource.dto.response.ResourceRes;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,16 +19,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import static com.example.pladialmserver.global.Constants.*;
-import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
 
 @Api(tags = "관리자 회의실 API")
 @RestController
@@ -138,18 +130,12 @@ public class OfficeAdminController {
     @GetMapping
     public ResponseCustom<Page<OfficeRes>> searchOffice(
             @Account User user,
-            @Parameter(description = "예약 날짜",example = "2023-10-22") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
-            @Parameter(description = "시작 예약 시간",example = "11:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
-            @Parameter(description = "종료 예약 시간",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
             @Parameter(description = "회의실 이름",example = "회의실1")@RequestParam(required = false) String facilityName,
             Pageable pageable
     ) {
-        // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
-        if ((date != null && (startTime == null || endTime == null)) ||
-                (date == null && (startTime != null || endTime != null))) {
-            throw new BaseException(BaseResponseCode.DATE_OR_TIME_IS_NULL);
-        }
-        return ResponseCustom.OK(officeService.findAvailableAdminOffices(user,date, startTime, endTime,facilityName,pageable));
+        return ResponseCustom.OK(officeService.findAvailableAdminOffices(user,facilityName,pageable));
     }
+
+
 
 }
