@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.dto.response;
 
+import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,6 +37,19 @@ public class ResourceBookingDetailRes {
                 .endDate(DateTimeUtil.dateTimeToString(resourceBooking.getEndDate()))
                 .returnDateTime(DateTimeUtil.dateTimeToStringNullable(resourceBooking.getReturnDate()))
                 .memo(resourceBooking.getMemo())
+                .build();
+    }
+
+    public static ResourceBookingDetailRes toDto(CarBooking carBooking) {
+        return ResourceBookingDetailRes.builder()
+                .resourceId(carBooking.getCar().getCarId())
+                .status(carBooking.getStatus().getValue())
+                .reservatorName(carBooking.getUser().getName())
+                .reservatorPhone(carBooking.getUser().getPhone())
+                .startDate(DateTimeUtil.dateTimeToString(carBooking.getStartDate()))
+                .endDate(DateTimeUtil.dateTimeToString(carBooking.getEndDate()))
+                .returnDateTime(DateTimeUtil.dateTimeToStringNullable(carBooking.getReturnDate()))
+                .memo(carBooking.getMemo())
                 .build();
     }
 }

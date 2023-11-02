@@ -1,7 +1,7 @@
 package com.example.pladialmserver.booking.controller;
 
 import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
-import com.example.pladialmserver.booking.service.BookingService;
+import com.example.pladialmserver.booking.service.CarBookingService;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin/bookings/cars")
 public class CarBookingAdminController {
-    private final BookingService bookingService;
+    private final CarBookingService bookingService;
 
     /**
      * 관리자 차량 예약 개별 조회

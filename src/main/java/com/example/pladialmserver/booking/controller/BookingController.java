@@ -3,7 +3,9 @@ package com.example.pladialmserver.booking.controller;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
-import com.example.pladialmserver.booking.service.BookingService;
+import com.example.pladialmserver.booking.service.CarBookingService;
+import com.example.pladialmserver.booking.service.OfficeBookingService;
+import com.example.pladialmserver.booking.service.ResourceBookingService;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.entity.User;
@@ -25,8 +27,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/bookings")
 public class BookingController {
-
-    private final BookingService bookingService;
+    private final OfficeBookingService officeBookingService;
+    private final ResourceBookingService resourceBookingService;
+    private final CarBookingService carBookingService;
 
     /**
      * 회의실 예약 목록 조회
@@ -41,7 +44,7 @@ public class BookingController {
     public ResponseCustom<Page<BookingRes>> getOfficeBookings(
             @Account User user,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(bookingService.getOfficeBookings(user, pageable));
+        return ResponseCustom.OK(officeBookingService.getOfficeBookings(user, pageable));
     }
 
     /**
@@ -57,7 +60,7 @@ public class BookingController {
     public ResponseCustom<Page<BookingRes>> getResourceBookings(
             @Account User user,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(bookingService.getResourceBookings(user, pageable));
+        return ResponseCustom.OK(resourceBookingService.getResourceBookings(user, pageable));
     }
 
     /**
@@ -74,7 +77,7 @@ public class BookingController {
             @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1")
             @PathVariable(name="officeBookingId") Long officeBookingId){
-        return ResponseCustom.OK(bookingService.getOfficeBookingDetailByBasic(user, officeBookingId));
+        return ResponseCustom.OK(officeBookingService.getOfficeBookingDetailByBasic(user, officeBookingId));
     }
 
     /**
@@ -91,7 +94,7 @@ public class BookingController {
     public ResponseCustom cancelBookingOffice(
             @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {
-        bookingService.cancelBookingOffice(user, officeBookingId);
+        officeBookingService.cancelBookingOffice(user, officeBookingId);
         return ResponseCustom.OK();
     }
 
@@ -110,7 +113,7 @@ public class BookingController {
     public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
-        return ResponseCustom.OK(bookingService.getResourceBookingDetail(user, resourceBookingId));
+        return ResponseCustom.OK(resourceBookingService.getResourceBookingDetail(user, resourceBookingId));
     }
 
     /**
@@ -128,7 +131,7 @@ public class BookingController {
             @Account User user,
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
-        bookingService.cancelBookingResource(user, resourceBookingId);
+        resourceBookingService.cancelBookingResource(user, resourceBookingId);
         return ResponseCustom.OK();
     }
 }
