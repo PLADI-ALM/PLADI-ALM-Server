@@ -229,6 +229,7 @@ public class BookingService {
         // 예약 취소
         officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+        // TODO 회의실 예약 반려 알림
     }
 
     /**
@@ -268,6 +269,7 @@ public class BookingService {
         if(resourceBooking.checkBookingStatus(BookingStatus.FINISHED) || resourceBooking.checkBookingStatus(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
+        // TODO  장비 예약 반려 알림
     }
 
     /**
@@ -284,6 +286,7 @@ public class BookingService {
 
         // 예약 허가
         resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
+        // TODO 장비 예약 허가 알림
     }
 
     /**
@@ -293,6 +296,7 @@ public class BookingService {
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         returnBookingResource(resourceBooking);
+        // TODO 장비 예약 반납 알림
     }
 
     /**

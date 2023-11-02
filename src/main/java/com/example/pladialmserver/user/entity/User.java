@@ -49,6 +49,9 @@ public class User extends BaseEntity {
     @Size(max = 20)
     private String phone;
 
+    @Size(max = 300)
+    private String fcmToken;
+
     @ManyToOne
     @JoinColumn(nullable = false, name = "department_id")
     private Department department;
@@ -92,9 +95,9 @@ public class User extends BaseEntity {
     public void updatePassword(String password){
         this.password = password;
     }
-  
+
     public boolean checkRole(Role role) {
         return this.role == role;
     }
-  
+
 }
