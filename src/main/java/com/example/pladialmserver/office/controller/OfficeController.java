@@ -8,6 +8,7 @@ import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.BookingStateRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
+import com.example.pladialmserver.office.dto.response.OfficeReservatorRes;
 import com.example.pladialmserver.office.service.OfficeService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
@@ -118,6 +119,24 @@ public class OfficeController {
         if (!officeReq.getStartTime().isBefore(officeReq.getEndTime()) && !officeReq.getEndTime().equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
         officeService.bookOffice(user, officeId, officeReq);
         return ResponseCustom.OK();
+    }
+
+    /**
+     * 회의실 예약자 정보 확인
+     */
+    @Operation(summary = "회의실 예약자 정보 확인 (장채은)", description = "회의실 예약자 정보를 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약자 정보 확인 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/{officeId}/booking")
+    public ResponseCustom<OfficeReservatorRes> getOfficeReservatorInfo(
+            @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name = "officeId") Long officeId,
+            @Parameter(description = "정보 확인 날짜",example = "2023-10-29") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
+            @Parameter(description = "정보 확인 시작 시간 (1시간 단위 시작시간)",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime time,
+            @Account User user
+    ){
+        return ResponseCustom.OK(officeService.getOfficeReservatorInfo(officeId, date, time));
     }
 
 }

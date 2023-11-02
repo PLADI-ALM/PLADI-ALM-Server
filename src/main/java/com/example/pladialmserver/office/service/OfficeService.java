@@ -123,6 +123,12 @@ public class OfficeService {
         officeBookingRepository.save(OfficeBooking.toDto(user, office, officeReq));
     }
 
+    public OfficeReservatorRes getOfficeReservatorInfo(Long officeId, LocalDate date, LocalTime time) {
+        Office office = officeRepository.findByOfficeIdAndIsEnableAndIsActive(officeId,true,true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_NOT_FOUND));
+        return officeBookingRepository.findOfficeReservatorByOfficeAndDateTime(office, date, time);
+    }
+
     // ===================================================================================================================
     // [관리자]
     // ===================================================================================================================
