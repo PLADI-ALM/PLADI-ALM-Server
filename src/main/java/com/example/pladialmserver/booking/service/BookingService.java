@@ -8,9 +8,11 @@ import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -27,13 +29,15 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.pladialmserver.global.Constants.Email.*;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BookingService {
     private final OfficeBookingRepository officeBookingRepository;
     private final ResourceBookingRepository resourceBookingRepository;
-
+    private final EmailUtil emailUtil;
 
     // 회의실 예약 목록 조회
     public Page<BookingRes> getOfficeBookings(User user, Pageable pageable) {
@@ -284,6 +288,11 @@ public class BookingService {
 
         // 예약 허가
         resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
+
+        // 이메일 전송
+        String title = COMPANY_NAME + RESOURCE +SPACE+ BOOKING_TEXT + APPROVE_BOOKING_TEXT;
+        emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(resourceBooking.getUser(), APPROVE_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
     }
 
     /**
