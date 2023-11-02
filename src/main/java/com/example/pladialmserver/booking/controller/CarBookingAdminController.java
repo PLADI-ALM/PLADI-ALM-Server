@@ -39,7 +39,7 @@ public class CarBookingAdminController {
     public ResponseCustom<ResourceBookingDetailRes> getCarBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name="carBookingId") Long carBookingId){
-        return ResponseCustom.OK(bookingService.getCarBookingDetailByAdmin(user, carBookingId));
+        return ResponseCustom.OK(bookingService.getProductBookingDetailByAdmin(user, carBookingId));
     }
 
     /**
@@ -57,7 +57,7 @@ public class CarBookingAdminController {
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
     ){
-        bookingService.rejectCarBooking(user, carBookingId);
+        bookingService.rejectProductBooking(user, carBookingId);
         return ResponseCustom.OK();
     }
 
@@ -76,7 +76,7 @@ public class CarBookingAdminController {
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
     ){
-        bookingService.allowCarBooking(user, carBookingId);
+        bookingService.allowProductBooking(user, carBookingId);
         return ResponseCustom.OK();
     }
 
@@ -95,7 +95,7 @@ public class CarBookingAdminController {
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
     ){
-        bookingService.returnBookingCarByAdmin(user, carBookingId);
+        bookingService.returnBookingProductByAdmin(user, carBookingId);
         return ResponseCustom.OK();
     }
 
@@ -111,6 +111,6 @@ public class CarBookingAdminController {
             @Account User user,
             @Parameter(description = "(Boolean) 오름차순/내림차순", example = "true / false") boolean active,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(bookingService.getBookingCars(user,pageable,active));
+        return ResponseCustom.OK(bookingService.getBookingProducts(user,pageable,active));
     }
 }

@@ -40,7 +40,7 @@ public class ResourceBookingAdminController {
     public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId) {
-        return ResponseCustom.OK(bookingService.getResourceBookingDetailByAdmin(user, resourceBookingId));
+        return ResponseCustom.OK(bookingService.getProductBookingDetailByAdmin(user, resourceBookingId));
     }
 
 
@@ -59,7 +59,7 @@ public class ResourceBookingAdminController {
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ) {
-        bookingService.rejectResourceBooking(user, resourceBookingId);
+        bookingService.rejectProductBooking(user, resourceBookingId);
         return ResponseCustom.OK();
     }
 
@@ -78,7 +78,7 @@ public class ResourceBookingAdminController {
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ) {
-        bookingService.allowResourceBooking(user, resourceBookingId);
+        bookingService.allowProductBooking(user, resourceBookingId);
         return ResponseCustom.OK();
     }
 
@@ -97,7 +97,7 @@ public class ResourceBookingAdminController {
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ) {
-        bookingService.returnBookingResourceByAdmin(user, resourceBookingId);
+        bookingService.returnBookingProductByAdmin(user, resourceBookingId);
         return ResponseCustom.OK();
     }
 
@@ -113,7 +113,7 @@ public class ResourceBookingAdminController {
             @Account User user,
             @Parameter(description = "(Boolean) 오름차순/내림차순", example = "true / false") boolean active,
             @PageableDefault(size = 8) Pageable pageable) {
-        return ResponseCustom.OK(bookingService.getBookingResources(user, pageable, active));
+        return ResponseCustom.OK(bookingService.getBookingProducts(user, pageable, active));
     }
 
 }

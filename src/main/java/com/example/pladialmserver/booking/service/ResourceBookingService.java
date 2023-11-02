@@ -29,13 +29,14 @@ import static com.example.pladialmserver.global.Constants.Email.*;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ResourceBookingService {
+public class ResourceBookingService implements ProductBookingService {
     private final ResourceBookingRepository resourceBookingRepository;
     private final EmailUtil emailUtil;
 
 
     // 장비 예약 목록 조회
-    public Page<BookingRes> getResourceBookings(User user, Pageable pageable) {
+    @Override
+    public Page<BookingRes> getProductBookings(User user, Pageable pageable) {
         return resourceBookingRepository.getBookingsByUser(user, pageable);
     }
 
@@ -78,7 +79,8 @@ public class ResourceBookingService {
     /**
      * 장비 예약 개별 조회
      */
-    public ResourceBookingDetailRes getResourceBookingDetail(User user, Long resourceBookingId) {
+    @Override
+    public ResourceBookingDetailRes getProductBookingDetail(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
         return ResourceBookingDetailRes.toDto(resourceBooking);
     }
@@ -86,8 +88,9 @@ public class ResourceBookingService {
     /**
      * 자원 예약 취소
      */
+    @Override
     @Transactional
-    public void cancelBookingResource(User user, Long resourceBookingId) {
+    public void cancelBookingProduct(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
 
         // 이미 취소된 예약이면
@@ -105,8 +108,9 @@ public class ResourceBookingService {
     /**
      * 자원 예약 반납
      */
+    @Override
     @Transactional
-    public void returnBookingResourceByBasic(User user, Long resourceBookingId) {
+    public void returnBookingProductByBasic(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
         returnBookingResource(resourceBooking);
     }
@@ -115,9 +119,10 @@ public class ResourceBookingService {
     /**
      * 자원 예약 상태 변경 스케줄링
      */
+    @Override
     @Transactional
     @Scheduled(cron = "0 0 * * * *", zone = "GMT+9:00") // 날짜가 바뀔 때(0시)에 스케줄링
-    public void checkResourceBookingTime() {
+    public void checkProductBookingTime() {
         // 오늘 날짜 + 예약중 인 것
         List<ResourceBooking> resourceBookingStartList = resourceBookingRepository.findByStartDateAndStatus(LocalDate.now(), BookingStatus.BOOKED);
         // USING 으로 변경
@@ -129,7 +134,8 @@ public class ResourceBookingService {
     /**
      * 관리자 장비 예약 개별 조회
      */
-    public ResourceBookingDetailRes getResourceBookingDetailByAdmin(User user, Long resourceBookingId) {
+    @Override
+    public ResourceBookingDetailRes getProductBookingDetailByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         return ResourceBookingDetailRes.toDto(resourceBooking);
     }
@@ -137,8 +143,9 @@ public class ResourceBookingService {
     /**
      * 관리자 장비 예약 반려
      */
+    @Override
     @Transactional
-    public void rejectResourceBooking(User user, Long resourceBookingId) {
+    public void rejectProductBooking(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         // '사용완료'또는'예약취소'인 경우 불가능
         if (resourceBooking.checkBookingStatus(BookingStatus.FINISHED) || resourceBooking.checkBookingStatus(BookingStatus.CANCELED))
@@ -155,8 +162,9 @@ public class ResourceBookingService {
     /**
      * 관리자 장비 예약 허가
      */
+    @Override
     @Transactional
-    public void allowResourceBooking(User user, Long resourceBookingId) {
+    public void allowProductBooking(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         // 예약대기가 아닌 경우
         if (!resourceBooking.checkBookingStatus(BookingStatus.WAITING))
@@ -177,8 +185,9 @@ public class ResourceBookingService {
     /**
      * 관리자 장비 예약 반납
      */
+    @Override
     @Transactional
-    public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
+    public void returnBookingProductByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         returnBookingResource(resourceBooking);
 
@@ -191,7 +200,8 @@ public class ResourceBookingService {
     /**
      * 관리자 장비 예약 목록을 조회
      */
-    public Page<AdminResourceRes> getBookingResources(User user, Pageable pageable, boolean active) {
+    @Override
+    public Page<AdminResourceRes> getBookingProducts(User user, Pageable pageable, boolean active) {
         checkAdminRole(user);
 
         Sort.Order order = active ? Sort.Order.asc("startDate") : Sort.Order.desc("startDate");

@@ -23,7 +23,7 @@ import java.util.Arrays;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CarBookingService {
+public class CarBookingService implements ProductBookingService{
     private final CarBookingRepository carBookingRepository;
     private final EmailUtil emailUtil;
 
@@ -44,7 +44,6 @@ public class CarBookingService {
         if (!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 
-
     private CarBooking checkCarBookingAuthentication(User user, Long carBookingId, Role role) {
         CarBooking carBooking = carBookingRepository.findById(carBookingId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.BOOKING_NOT_FOUND));
@@ -55,7 +54,8 @@ public class CarBookingService {
     /**
      * 관리자 차량 예약 개별 조회
      */
-    public ResourceBookingDetailRes getCarBookingDetailByAdmin(User user, Long carBookingId) {
+    @Override
+    public ResourceBookingDetailRes getProductBookingDetailByAdmin(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
         return ResourceBookingDetailRes.toDto(carBooking);
     }
@@ -63,8 +63,9 @@ public class CarBookingService {
     /**
      * 관리자 차량 예약 반려
      */
+    @Override
     @Transactional
-    public void rejectCarBooking(User user, Long carBookingId) {
+    public void rejectProductBooking(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
         // '사용완료'또는'예약취소'인 경우 불가능
         if (carBooking.checkBookingStatus(BookingStatus.FINISHED) || carBooking.checkBookingStatus(BookingStatus.CANCELED))
@@ -76,8 +77,9 @@ public class CarBookingService {
     /**
      * 관리자 차량 예약 허가
      */
+    @Override
     @Transactional
-    public void allowCarBooking(User user, Long carBookingId) {
+    public void allowProductBooking(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
         // 예약대기가 아닌 경우
         if (!carBooking.checkBookingStatus(BookingStatus.WAITING))
@@ -93,8 +95,9 @@ public class CarBookingService {
     /**
      * 관리자 차량 예약 반납
      */
+    @Override
     @Transactional
-    public void returnBookingCarByAdmin(User user, Long carBookingId) {
+    public void returnBookingProductByAdmin(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
         returnBookingCar(carBooking);
     }
@@ -102,7 +105,8 @@ public class CarBookingService {
     /**
      * 관리자 차량 예약 목록을 조회
      */
-    public Page<AdminResourceRes> getBookingCars(User user, Pageable pageable, boolean active) {
+    @Override
+    public Page<AdminResourceRes> getBookingProducts(User user, Pageable pageable, boolean active) {
         checkAdminRole(user);
 
         Sort.Order order = active ? Sort.Order.asc("startDate") : Sort.Order.desc("startDate");

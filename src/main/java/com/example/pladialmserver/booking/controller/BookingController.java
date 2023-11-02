@@ -60,7 +60,7 @@ public class BookingController {
     public ResponseCustom<Page<BookingRes>> getResourceBookings(
             @Account User user,
             @PageableDefault(size = 8) Pageable pageable){
-        return ResponseCustom.OK(resourceBookingService.getResourceBookings(user, pageable));
+        return ResponseCustom.OK(resourceBookingService.getProductBookings(user, pageable));
     }
 
     /**
@@ -113,7 +113,7 @@ public class BookingController {
     public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name="resourceBookingId") Long resourceBookingId){
-        return ResponseCustom.OK(resourceBookingService.getResourceBookingDetail(user, resourceBookingId));
+        return ResponseCustom.OK(resourceBookingService.getProductBookingDetail(user, resourceBookingId));
     }
 
     /**
@@ -131,7 +131,7 @@ public class BookingController {
             @Account User user,
             @Parameter(description = "(Long) 자원 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
     ){
-        resourceBookingService.cancelBookingResource(user, resourceBookingId);
+        resourceBookingService.cancelBookingProduct(user, resourceBookingId);
         return ResponseCustom.OK();
     }
 }
