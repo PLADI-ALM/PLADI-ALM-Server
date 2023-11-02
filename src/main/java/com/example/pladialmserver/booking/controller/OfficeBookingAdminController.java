@@ -34,7 +34,7 @@ public class OfficeBookingAdminController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
     })
-    @GetMapping("/offices")
+    @GetMapping("")
     public ResponseCustom<Page<AdminBookingRes>> getBookingOffices(
             @Account User user,
             @PageableDefault(size = 8) Pageable pageable) {
@@ -52,7 +52,7 @@ public class OfficeBookingAdminController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0007)이미 취소된 예약입니다. (B0008)이미 사용이 완료된 예약입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @PatchMapping("/offices/{officeBookingId}/cancel")
+    @PatchMapping("/{officeBookingId}/cancel")
     public ResponseCustom cancelBookingOffice(
             @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {
@@ -70,7 +70,7 @@ public class OfficeBookingAdminController {
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @GetMapping("/offices/{officeBookingId}")
+    @GetMapping("/{officeBookingId}")
     public ResponseCustom<OfficeBookingDetailRes> getOfficeBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 회의실 예약 Id", example = "1") @PathVariable(name = "officeBookingId") Long officeBookingId) {

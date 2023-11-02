@@ -35,7 +35,7 @@ public class CarBookingAdminController {
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @GetMapping("/cars/{carBookingId}")
+    @GetMapping("/{carBookingId}")
     public ResponseCustom<ProductBookingDetailRes> getCarBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name="carBookingId") Long carBookingId){
@@ -52,7 +52,7 @@ public class CarBookingAdminController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0011)불가능한 예약 상태입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
-    @PatchMapping("/cars/{carBookingId}/reject")
+    @PatchMapping("/{carBookingId}/reject")
     public ResponseCustom rejectCarBooking(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
@@ -71,7 +71,7 @@ public class CarBookingAdminController {
             @ApiResponse(responseCode = "404", description = "(B0005)이미 예약되어 있는 시간입니다. (B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0011)불가능한 예약 상태입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
-    @PatchMapping("/cars/{carBookingId}/allow")
+    @PatchMapping("/{carBookingId}/allow")
     public ResponseCustom allowCarBooking(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
@@ -90,7 +90,7 @@ public class CarBookingAdminController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0009)사용중인 상태에서만 반납이 가능합니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @PatchMapping("/cars/{carBookingId}/return")
+    @PatchMapping("/{carBookingId}/return")
     public ResponseCustom returnBookingCar(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
@@ -106,7 +106,7 @@ public class CarBookingAdminController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
     })
-    @GetMapping("/cars")
+    @GetMapping("")
     public ResponseCustom<Page<AdminProductRes>> getBookingCars(
             @Account User user,
             @Parameter(description = "(Boolean) 오름차순/내림차순", example = "true / false") boolean active,
