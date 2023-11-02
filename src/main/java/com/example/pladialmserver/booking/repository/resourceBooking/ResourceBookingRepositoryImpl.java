@@ -5,10 +5,9 @@ import com.example.pladialmserver.booking.entity.QResourceBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
-import com.example.pladialmserver.product.resource.dto.response.ResourceBookingRes;
+import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
-import static com.example.pladialmserver.product.resource.entity.QResource.resource;
 import static io.jsonwebtoken.lang.Strings.hasText;
 
 
@@ -147,7 +145,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
     }
 
     @Override
-    public List<ResourceBookingRes> findResourceBookingByDate(Resource resource, LocalDate standardDate) {
+    public List<ProductBookingRes> findResourceBookingByDate(Resource resource, LocalDate standardDate) {
 
         // 해당 일의 00:00
         LocalDateTime startDateTime = LocalDateTime.of(standardDate, LocalTime.MIN);
@@ -164,7 +162,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
-        return bookings.stream().map(ResourceBookingRes::toDto).collect(Collectors.toList());
+        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());
     }
 
 

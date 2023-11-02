@@ -8,6 +8,7 @@ import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.car.repository.CarRepository;
 import com.example.pladialmserver.product.dto.request.ProductReq;
+import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.User;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -64,12 +66,19 @@ public class CarService implements ProductService {
     @Transactional
     public void bookProduct(User user, Long resourceId, ProductReq productReq) {
         Car car = carRepository.findById(resourceId)
-                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
 
         // 이미 예약된 날짜 여부 확인
         if (carBookingRepository.existsDateTime(car, productReq.getStartDateTime(), productReq.getEndDateTime()))
             throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         ;
         carBookingRepository.save(CarBooking.toDto(user, car, productReq));
+    }
+
+    @Override
+    public List<ProductBookingRes> getProductBookingByDate(Long resourceId, LocalDate date) {
+        Car car = carRepository.findById(resourceId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        return carBookingRepository.findCarBookingByDate(car, date);
     }
 }
