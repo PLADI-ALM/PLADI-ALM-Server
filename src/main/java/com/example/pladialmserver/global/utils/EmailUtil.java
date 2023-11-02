@@ -2,6 +2,7 @@ package com.example.pladialmserver.global.utils;
 
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,6 +13,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -73,6 +75,15 @@ public class EmailUtil {
         Map<String, String> emailData = new HashMap<>();
         emailData.put(EMAIL_CODE, code);
         return emailData;
+    }
+
+    public Map<String, String> createBookingData(User user, String text, String productName, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        Map<String, String> bookingData = new HashMap<>();
+        bookingData.put("text", text);
+        bookingData.put("reservatorName", user.getName());
+        bookingData.put("resourceName", productName);
+        bookingData.put("reservationTime", DateTimeUtil.dateTimeToStringNullable(startDateTime) + " ~ " + DateTimeUtil.dateTimeToStringNullable(endDateTime));
+        return bookingData;
     }
 
 

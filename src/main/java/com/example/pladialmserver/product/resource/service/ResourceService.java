@@ -7,6 +7,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
+import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
@@ -34,6 +35,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.pladialmserver.global.Constants.Email.*;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -41,6 +44,7 @@ public class ResourceService implements ProductService {
     private final ResourceRepository resourceRepository;
     private final ResourceBookingRepository resourceBookingRepository;
     private final UserRepository userRepository;
+    private final EmailUtil emailUtil;
 
 
     // 관리자 권한 확인
@@ -93,8 +97,12 @@ public class ResourceService implements ProductService {
         // 이미 예약된 날짜 여부 확인
         if (resourceBookingRepository.existsDateTime(resource, productReq.getStartDateTime(), productReq.getEndDateTime()))
             throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
-        ;
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, productReq));
+
+        // 이메일 전송
+        String title = COMPANY_NAME + SPACE + RESOURCE + BOOKING_REQUEST;
+        emailUtil.sendEmail(resource.getUser().getEmail(), title,
+                emailUtil.createBookingData(user, PRODUCT_TEXT, resource.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING);
     }
 
     // ===================================================================================================================
