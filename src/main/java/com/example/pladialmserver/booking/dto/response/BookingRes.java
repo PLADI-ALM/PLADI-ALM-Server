@@ -11,15 +11,15 @@ import lombok.Getter;
 @Builder
 public class BookingRes {
 
-    @Schema(type = "Long", description = "회의실 Id / 장비 Id", example = "1")
+    @Schema(type = "Long", description = "Id", example = "1")
     private Long id;
-    @Schema(type = "String", description = "회의실명 / 장비명", example = "'회의실1' / '카메라1'")
+    @Schema(type = "String", description = "회의실명 / 장비명 / 차량명", example = "'회의실1' / '카메라1' / '벤틀리'")
     private String name;
-    @Schema(type = "String", description = "회의실 위치 / 보관장소", example = "'401호' / '3층 A홀'")
+    @Schema(type = "String", description = "회의실 위치 / 보관장소", example = "'401호' / '3층 A홀' / '주차장'")
     private String detailInfo;
-    @Schema(type = "String", description = "예약일자(시작일)", example = "'2023-10-01 12:00' / '2023-10-01'")
+    @Schema(type = "String", description = "예약일자(시작일)", example = "2023-10-01 12:00")
     private String startDateTime;
-    @Schema(type = "String", description = "예약일자(종료일)", example = "'2023-10-01 13:00' / '2023-10-03'")
+    @Schema(type = "String", description = "예약일자(종료일)", example = "2023-10-01 13:00")
     private String endDateTime;
     @Schema(type = "String", description = "상태", example = "'예약대기' / '예약중' / '사용중' / '사용완료' / '예약취소'")
     private String status;

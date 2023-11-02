@@ -1,14 +1,14 @@
 package com.example.pladialmserver.booking.service;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
-import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -59,9 +59,9 @@ public class CarBookingService implements ProductBookingService{
      * 관리자 차량 예약 개별 조회
      */
     @Override
-    public ResourceBookingDetailRes getProductBookingDetailByAdmin(User user, Long carBookingId) {
+    public ProductBookingDetailRes getProductBookingDetailByAdmin(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
-        return ResourceBookingDetailRes.toDto(carBooking);
+        return ProductBookingDetailRes.toDto(carBooking);
     }
 
     /**
@@ -110,7 +110,7 @@ public class CarBookingService implements ProductBookingService{
      * 관리자 차량 예약 목록을 조회
      */
     @Override
-    public Page<AdminResourceRes> getBookingProducts(User user, Pageable pageable, boolean active) {
+    public Page<AdminProductRes> getBookingProducts(User user, Pageable pageable, boolean active) {
         checkAdminRole(user);
 
         Sort.Order order = active ? Sort.Order.asc("startDate") : Sort.Order.desc("startDate");
@@ -123,7 +123,7 @@ public class CarBookingService implements ProductBookingService{
                 sortedByDate
         );
 
-        return carBookings.map(AdminResourceRes::toDto);
+        return carBookings.map(AdminProductRes::toDto);
     }
 
     private void returnBookingCar(CarBooking carBooking) {
@@ -142,9 +142,9 @@ public class CarBookingService implements ProductBookingService{
     }
 
     @Override
-    public ResourceBookingDetailRes getProductBookingDetail(User user, Long carBookingId) {
+    public ProductBookingDetailRes getProductBookingDetail(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.BASIC);
-        return ResourceBookingDetailRes.toDto(carBooking);
+        return ProductBookingDetailRes.toDto(carBooking);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.example.pladialmserver.booking.controller;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
-import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.service.CarBookingService;
 import com.example.pladialmserver.booking.service.OfficeBookingService;
 import com.example.pladialmserver.booking.service.ResourceBookingService;
@@ -126,7 +126,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/resources/{resourceBookingId}")
-    public ResponseCustom<ResourceBookingDetailRes> getResourceBookingDetail(
+    public ResponseCustom<ProductBookingDetailRes> getResourceBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId) {
         return ResponseCustom.OK(resourceBookingService.getProductBookingDetail(user, resourceBookingId));
@@ -142,7 +142,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/cars/{carBookingId}")
-    public ResponseCustom<ResourceBookingDetailRes> getCarBookingDetail(
+    public ResponseCustom<ProductBookingDetailRes> getCarBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId) {
         return ResponseCustom.OK(carBookingService.getProductBookingDetail(user, carBookingId));

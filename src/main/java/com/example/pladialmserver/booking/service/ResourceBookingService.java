@@ -1,14 +1,14 @@
 package com.example.pladialmserver.booking.service;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
-import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -80,9 +80,9 @@ public class ResourceBookingService implements ProductBookingService {
      * 장비 예약 개별 조회
      */
     @Override
-    public ResourceBookingDetailRes getProductBookingDetail(User user, Long resourceBookingId) {
+    public ProductBookingDetailRes getProductBookingDetail(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
-        return ResourceBookingDetailRes.toDto(resourceBooking);
+        return ProductBookingDetailRes.toDto(resourceBooking);
     }
 
     /**
@@ -125,9 +125,9 @@ public class ResourceBookingService implements ProductBookingService {
      * 관리자 장비 예약 개별 조회
      */
     @Override
-    public ResourceBookingDetailRes getProductBookingDetailByAdmin(User user, Long resourceBookingId) {
+    public ProductBookingDetailRes getProductBookingDetailByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
-        return ResourceBookingDetailRes.toDto(resourceBooking);
+        return ProductBookingDetailRes.toDto(resourceBooking);
     }
 
     /**
@@ -191,7 +191,7 @@ public class ResourceBookingService implements ProductBookingService {
      * 관리자 장비 예약 목록을 조회
      */
     @Override
-    public Page<AdminResourceRes> getBookingProducts(User user, Pageable pageable, boolean active) {
+    public Page<AdminProductRes> getBookingProducts(User user, Pageable pageable, boolean active) {
         checkAdminRole(user);
 
         Sort.Order order = active ? Sort.Order.asc("startDate") : Sort.Order.desc("startDate");
@@ -204,7 +204,7 @@ public class ResourceBookingService implements ProductBookingService {
                 sortedByDate
         );
 
-        return resourceBookings.map(AdminResourceRes::toDto);
+        return resourceBookings.map(AdminProductRes::toDto);
     }
 
 }

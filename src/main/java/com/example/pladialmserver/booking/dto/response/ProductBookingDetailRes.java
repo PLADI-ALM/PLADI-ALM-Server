@@ -9,8 +9,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ResourceBookingDetailRes {
-    @Schema(type = "Long", description = "장비 Id", example = "1")
+public class ProductBookingDetailRes {
+    @Schema(type = "Long", description = "Id", example = "1")
     private Long resourceId;
     @Schema(type = "String", description = "상태", example = "'예약대기' / '예약중' / '사용중' / '사용완료' / '예약취소'")
     private String status;
@@ -27,8 +27,8 @@ public class ResourceBookingDetailRes {
     @Schema(type = "String", description = "이용목적", example = "10월 2일 촬영에 사용할 예정입니다.")
     private String memo;
 
-    public static ResourceBookingDetailRes toDto(ResourceBooking resourceBooking) {
-        return ResourceBookingDetailRes.builder()
+    public static ProductBookingDetailRes toDto(ResourceBooking resourceBooking) {
+        return ProductBookingDetailRes.builder()
                 .resourceId(resourceBooking.getResource().getResourceId())
                 .status(resourceBooking.getStatus().getValue())
                 .reservatorName(resourceBooking.getUser().getName())
@@ -40,8 +40,8 @@ public class ResourceBookingDetailRes {
                 .build();
     }
 
-    public static ResourceBookingDetailRes toDto(CarBooking carBooking) {
-        return ResourceBookingDetailRes.builder()
+    public static ProductBookingDetailRes toDto(CarBooking carBooking) {
+        return ProductBookingDetailRes.builder()
                 .resourceId(carBooking.getCar().getCarId())
                 .status(carBooking.getStatus().getValue())
                 .reservatorName(carBooking.getUser().getName())

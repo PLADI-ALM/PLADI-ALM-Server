@@ -1,10 +1,10 @@
 package com.example.pladialmserver.booking.controller;
 
-import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
+import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.service.CarBookingService;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +36,7 @@ public class CarBookingAdminController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/cars/{carBookingId}")
-    public ResponseCustom<ResourceBookingDetailRes> getCarBookingDetail(
+    public ResponseCustom<ProductBookingDetailRes> getCarBookingDetail(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name="carBookingId") Long carBookingId){
         return ResponseCustom.OK(bookingService.getProductBookingDetailByAdmin(user, carBookingId));
@@ -107,7 +107,7 @@ public class CarBookingAdminController {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
     })
     @GetMapping("/cars")
-    public ResponseCustom<Page<AdminResourceRes>> getBookingCars(
+    public ResponseCustom<Page<AdminProductRes>> getBookingCars(
             @Account User user,
             @Parameter(description = "(Boolean) 오름차순/내림차순", example = "true / false") boolean active,
             @PageableDefault(size = 8) Pageable pageable){
