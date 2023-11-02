@@ -16,6 +16,7 @@ import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.example.pladialmserver.global.Constants.Email.*;
 import static com.example.pladialmserver.global.exception.BaseResponseCode.*;
 
 @Service
@@ -81,7 +83,9 @@ public class UserService {
     // 이메일 인증 전송
     public void verifyEmail(VerifyEmailReq verifyEmailReq) {
         userRepository.findByEmailAndIsEnable(verifyEmailReq.getEmail(), true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
-        emailUtil.sendEmail(verifyEmailReq.getEmail());
+        String code = RandomStringUtils.random(5, true, true);
+        emailUtil.sendEmail(verifyEmailReq.getEmail(), COMPANY_NAME + FIND_EMAIL_CODE_TITLE, emailUtil.createEmailCodeData(code), EMAIL);
+        emailUtil.setEmailCodeInRedis(verifyEmailReq.getEmail(), code);
     }
 
     // 이메일 인증 코드 확인
