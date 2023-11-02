@@ -132,8 +132,8 @@ public class OfficeController {
     @GetMapping("/{officeId}/booking")
     public ResponseCustom<OfficeReservatorRes> getOfficeReservatorInfo(
             @Parameter(description = "(Long) 회의실 Id", example = "1") @PathVariable(name = "officeId") Long officeId,
-            @Parameter(description = "정보 확인 날짜",example = "2023-10-29") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
-            @Parameter(description = "정보 확인 시작 시간 (1시간 단위 시작시간)",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime time,
+            @Parameter(description = "정보 확인 날짜",example = "2023-10-29") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
+            @Parameter(description = "정보 확인 시작 시간 (1시간 단위 시작시간)",example = "12:00") @RequestParam @DateTimeFormat(pattern = TIME_PATTERN) LocalTime time,
             @Account User user
     ){
         return ResponseCustom.OK(officeService.getOfficeReservatorInfo(officeId, date, time));
