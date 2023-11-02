@@ -295,7 +295,7 @@ public class BookingService {
         resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
 
         // 이메일 전송
-        String title = COMPANY_NAME + RESOURCE +SPACE+ BOOKING_TEXT + APPROVE_BOOKING_TEXT;
+        String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), APPROVE_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
     }
@@ -307,6 +307,11 @@ public class BookingService {
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         returnBookingResource(resourceBooking);
+
+        // 이메일 전송
+        String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
+        emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(resourceBooking.getUser(), RETURN_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
     }
 
     /**
