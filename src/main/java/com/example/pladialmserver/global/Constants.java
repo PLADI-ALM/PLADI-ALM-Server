@@ -13,7 +13,7 @@ public class Constants {
         public static final String FIND_EMAIL_CODE_TITLE = "사내 시스템 이메일 인증 번호";
         public static final String NEW_BOOKING_TEXT = "새로운 예약 요청이 들어왔습니다. 예약 상태를 확인해주세요.";
         public static final String APPROVE_BOOKING_TEXT = "요청하신 예약이 승인되었습니다.";
-        public static final String REQUEST_BOOKING_TEXT = "요청하신 예약이 반려되었습니다.";
+        public static final String REJECT_BOOKING_TEXT = "요청하신 예약이 반려되었습니다.";
         public static final String RETURN_BOOKING_TEXT = "요청하신 예약 반납 확인되었습니다.";
         public static final String BOOKING_TEXT = "예약 ";
         public static final String BOOKING_REQUEST = "요청";

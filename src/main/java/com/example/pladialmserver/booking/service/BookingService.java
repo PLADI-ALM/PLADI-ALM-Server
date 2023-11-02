@@ -272,6 +272,11 @@ public class BookingService {
         if(resourceBooking.checkBookingStatus(BookingStatus.FINISHED) || resourceBooking.checkBookingStatus(BookingStatus.CANCELED)) throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
+
+        // 이메일 전송
+        String title = COMPANY_NAME + RESOURCE +SPACE+ BOOKING_TEXT + BOOKING_REJECT;
+        emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(resourceBooking.getUser(), REJECT_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
     }
 
     /**
