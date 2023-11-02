@@ -121,6 +121,7 @@ public class OfficeService {
         // 이미 예약되어 있는 시간인지 확인
         if(officeBookingRepository.existsByDateAndTime(office, officeReq.getDate(), officeReq.getStartTime(), officeReq.getEndTime())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         officeBookingRepository.save(OfficeBooking.toDto(user, office, officeReq));
+        // TODO 회의실 예약 알림
     }
 
     // ===================================================================================================================

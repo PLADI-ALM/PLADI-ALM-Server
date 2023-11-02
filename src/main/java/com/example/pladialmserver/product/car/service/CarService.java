@@ -73,6 +73,7 @@ public class CarService implements ProductService {
             throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         ;
         carBookingRepository.save(CarBooking.toDto(user, car, productReq));
+        // TODO 자동차 예약 알림
     }
 
     @Override

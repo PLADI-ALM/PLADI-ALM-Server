@@ -86,6 +86,7 @@ public class BookingService {
         // 장비 반납
         resourceBooking.returnBookingResource();
         resourceBookingRepository.save(resourceBooking);
+        // TODO 장비 반납 알림
     }
 
     // ===================================================================================================================
@@ -296,7 +297,6 @@ public class BookingService {
     public void returnBookingResourceByAdmin(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
         returnBookingResource(resourceBooking);
-        // TODO 장비 예약 반납 알림
     }
 
     /**
