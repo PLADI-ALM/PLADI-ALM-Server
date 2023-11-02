@@ -13,6 +13,7 @@ public interface CarBookingCustom {
     List<ProductBookingRes> findResourceBookingByDate(Car car, LocalDate date);
 
     List<String> getCarBookedDate(Car car, LocalDate standardDate, LocalDate date);
+    List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate date);
 //    List<Long> findBookedCarIdsByDateAndCarName(LocalDate startDate, LocalDate endDate, String carName);
 
 }

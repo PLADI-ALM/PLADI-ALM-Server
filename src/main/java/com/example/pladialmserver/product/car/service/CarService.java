@@ -80,7 +80,7 @@ public class CarService implements ProductService {
     public List<ProductBookingRes> getProductBookingByDate(Long resourceId, LocalDate date) {
         Car car = carRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
-        return carBookingRepository.findResourceBookingByDate(car, date);
+        return carBookingRepository.findCarBookingByDate(car, date);
     }
 
     @Override

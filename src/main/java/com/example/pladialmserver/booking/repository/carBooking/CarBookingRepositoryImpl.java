@@ -41,7 +41,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
     }
 
     @Override
-    public List<ProductBookingRes> findResourceBookingByDate(Car car, LocalDate standardDate) {
+    public List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate standardDate) {
 
         // 해당 일의 00:00
         LocalDateTime startDateTime = LocalDateTime.of(standardDate, LocalTime.MIN);
