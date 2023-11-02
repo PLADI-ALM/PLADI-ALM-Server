@@ -1,12 +1,13 @@
 package com.example.pladialmserver.product.car.controller;
 
-import com.example.pladialmserver.product.car.dto.CarRes;
-import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.car.service.CarService;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.product.car.dto.CarRes;
+import com.example.pladialmserver.product.car.service.CarService;
+import com.example.pladialmserver.product.dto.request.ProductReq;
+import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 import static com.example.pladialmserver.global.Constants.DATE_TIME_PATTERN;
@@ -71,5 +73,31 @@ public class CarController {
             @Parameter(description = "(Long) 차량 Id", example = "1") @PathVariable(name = "carId") Long carId
     ) {
         return ResponseCustom.OK(carService.getProductDetail(carId));
+    }
+
+    /**
+     * 차량 예약
+     */
+    @Operation(summary = "차량 예약 (박소정)", description = "차량을 예약한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(B0010)날짜를 모두 입력해주세요. (B0002) 요청사항은 30자 이하로 작성해주세요. (B0003)시작시간보다 끝나는 시간이 더 앞에 있습니다. (B0004)미래의 날짜를 선택해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 차량입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(B0005)이미 예약되어 있는 시간입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))})
+    @PostMapping("/{carId}")
+    public ResponseCustom bookCar(
+            @Account User user,
+            @Parameter(description = "(Long) 차량 Id", example = "1") @PathVariable(name = "carId") Long carId,
+            @RequestBody @Valid ProductReq carReq) {
+
+        // 현재 보다 과거 날짜로 등록 하는 경우량
+        if (LocalDateTime.now().isAfter(carReq.getStartDateTime()))
+            throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        // 종료일이 시작일 보다 빠른 경우
+        if (carReq.getEndDateTime().isBefore(carReq.getStartDateTime()))
+            throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
+
+        carService.bookProduct(user, carId, carReq);
+        return ResponseCustom.OK();
     }
 }

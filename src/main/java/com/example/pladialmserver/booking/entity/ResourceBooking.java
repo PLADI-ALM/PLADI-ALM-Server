@@ -2,7 +2,7 @@ package com.example.pladialmserver.booking.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
-import com.example.pladialmserver.product.resource.dto.request.ResourceReq;
+import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
@@ -61,13 +61,13 @@ public class ResourceBooking extends BaseEntity {
   }
 
 
-  public static ResourceBooking toDto(User user, Resource resource, ResourceReq resourceReq) {
+  public static ResourceBooking toDto(User user, Resource resource, ProductReq productReq) {
     return ResourceBooking.builder()
             .user(user)
             .resource(resource)
-            .startDate(resourceReq.getStartDateTime())
-            .endDate(resourceReq.getEndDateTime())
-            .memo(resourceReq.getMemo())
+            .startDate(productReq.getStartDateTime())
+            .endDate(productReq.getEndDateTime())
+            .memo(productReq.getMemo())
             .build();
   }
 

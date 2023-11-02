@@ -1,8 +1,9 @@
 package com.example.pladialmserver.booking.entity;
 
-import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.entity.BookingStatus;
+import com.example.pladialmserver.product.car.entity.Car;
+import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,12 +51,22 @@ public class CarBooking extends BaseEntity {
     private BookingStatus status = BookingStatus.WAITING;
 
     @Builder
-    public CarBooking(User user, Car car, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime returnDate,String memo) {
+    public CarBooking(User user, Car car, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime returnDate, String memo) {
         this.user = user;
         this.car = car;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.returnDate=returnDate;
+        this.returnDate = returnDate;
         this.memo = memo;
+    }
+
+    public static CarBooking toDto(User user, Car car, ProductReq productReq) {
+        return CarBooking.builder()
+                .user(user)
+                .car(car)
+                .startDate(productReq.getStartDateTime())
+                .endDate(productReq.getEndDateTime())
+                .memo(productReq.getMemo())
+                .build();
     }
 }
