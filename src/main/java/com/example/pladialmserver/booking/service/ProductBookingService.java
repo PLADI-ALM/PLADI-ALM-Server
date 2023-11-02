@@ -14,8 +14,6 @@ public interface ProductBookingService {
 
     void cancelBookingProduct(User user, Long productId);
 
-    void returnBookingProductByBasic(User user, Long productId);
-
     void checkProductBookingTime();
 
     ResourceBookingDetailRes getProductBookingDetailByAdmin(User user, Long productId);

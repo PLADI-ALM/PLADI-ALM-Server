@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ResourceBookingDetailRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
@@ -15,10 +16,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -130,6 +134,45 @@ public class CarBookingService implements ProductBookingService{
         // 차량 반납
         carBooking.returnBookingCar();
         carBookingRepository.save(carBooking);
+    }
+
+    @Override
+    public Page<BookingRes> getProductBookings(User user, Pageable pageable) {
+        return carBookingRepository.getBookingsByUser(user, pageable);
+    }
+
+    @Override
+    public ResourceBookingDetailRes getProductBookingDetail(User user, Long carBookingId) {
+        CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.BASIC);
+        return ResourceBookingDetailRes.toDto(carBooking);
+    }
+
+    @Override
+    public void cancelBookingProduct(User user, Long carBookingId) {
+        CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.BASIC);
+
+        // 이미 취소된 예약이면
+        if (carBooking.checkBookingStatus(BookingStatus.CANCELED))
+            throw new BaseException(BaseResponseCode.ALREADY_CANCELED_BOOKING);
+        // 취소하려는 예약이 이미 사용이 완료된 경우
+        if (carBooking.checkBookingStatus(BookingStatus.FINISHED))
+            throw new BaseException(BaseResponseCode.ALREADY_FINISHED_BOOKING);
+
+        // 예약 취소
+        carBooking.changeBookingStatus(BookingStatus.CANCELED);
+        carBookingRepository.save(carBooking);
+    }
+
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0 * * * *", zone = "GMT+9:00") // 날짜가 바뀔 때(0시)에 스케줄링
+    public void checkProductBookingTime() {
+        // 오늘 날짜 + 예약중 인 것
+        List<CarBooking> carBookingStartList = carBookingRepository.findByStartDateAndStatus(LocalDate.now(), BookingStatus.BOOKED);
+        // USING 으로 변경
+        carBookingStartList.forEach(CarBooking::startCarBooking);
+        // 저장
+        carBookingRepository.saveAll(carBookingStartList);
     }
 
 }

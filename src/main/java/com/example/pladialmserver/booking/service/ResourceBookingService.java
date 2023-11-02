@@ -105,16 +105,6 @@ public class ResourceBookingService implements ProductBookingService {
         resourceBookingRepository.save(resourceBooking);
     }
 
-    /**
-     * 자원 예약 반납
-     */
-    @Override
-    @Transactional
-    public void returnBookingProductByBasic(User user, Long resourceBookingId) {
-        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
-        returnBookingResource(resourceBooking);
-    }
-
 
     /**
      * 자원 예약 상태 변경 스케줄링

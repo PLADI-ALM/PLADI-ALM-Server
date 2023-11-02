@@ -82,4 +82,9 @@ public class CarBooking extends BaseEntity {
         changeBookingStatus(BookingStatus.FINISHED);
         returnDate = LocalDateTime.now();
     }
+
+
+    public void startCarBooking() {
+        changeBookingStatus(BookingStatus.USING);
+    }
 }
