@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.Email.*;
-import static com.example.pladialmserver.global.Constants.Email.BOOKING;
 
 @Service
 @Transactional(readOnly = true)
@@ -80,9 +79,9 @@ public class CarService implements ProductService {
         carBookingRepository.save(CarBooking.toDto(user, car, productReq));
 
         // 이메일 전송
-        String title = COMPANY_NAME + SPACE + RESOURCE + BOOKING_REQUEST;
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(car.getUser().getEmail(), title,
-                emailUtil.createBookingData(user, PRODUCT_TEXT, car.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING);
+                emailUtil.createBookingData(user, NEW_BOOKING_TEXT, car.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING_TEMPLATE);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.pladialmserver.product.resource.service;
 
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -100,9 +101,9 @@ public class ResourceService implements ProductService {
         resourceBookingRepository.save(ResourceBooking.toDto(user, resource, productReq));
 
         // 이메일 전송
-        String title = COMPANY_NAME + SPACE + RESOURCE + BOOKING_REQUEST;
+        String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(resource.getUser().getEmail(), title,
-                emailUtil.createBookingData(user, PRODUCT_TEXT, resource.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING);
+                emailUtil.createBookingData(user, Constants.Email.NEW_BOOKING_TEXT, resource.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING_TEMPLATE);
     }
 
     // ===================================================================================================================

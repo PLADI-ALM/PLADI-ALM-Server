@@ -84,7 +84,7 @@ public class UserService {
     public void verifyEmail(VerifyEmailReq verifyEmailReq) {
         userRepository.findByEmailAndIsEnable(verifyEmailReq.getEmail(), true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         String code = RandomStringUtils.random(5, true, true);
-        emailUtil.sendEmail(verifyEmailReq.getEmail(), COMPANY_NAME + FIND_EMAIL_CODE_TITLE, emailUtil.createEmailCodeData(code), EMAIL);
+        emailUtil.sendEmail(verifyEmailReq.getEmail(), COMPANY_NAME + FIND_EMAIL_CODE_TITLE, emailUtil.createEmailCodeData(code), EMAIL_TEMPLATE);
         emailUtil.setEmailCodeInRedis(verifyEmailReq.getEmail(), code);
     }
 
