@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -168,7 +169,7 @@ public class CarBookingService implements ProductBookingService{
     @Scheduled(cron = "0 0 * * * *", zone = "GMT+9:00") // 날짜가 바뀔 때(0시)에 스케줄링
     public void checkProductBookingTime() {
         // 오늘 날짜 + 예약중 인 것
-        List<CarBooking> carBookingStartList = carBookingRepository.findByStartDateAndStatus(LocalDate.now(), BookingStatus.BOOKED);
+        List<CarBooking> carBookingStartList = carBookingRepository.findByStartDateAndStatus(LocalDateTime.now(), BookingStatus.BOOKED);
         // USING 으로 변경
         carBookingStartList.forEach(CarBooking::startCarBooking);
         // 저장

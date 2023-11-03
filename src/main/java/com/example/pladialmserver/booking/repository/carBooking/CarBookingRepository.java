@@ -21,5 +21,5 @@ public interface CarBookingRepository extends JpaRepository<CarBooking, Long>, C
 
     Page<CarBooking> findByStatusIn(List<BookingStatus> list, Pageable pageable);
 
-    List<CarBooking> findByStartDateAndStatus(LocalDate now, BookingStatus bookingStatus);
+    List<CarBooking> findByStartDateAndStatus(LocalDateTime now, BookingStatus bookingStatus);
 }
