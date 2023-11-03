@@ -8,6 +8,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
+import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -20,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -33,6 +35,7 @@ import static com.example.pladialmserver.global.Constants.Email.*;
 public class ResourceBookingService implements ProductBookingService {
     private final ResourceBookingRepository resourceBookingRepository;
     private final EmailUtil emailUtil;
+    private final PushNotificationService notificationService;
 
 
     // 장비 예약 목록 조회
@@ -104,6 +107,12 @@ public class ResourceBookingService implements ProductBookingService {
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
         resourceBookingRepository.save(resourceBooking);
+        // 장비 예약 취소 알림
+        try {
+            notificationService.sendCancelBookingNotification(resourceBooking, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -148,6 +157,13 @@ public class ResourceBookingService implements ProductBookingService {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), REJECT_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+
+        // 장비 예약 반려 알림
+        try {
+            notificationService.sendRejectBookingNotification(resourceBooking, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -171,6 +187,12 @@ public class ResourceBookingService implements ProductBookingService {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), APPROVE_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+        // 장비 예약 알림
+        try {
+            notificationService.sendAllowBookingNotification(resourceBooking, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -186,6 +208,12 @@ public class ResourceBookingService implements ProductBookingService {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), RETURN_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+        // 장비 반납 알림
+        try {
+            notificationService.sendReturnBookingNotification(resourceBooking, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

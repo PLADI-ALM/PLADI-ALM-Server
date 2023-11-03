@@ -9,6 +9,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
+import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import java.util.List;
 public class OfficeBookingService {
     private final OfficeBookingRepository officeBookingRepository;
     private final EmailUtil emailUtil;
+    private final PushNotificationService notificationService;
 
     // 회의실 예약 목록 조회
     public Page<BookingRes> getOfficeBookings(User user, Pageable pageable) {
@@ -89,6 +92,12 @@ public class OfficeBookingService {
         // 예약 취소
         officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+        // 회의실 예약 취소 알림
+        try {
+            notificationService.sendCancelBookingNotification(officeBooking, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -156,6 +165,13 @@ public class OfficeBookingService {
         // 예약 취소
         officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+        // 회의실 예약 반려 알림
+        try {
+            notificationService.sendCancelBookingNotification(officeBooking, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
