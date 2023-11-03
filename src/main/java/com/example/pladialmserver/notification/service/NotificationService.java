@@ -19,8 +19,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class NotificationService {
 
-    // todo : firebase 구축 후 API URL 할당
-    private final String API_URL = "";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/pladi-alm-7702202947/messages:send";
     private final ObjectMapper objectMapper;
     private final NotificationRepository notificationRepository;
 
