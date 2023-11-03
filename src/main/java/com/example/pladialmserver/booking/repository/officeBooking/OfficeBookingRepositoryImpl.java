@@ -3,6 +3,8 @@ package com.example.pladialmserver.booking.repository.officeBooking;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
+import com.example.pladialmserver.office.dto.response.OfficeReservatorRes;
+import com.example.pladialmserver.office.dto.response.QOfficeReservatorRes;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.user.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -86,6 +88,17 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
                 .execute();
         // 영속성 컨텍스트를 DB 에 즉시 반영
         entityManager.flush();
+    }
+
+    @Override
+    public OfficeReservatorRes findOfficeReservatorByOfficeAndDateTime(Office office, LocalDate date, LocalTime time) {
+        return jpaQueryFactory.select(new QOfficeReservatorRes(officeBooking.user.name, officeBooking.user.phone, officeBooking.user.department.name))
+                .from(officeBooking)
+                .where(officeBooking.office.eq(office),
+                        officeBooking.date.eq(date),
+                        officeBooking.startTime.loe(time).and(officeBooking.endTime.gt(time)),
+                        officeBooking.status.notIn(BookingStatus.CANCELED))
+                .fetchFirst();
     }
 
 }

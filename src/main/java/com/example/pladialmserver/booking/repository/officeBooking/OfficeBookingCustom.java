@@ -3,6 +3,7 @@ package com.example.pladialmserver.booking.repository.officeBooking;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
+import com.example.pladialmserver.office.dto.response.OfficeReservatorRes;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.user.entity.User;
 import org.springframework.data.domain.Page;
@@ -19,4 +20,5 @@ public interface OfficeBookingCustom {
     List<OfficeBooking> findByStatusAndDateAndStartTime(BookingStatus status);
 
     void updateBookingStatusForResigning(User user);
+    OfficeReservatorRes findOfficeReservatorByOfficeAndDateTime(Office office, LocalDate date, LocalTime time);
 }
