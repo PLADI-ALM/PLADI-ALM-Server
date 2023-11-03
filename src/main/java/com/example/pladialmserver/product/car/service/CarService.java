@@ -5,6 +5,7 @@ import com.example.pladialmserver.booking.repository.carBooking.CarBookingReposi
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
+import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.car.repository.CarRepository;
@@ -23,6 +24,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.example.pladialmserver.global.Constants.Email.*;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class CarService implements ProductService {
 
     private final CarRepository carRepository;
     private final CarBookingRepository carBookingRepository;
+    private final EmailUtil emailUtil;
 
     /**
      * 전체 차량 목록 조회 and 예약 가능한 차량 목록 조회
@@ -72,8 +76,12 @@ public class CarService implements ProductService {
         // 이미 예약된 날짜 여부 확인
         if (carBookingRepository.existsDateTime(car, productReq.getStartDateTime(), productReq.getEndDateTime()))
             throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
-        ;
         carBookingRepository.save(CarBooking.toDto(user, car, productReq));
+
+        // 이메일 전송
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
+        emailUtil.sendEmail(car.getUser().getEmail(), title,
+                emailUtil.createBookingData(user, NEW_BOOKING_TEXT, car.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING_TEMPLATE);
     }
 
     @Override

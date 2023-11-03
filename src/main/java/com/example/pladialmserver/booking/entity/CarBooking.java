@@ -69,4 +69,22 @@ public class CarBooking extends BaseEntity {
                 .memo(productReq.getMemo())
                 .build();
     }
+
+    public void changeBookingStatus(BookingStatus bookingStatus) {
+        status = bookingStatus;
+    }
+
+    public boolean checkBookingStatus(BookingStatus bookingStatus) {
+        return status.equals(bookingStatus);
+    }
+
+    public void returnBookingCar() {
+        changeBookingStatus(BookingStatus.FINISHED);
+        returnDate = LocalDateTime.now();
+    }
+
+
+    public void startCarBooking() {
+        changeBookingStatus(BookingStatus.USING);
+    }
 }

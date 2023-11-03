@@ -1,12 +1,18 @@
 package com.example.pladialmserver.booking.repository.carBooking;
 
+import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
+import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
+import com.example.pladialmserver.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
+import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
 
 @RequiredArgsConstructor
 public class CarBookingRepositoryImpl implements CarBookingCustom {
@@ -154,4 +161,21 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
 ////                        QCarBooking.carBooking.car.name.like("%" + carName + "%"))
 //                .fetch();
 //        }
+
+    @Override
+    public Page<BookingRes> getBookingsByUser(User user, Pageable pageable) {
+        List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
+                .where(resourceBooking.user.eq(user)
+                        .and(resourceBooking.isEnable.eq(true)))
+                .orderBy(resourceBooking.createdAt.desc())
+                .fetch();
+
+        List<BookingRes> res = bookings.stream()
+                .map(BookingRes::toDto)
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), res.size());
+        return new PageImpl<>(res.subList(start, end), pageable, res.size());
+    }
 }
