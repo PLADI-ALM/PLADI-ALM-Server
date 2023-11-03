@@ -35,7 +35,6 @@ public class AdminBookingRes {
                 .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getStartTime()))
                 .endDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getEndTime()))
                 .reservatorName(officeBooking.getUser().getName())
-                // TODO 기획 변경으로 인한 수정
                 .reservatorPhone(officeBooking.getUser().getPhone())
                 .status(officeBooking.getStatus().getValue())
                 .build();

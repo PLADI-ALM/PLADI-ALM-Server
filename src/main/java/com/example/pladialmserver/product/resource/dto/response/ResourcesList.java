@@ -22,7 +22,6 @@ public class ResourcesList {
     @Schema(type = "String", description = "예약상태", example = "예약중")
     private String bookingStatus;
 
-    // TODO 기획 변경으로 인한 수정
     public static ResourcesList toDto(ResourceBooking resourceBooking){
         return ResourcesList.builder()
                 .reservatorName(resourceBooking.getUser().getName())
