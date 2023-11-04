@@ -68,17 +68,18 @@ public class PushNotificationService {
         createNotification(user, messageBody);
     }
 
-    private void createNotification(User user, String messageBody) throws IOException {
+    public void sendCancelBookingNotification(OfficeBooking officeBooking, User user) throws IOException {
+        String messageBody = officeBooking.getOffice().getName()+" 회의실 예약이 취소되었습니다.";
+        createNotification(user, messageBody);
+    }
+
+    @Transactional
+    public void createNotification(User user, String messageBody) throws IOException {
         if (user.getFcmToken() != null) {
             FcmMessage fcmMessage = FcmMessage.makeMessage(user.getFcmToken(), " ", messageBody);
             Response response = sendMessage(objectMapper.writeValueAsString(fcmMessage));
             notificationRepository.save(PushNotification.toEntity("", messageBody, user));
         }
-    }
-
-    public void sendCancelBookingNotification(OfficeBooking officeBooking, User user) throws IOException {
-        String messageBody = officeBooking.getOffice().getName()+" 회의실 예약이 취소되었습니다.";
-        createNotification(user, messageBody);
     }
 
     @NotNull
