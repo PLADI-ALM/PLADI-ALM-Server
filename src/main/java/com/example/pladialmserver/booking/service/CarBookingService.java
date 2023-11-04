@@ -90,9 +90,8 @@ public class CarBookingService implements ProductBookingService{
         if (!carBooking.checkBookingStatus(BookingStatus.WAITING))
             throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 이미 예약된 날짜 여부 확인
-        // TODO 기획 변경으로 인한 수정
-//        if(resourceBookingRepository.existsDate(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
-
+        if (carBookingRepository.existsDateTime(carBooking.getCar(), carBooking.getStartDate(), carBooking.getEndDate()))
+            throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         // 예약 허가
         carBooking.changeBookingStatus(BookingStatus.BOOKED);
     }
