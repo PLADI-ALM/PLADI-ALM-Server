@@ -157,7 +157,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
 
         // 장비 예약 반려 알림
         try {
@@ -185,7 +185,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
             notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);
@@ -206,7 +206,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 반납 알림
         try {
             notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.RETURNED, user);

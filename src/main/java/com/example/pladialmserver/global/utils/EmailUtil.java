@@ -78,10 +78,10 @@ public class EmailUtil {
         return emailData;
     }
 
-    public Map<String, String> createBookingData(User user, SendEmailReq emailReq){
+    public Map<String, String> createBookingData( SendEmailReq emailReq){
         Map<String, String> bookingData = new HashMap<>();
         bookingData.put("text", emailReq.getText());
-        bookingData.put("reservatorName", user.getName());
+        bookingData.put("reservatorName", emailReq.getReservatorName());
         bookingData.put(emailReq.getOffice_product(), PRODUCT);
         bookingData.put("resourceName", emailReq.getProductName());
         bookingData.put("reservationTime", DateTimeUtil.dateTimeToStringNullable(emailReq.getStartDateTime()) + " ~ " + DateTimeUtil.dateTimeToStringNullable(emailReq.getEndDateTime()));

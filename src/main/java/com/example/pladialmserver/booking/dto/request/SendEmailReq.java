@@ -16,6 +16,7 @@ import static com.example.pladialmserver.global.Constants.EmailNotification.PROD
 @Builder
 public class SendEmailReq {
     private String text;
+    private String reservatorName;
     private String productName;
     private String office_product;
     private LocalDateTime startDateTime;
@@ -25,6 +26,7 @@ public class SendEmailReq {
     public static SendEmailReq toDto(ResourceBooking resourceBooking, String text) {
         return SendEmailReq.builder()
                 .text(text)
+                .reservatorName(resourceBooking.getUser().getName())
                 .productName(resourceBooking.getResource().getName())
                 .office_product(PRODUCT)
                 .startDateTime(resourceBooking.getStartDate())
@@ -35,6 +37,7 @@ public class SendEmailReq {
     public static SendEmailReq toDto(CarBooking carBooking, String text) {
         return SendEmailReq.builder()
                 .text(text)
+                .reservatorName(carBooking.getUser().getName())
                 .productName(carBooking.getCar().getName())
                 .office_product(PRODUCT)
                 .startDateTime(carBooking.getStartDate())
@@ -45,6 +48,7 @@ public class SendEmailReq {
     public static SendEmailReq toDto(OfficeBooking officeBooking, String text) {
         return SendEmailReq.builder()
                 .text(text)
+                .reservatorName(officeBooking.getUser().getName())
                 .productName(officeBooking.getOffice().getName())
                 .office_product(OFFICE)
                 .startDateTime(DateTimeUtil.localDateAndTimeToLocalDateTime(officeBooking.getDate(), officeBooking.getStartTime()))
