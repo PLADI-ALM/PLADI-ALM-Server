@@ -88,7 +88,6 @@ public class CarBookingService implements ProductBookingService{
         String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
-
         // 차랑 예약 반려 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.DENIED, user);

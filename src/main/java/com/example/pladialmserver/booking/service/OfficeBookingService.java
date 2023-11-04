@@ -181,7 +181,7 @@ public class OfficeBookingService {
         // 이메일 알림
         String title = COMPANY_NAME + OFFICE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(officeBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(SendEmailReq.toDto(officeBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(officeBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
 
         // 회의실 예약 반려 알림
         try {
