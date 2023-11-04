@@ -21,7 +21,7 @@ spring:
 server:
   port: 8080
   archiving:
-    url: ENC(mgbO6QO3wScbYH9yPV/a7e5cvA6sc5/z9dig4/VlywgHXN+UrDaRWhQYOAY7bqEkcI8O2nmMlWIIUlzZyaRzSoD+AmgSVeQUPNCcYGPt1B1dZHbtNCZmc5i6KWBJfKKx)
+    url: ENC(sxIAInDzar/I6N1GBXECEKVtbUn2BHHSCStLG1vKOpI9dXFReW7bKies838wPxoCTSdUsiNPbdOF6wy8dhGNy6VWkSF1ja7j)
   servlet:
     context-path: /api
 

@@ -2,7 +2,7 @@ package com.example.pladialmserver.user.service;
 
 import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
-import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient;
+import com.example.pladialmserver.global.feign.publisher.ArchivingServerEventPublisher;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
@@ -36,7 +36,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
-    private final ArchivingServerClient archivingServerClient;
+    private final ArchivingServerEventPublisher archivingServerEventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final EmailUtil emailUtil;
@@ -123,7 +123,10 @@ public class UserService {
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
-        userRepository.save(User.toEntity(createUserReq, department));
+        User user = User.toEntity(createUserReq, department);
+        userRepository.save(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.addUser(user);
     }
 
     // 직원 수정
