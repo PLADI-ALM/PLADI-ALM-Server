@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
@@ -27,6 +28,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -81,6 +84,11 @@ public class CarBookingService implements ProductBookingService{
             throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 예약 취소
         carBooking.changeBookingStatus(BookingStatus.CANCELED);
+        // 이메일 알림
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REJECT;
+        emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, REJECT_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+
         // 차랑 예약 반려 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.DENIED, user);
@@ -105,6 +113,10 @@ public class CarBookingService implements ProductBookingService{
             throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         // 예약 허가
         carBooking.changeBookingStatus(BookingStatus.BOOKED);
+        // 이메일 알림
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
+        emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, APPROVE_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
         // 차량 예약 허가 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.SUCCESS, user);
@@ -121,6 +133,10 @@ public class CarBookingService implements ProductBookingService{
     public void returnBookingProductByAdmin(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
         returnBookingCar(carBooking);
+        // 이메일 알림
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_RETURN;
+        emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
         // 차랑 예약 반납 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.RETURNED, user);

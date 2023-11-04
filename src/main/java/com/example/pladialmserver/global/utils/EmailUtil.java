@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.pladialmserver.global.Constants.Email.EMAIL_CODE;
-import static com.example.pladialmserver.global.Constants.Email.PRODUCT;
+import static com.example.pladialmserver.global.Constants.EmailNotification.EMAIL_CODE;
+import static com.example.pladialmserver.global.Constants.EmailNotification.PRODUCT;
 import static com.example.pladialmserver.global.exception.BaseResponseCode.BLACKLIST_EMAIL_CODE;
 
 @Component

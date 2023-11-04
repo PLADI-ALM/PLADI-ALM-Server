@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.pladialmserver.global.Constants.Email.*;
+import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 
 @Service
 @Transactional(readOnly = true)

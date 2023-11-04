@@ -28,7 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.pladialmserver.global.Constants.Email.*;
+import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 
 @Service
 @Transactional(readOnly = true)
