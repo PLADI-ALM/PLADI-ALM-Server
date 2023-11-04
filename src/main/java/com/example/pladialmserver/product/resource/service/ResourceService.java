@@ -1,9 +1,9 @@
 package com.example.pladialmserver.product.resource.service;
 
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
-import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -98,12 +98,13 @@ public class ResourceService implements ProductService {
         // 이미 예약된 날짜 여부 확인
         if (resourceBookingRepository.existsDateTime(resource, productReq.getStartDateTime(), productReq.getEndDateTime()))
             throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
-        resourceBookingRepository.save(ResourceBooking.toDto(user, resource, productReq));
+        ResourceBooking resourceBooking = ResourceBooking.toDto(user, resource, productReq);
+        resourceBookingRepository.save(resourceBooking);
 
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(resource.getUser().getEmail(), title,
-                emailUtil.createBookingData(user, Constants.Email.NEW_BOOKING_TEXT, resource.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(user, SendEmailReq.toDto(resourceBooking, NEW_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
     }
 
     // ===================================================================================================================

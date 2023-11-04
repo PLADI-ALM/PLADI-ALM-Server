@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
@@ -146,7 +147,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), REJECT_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, REJECT_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
     }
 
     /**
@@ -169,7 +170,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), APPROVE_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
     }
 
     /**
@@ -184,7 +185,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), RETURN_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
     }
 
     /**
