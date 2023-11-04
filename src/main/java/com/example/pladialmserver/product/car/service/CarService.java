@@ -1,5 +1,6 @@
 package com.example.pladialmserver.product.car.service;
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
 import com.example.pladialmserver.global.Constants;
@@ -85,7 +86,7 @@ public class CarService implements ProductService {
         // 이메일 전송
         String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(car.getUser().getEmail(), title,
-                emailUtil.createBookingData(user, NEW_BOOKING_TEXT, car.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(user, SendEmailReq.toDto(carBooking, NEW_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);

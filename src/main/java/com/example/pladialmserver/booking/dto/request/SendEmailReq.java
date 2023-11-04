@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.dto.request;
 
+import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,16 @@ public class SendEmailReq {
                 .office_product(office_product)
                 .startDateTime(resourceBooking.getStartDate())
                 .endDateTime(resourceBooking.getEndDate())
+                .build();
+    }
+
+    public static SendEmailReq toDto(CarBooking carBooking, String text, String office_product) {
+        return SendEmailReq.builder()
+                .text(text)
+                .productName(carBooking.getCar().getName())
+                .office_product(office_product)
+                .startDateTime(carBooking.getStartDate())
+                .endDateTime(carBooking.getEndDate())
                 .build();
     }
 }
