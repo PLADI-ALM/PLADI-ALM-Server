@@ -104,7 +104,7 @@ public class ResourceService implements ProductService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(resource.getUser().getEmail(), title,
-                emailUtil.createBookingData(user, SendEmailReq.toDto(resourceBooking, NEW_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(user, SendEmailReq.toDto(resourceBooking, NEW_BOOKING_TEXT)), BOOKING_TEMPLATE);
     }
 
     // ===================================================================================================================

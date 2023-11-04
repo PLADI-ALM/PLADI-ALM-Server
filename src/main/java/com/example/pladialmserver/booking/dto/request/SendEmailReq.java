@@ -1,11 +1,16 @@
 package com.example.pladialmserver.booking.dto.request;
 
 import com.example.pladialmserver.booking.entity.CarBooking;
+import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
+import com.example.pladialmserver.global.utils.DateTimeUtil;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+
+import static com.example.pladialmserver.global.Constants.EmailNotification.OFFICE;
+import static com.example.pladialmserver.global.Constants.EmailNotification.PRODUCT;
 
 @Getter
 @Builder
@@ -17,23 +22,33 @@ public class SendEmailReq {
     private LocalDateTime endDateTime;
 
 
-    public static SendEmailReq toDto(ResourceBooking resourceBooking, String text, String office_product) {
+    public static SendEmailReq toDto(ResourceBooking resourceBooking, String text) {
         return SendEmailReq.builder()
                 .text(text)
                 .productName(resourceBooking.getResource().getName())
-                .office_product(office_product)
+                .office_product(PRODUCT)
                 .startDateTime(resourceBooking.getStartDate())
                 .endDateTime(resourceBooking.getEndDate())
                 .build();
     }
 
-    public static SendEmailReq toDto(CarBooking carBooking, String text, String office_product) {
+    public static SendEmailReq toDto(CarBooking carBooking, String text) {
         return SendEmailReq.builder()
                 .text(text)
                 .productName(carBooking.getCar().getName())
-                .office_product(office_product)
+                .office_product(PRODUCT)
                 .startDateTime(carBooking.getStartDate())
                 .endDateTime(carBooking.getEndDate())
+                .build();
+    }
+
+    public static SendEmailReq toDto(OfficeBooking officeBooking, String text) {
+        return SendEmailReq.builder()
+                .text(text)
+                .productName(officeBooking.getOffice().getName())
+                .office_product(OFFICE)
+                .startDateTime(DateTimeUtil.localDateAndTimeToLocalDateTime(officeBooking.getDate(), officeBooking.getStartTime()))
+                .endDateTime(DateTimeUtil.localDateAndTimeToLocalDateTime(officeBooking.getDate(), officeBooking.getEndTime()))
                 .build();
     }
 }

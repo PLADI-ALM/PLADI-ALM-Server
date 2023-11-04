@@ -87,7 +87,7 @@ public class CarBookingService implements ProductBookingService{
         // 이메일 알림
         String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, REJECT_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
 
         // 차랑 예약 반려 알림
         try {
@@ -116,7 +116,7 @@ public class CarBookingService implements ProductBookingService{
         // 이메일 알림
         String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, APPROVE_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차량 예약 허가 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.SUCCESS, user);
@@ -136,7 +136,7 @@ public class CarBookingService implements ProductBookingService{
         // 이메일 알림
         String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_RETURN;
         emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(carBooking.getUser(), SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차랑 예약 반납 알림
         try {
             notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.RETURNED, user);
