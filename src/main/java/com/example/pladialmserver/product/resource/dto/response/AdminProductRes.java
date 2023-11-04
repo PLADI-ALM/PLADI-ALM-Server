@@ -27,7 +27,6 @@ public class AdminProductRes {
     @Schema(type = "String", description = "상태", example = "'예약중' / '사용중'")
     private String status;
 
-    // TODO 기획 변경으로 인한 수정
     public static AdminProductRes toDto(ResourceBooking resourceBooking){
         return AdminProductRes.builder()
                 .id(resourceBooking.getResourceBookingId())

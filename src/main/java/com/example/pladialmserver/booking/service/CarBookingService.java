@@ -4,10 +4,12 @@ import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
+import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -20,7 +22,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +34,7 @@ import java.util.List;
 public class CarBookingService implements ProductBookingService{
     private final CarBookingRepository carBookingRepository;
     private final EmailUtil emailUtil;
+    private final PushNotificationService notificationService;
 
     // 권한 확인
     private static void checkRole(Role role, User user, User target) {
@@ -76,6 +81,13 @@ public class CarBookingService implements ProductBookingService{
             throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 예약 취소
         carBooking.changeBookingStatus(BookingStatus.CANCELED);
+        // 차랑 예약 반려 알림
+        try {
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.DENIED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -89,11 +101,16 @@ public class CarBookingService implements ProductBookingService{
         if (!carBooking.checkBookingStatus(BookingStatus.WAITING))
             throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 이미 예약된 날짜 여부 확인
-        // TODO 기획 변경으로 인한 수정
-//        if(resourceBookingRepository.existsDate(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
-
+        if (carBookingRepository.existsDateTime(carBooking.getCar(), carBooking.getStartDate(), carBooking.getEndDate()))
+            throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         // 예약 허가
         carBooking.changeBookingStatus(BookingStatus.BOOKED);
+        // 차량 예약 허가 알림
+        try {
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.SUCCESS, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -104,6 +121,12 @@ public class CarBookingService implements ProductBookingService{
     public void returnBookingProductByAdmin(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
         returnBookingCar(carBooking);
+        // 차랑 예약 반납 알림
+        try {
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.RETURNED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -161,6 +184,13 @@ public class CarBookingService implements ProductBookingService{
         // 예약 취소
         carBooking.changeBookingStatus(BookingStatus.CANCELED);
         carBookingRepository.save(carBooking);
+        // 차량 예약 취소 알림
+        try {
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.CANCELED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -168,7 +198,7 @@ public class CarBookingService implements ProductBookingService{
     @Scheduled(cron = "0 0 * * * *", zone = "GMT+9:00") // 날짜가 바뀔 때(0시)에 스케줄링
     public void checkProductBookingTime() {
         // 오늘 날짜 + 예약중 인 것
-        List<CarBooking> carBookingStartList = carBookingRepository.findByStartDateAndStatus(LocalDate.now(), BookingStatus.BOOKED);
+        List<CarBooking> carBookingStartList = carBookingRepository.findByStartDateAndStatus(LocalDateTime.now(), BookingStatus.BOOKED);
         // USING 으로 변경
         carBookingStartList.forEach(CarBooking::startCarBooking);
         // 저장

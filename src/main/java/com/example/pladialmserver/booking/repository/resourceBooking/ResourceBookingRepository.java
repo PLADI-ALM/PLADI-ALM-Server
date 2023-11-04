@@ -28,5 +28,5 @@ public interface ResourceBookingRepository extends JpaRepository<ResourceBooking
     boolean existsByResourceAndStatusIn(Resource resource, List<BookingStatus> bookingStatus);
     List<ResourceBooking> findAllByResourceOrderByStartDateDesc(Resource resource);
 
-    List<ResourceBooking> findByStartDateAndStatus(LocalDate now, BookingStatus bookingStatus);
+    List<ResourceBooking> findByStartDateAndStatus(LocalDateTime now, BookingStatus bookingStatus);
 }

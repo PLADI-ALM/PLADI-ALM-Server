@@ -5,10 +5,12 @@ import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
+import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -21,7 +23,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +37,7 @@ import static com.example.pladialmserver.global.Constants.Email.*;
 public class ResourceBookingService implements ProductBookingService {
     private final ResourceBookingRepository resourceBookingRepository;
     private final EmailUtil emailUtil;
+    private final PushNotificationService notificationService;
 
 
     // 장비 예약 목록 조회
@@ -104,6 +109,12 @@ public class ResourceBookingService implements ProductBookingService {
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
         resourceBookingRepository.save(resourceBooking);
+        // 장비 예약 취소 알림
+        try {
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.CANCELED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -115,7 +126,7 @@ public class ResourceBookingService implements ProductBookingService {
     @Scheduled(cron = "0 0 * * * *", zone = "GMT+9:00") // 날짜가 바뀔 때(0시)에 스케줄링
     public void checkProductBookingTime() {
         // 오늘 날짜 + 예약중 인 것
-        List<ResourceBooking> resourceBookingStartList = resourceBookingRepository.findByStartDateAndStatus(LocalDate.now(), BookingStatus.BOOKED);
+        List<ResourceBooking> resourceBookingStartList = resourceBookingRepository.findByStartDateAndStatus(LocalDateTime.now(), BookingStatus.BOOKED);
         // USING 으로 변경
         resourceBookingStartList.forEach(ResourceBooking::startResourceBooking);
         // 저장
@@ -148,6 +159,13 @@ public class ResourceBookingService implements ProductBookingService {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, REJECT_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+
+        // 장비 예약 반려 알림
+        try {
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.DENIED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -161,16 +179,20 @@ public class ResourceBookingService implements ProductBookingService {
         if (!resourceBooking.checkBookingStatus(BookingStatus.WAITING))
             throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
         // 이미 예약된 날짜 여부 확인
-        // TODO 기획 변경으로 인한 수정
-//        if(resourceBookingRepository.existsDate(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate())) throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);;
-
+        if (resourceBookingRepository.existsDateTime(resourceBooking.getResource(), resourceBooking.getStartDate(), resourceBooking.getEndDate()))
+            throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
         // 예약 허가
         resourceBooking.changeBookingStatus(BookingStatus.BOOKED);
-
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+        // 장비 예약 알림
+        try {
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -186,6 +208,12 @@ public class ResourceBookingService implements ProductBookingService {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
                 emailUtil.createBookingData(resourceBooking.getUser(), SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT, PRODUCT)), BOOKING_TEMPLATE);
+        // 장비 반납 알림
+        try {
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.RETURNED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
