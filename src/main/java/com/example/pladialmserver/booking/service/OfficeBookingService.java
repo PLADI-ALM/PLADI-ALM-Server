@@ -5,6 +5,7 @@ import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -94,7 +95,7 @@ public class OfficeBookingService {
         officeBookingRepository.save(officeBooking);
         // 회의실 예약 취소 알림
         try {
-            notificationService.sendCancelBookingNotification(officeBooking, user);
+            notificationService.sendNotification(officeBooking.getOffice().getName(), Constants.NotificationCategory.OFFICE, Constants.NotificationType.CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -167,7 +168,7 @@ public class OfficeBookingService {
         officeBookingRepository.save(officeBooking);
         // 회의실 예약 반려 알림
         try {
-            notificationService.sendCancelBookingNotification(officeBooking, user);
+            notificationService.sendNotification(officeBooking.getOffice().getName(), Constants.NotificationCategory.OFFICE, Constants.NotificationType.DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -109,7 +110,7 @@ public class ResourceBookingService implements ProductBookingService {
         resourceBookingRepository.save(resourceBooking);
         // 장비 예약 취소 알림
         try {
-            notificationService.sendCancelBookingNotification(resourceBooking, user);
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,7 +161,7 @@ public class ResourceBookingService implements ProductBookingService {
 
         // 장비 예약 반려 알림
         try {
-            notificationService.sendRejectBookingNotification(resourceBooking, user);
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -189,7 +190,7 @@ public class ResourceBookingService implements ProductBookingService {
                 emailUtil.createBookingData(resourceBooking.getUser(), APPROVE_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
-            notificationService.sendAllowBookingNotification(resourceBooking, user);
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -210,7 +211,7 @@ public class ResourceBookingService implements ProductBookingService {
                 emailUtil.createBookingData(resourceBooking.getUser(), RETURN_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
         // 장비 반납 알림
         try {
-            notificationService.sendReturnBookingNotification(resourceBooking, user);
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.RETURNED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.example.pladialmserver.product.car.service;
 
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -87,7 +88,7 @@ public class CarService implements ProductService {
                 emailUtil.createBookingData(user, NEW_BOOKING_TEXT, car.getName(), productReq.getStartDateTime(), productReq.getEndDateTime()), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
-            notificationService.sendAllowBookingNotification(carBooking, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);
         } catch (IOException e) {
             e.printStackTrace();
         }

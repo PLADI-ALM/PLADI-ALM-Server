@@ -28,57 +28,13 @@ public class PushNotificationService {
     private final ObjectMapper objectMapper;
     private final PushNotificationRepository notificationRepository;
 
-    public void sendAllowBookingNotification(CarBooking carBooking, User user) throws IOException {
-        String messageBody = carBooking.getCar().getName()+" 차량이 예약되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendAllowBookingNotification(ResourceBooking resourceBooking, User user) throws IOException {
-        String messageBody = resourceBooking.getResource().getName()+" 장비가 예약되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendRejectBookingNotification(CarBooking carBooking, User user) throws IOException {
-        String messageBody = carBooking.getCar().getName()+" 차량 예약이 반려되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendRejectBookingNotification(ResourceBooking resourceBooking, User user) throws IOException {
-        String messageBody = resourceBooking.getResource().getName()+" 장비 예약이 반려되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendReturnBookingNotification(CarBooking carBooking, User user) throws IOException {
-        String messageBody = carBooking.getCar().getName()+" 차량이 반납되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendReturnBookingNotification(ResourceBooking resourceBooking, User user) throws IOException {
-        String messageBody = resourceBooking.getResource().getName()+"장비가 반납되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendCancelBookingNotification(CarBooking carBooking, User user) throws IOException {
-        String messageBody = carBooking.getCar().getName()+" 차량 예약이 취소되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendCancelBookingNotification(ResourceBooking resourceBooking, User user) throws IOException {
-        String messageBody = resourceBooking.getResource().getName()+" 장비 예약이 취소되었습니다.";
-        createNotification(user, messageBody);
-    }
-
-    public void sendCancelBookingNotification(OfficeBooking officeBooking, User user) throws IOException {
-        String messageBody = officeBooking.getOffice().getName()+" 회의실 예약이 취소되었습니다.";
-        createNotification(user, messageBody);
-    }
-
     @Transactional
-    public void createNotification(User user, String messageBody) throws IOException {
+    public void sendNotification(String title, String category, String type, User user) throws IOException {
+        String messageBody = title + category + type;
         if (user.getFcmToken() != null) {
-            FcmMessage fcmMessage = FcmMessage.makeMessage(user.getFcmToken(), " ", messageBody);
+            FcmMessage fcmMessage = FcmMessage.makeMessage(user.getFcmToken(), title, messageBody);
             Response response = sendMessage(objectMapper.writeValueAsString(fcmMessage));
-            notificationRepository.save(PushNotification.toEntity("", messageBody, user));
+            notificationRepository.save(PushNotification.toEntity(title, messageBody, user));
         }
     }
 

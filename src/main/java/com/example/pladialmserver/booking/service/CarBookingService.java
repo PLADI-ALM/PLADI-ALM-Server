@@ -4,6 +4,7 @@ import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
@@ -82,7 +83,7 @@ public class CarBookingService implements ProductBookingService{
         carBooking.changeBookingStatus(BookingStatus.CANCELED);
         // 차랑 예약 반려 알림
         try {
-            notificationService.sendRejectBookingNotification(carBooking, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,7 +108,7 @@ public class CarBookingService implements ProductBookingService{
         carBooking.changeBookingStatus(BookingStatus.BOOKED);
         // 차량 예약 허가 알림
         try {
-            notificationService.sendAllowBookingNotification(carBooking, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.SUCCESS, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,7 +124,7 @@ public class CarBookingService implements ProductBookingService{
         returnBookingCar(carBooking);
         // 차랑 예약 반납 알림
         try {
-            notificationService.sendReturnBookingNotification(carBooking, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.RETURNED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -186,10 +187,11 @@ public class CarBookingService implements ProductBookingService{
         carBookingRepository.save(carBooking);
         // 차량 예약 취소 알림
         try {
-            notificationService.sendCancelBookingNotification(carBooking, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
