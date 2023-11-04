@@ -41,4 +41,17 @@ public class Constants {
         public static final String LOGOUT = "logout";
         public static final String SIGNOUT = "signout";
     }
+
+    public static class NotificationCategory{
+        public static final String CAR = "차량";
+        public static final String EQUIPMENT = "장비";
+        public static final String OFFICE = "회의실";
+    }
+
+    public static class NotificationType{
+        public static final String SUCCESS = "예약이 완료되었습니다.";
+        public static final String DENIED = "예약이 반려되었습니다.";
+        public static final String CANCELED = "예약이 취소되었습니다.";
+        public static final String RETURNED = "예약이 반납되었습니다.";
+    }
 }

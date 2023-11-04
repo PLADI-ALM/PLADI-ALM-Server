@@ -49,6 +49,9 @@ public class User extends BaseEntity {
     @Size(max = 20)
     private String phone;
 
+    @Size(max = 300)
+    private String fcmToken;
+
     @ManyToOne
     @JoinColumn(nullable = false, name = "department_id")
     private Department department;
@@ -61,13 +64,14 @@ public class User extends BaseEntity {
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, String phone, Role role) {
+    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.department = department;
         this.phone=phone;
         this.role = role;
+        this.fcmToken = fcmToken;
     }
 
     public static User toEntity(CreateUserReq req, Department department){
@@ -78,6 +82,7 @@ public class User extends BaseEntity {
                 .phone(req.getPhone())
                 .department(department)
                 .role(Role.getRoleByName(req.getRole()))
+                .fcmToken(req.getFcmToken())
                 .build();
     }
 
@@ -92,9 +97,9 @@ public class User extends BaseEntity {
     public void updatePassword(String password){
         this.password = password;
     }
-  
+
     public boolean checkRole(Role role) {
         return this.role == role;
     }
-  
+
 }
