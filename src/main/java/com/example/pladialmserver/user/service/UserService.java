@@ -140,6 +140,8 @@ public class UserService {
         // 수정 및 저장
         user.updateUser(updateUserReq, department);
         userRepository.save(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.changeUserProfile(user);
     }
 
     // 부서 리스트
@@ -169,6 +171,8 @@ public class UserService {
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.deleteUser(user);
     }
 
 }
