@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.example.pladialmserver.global.Constants.Email.*;
+import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 import static com.example.pladialmserver.global.exception.BaseResponseCode.*;
 
 @Service

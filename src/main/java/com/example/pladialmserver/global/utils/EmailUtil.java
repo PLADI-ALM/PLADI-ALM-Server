@@ -1,5 +1,6 @@
 package com.example.pladialmserver.global.utils;
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.user.entity.User;
@@ -13,12 +14,12 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.pladialmserver.global.Constants.Email.EMAIL_CODE;
+import static com.example.pladialmserver.global.Constants.EmailNotification.EMAIL_CODE;
+import static com.example.pladialmserver.global.Constants.EmailNotification.PRODUCT;
 import static com.example.pladialmserver.global.exception.BaseResponseCode.BLACKLIST_EMAIL_CODE;
 
 @Component
@@ -77,12 +78,13 @@ public class EmailUtil {
         return emailData;
     }
 
-    public Map<String, String> createBookingData(User user, String text, String productName, LocalDateTime startDateTime, LocalDateTime endDateTime){
+    public Map<String, String> createBookingData( SendEmailReq emailReq){
         Map<String, String> bookingData = new HashMap<>();
-        bookingData.put("text", text);
-        bookingData.put("reservatorName", user.getName());
-        bookingData.put("resourceName", productName);
-        bookingData.put("reservationTime", DateTimeUtil.dateTimeToStringNullable(startDateTime) + " ~ " + DateTimeUtil.dateTimeToStringNullable(endDateTime));
+        bookingData.put("text", emailReq.getText());
+        bookingData.put("reservatorName", emailReq.getReservatorName());
+        bookingData.put("officeProduct", emailReq.getOffice_product());
+        bookingData.put("resourceName", emailReq.getProductName());
+        bookingData.put("reservationTime", DateTimeUtil.dateTimeToStringNullable(emailReq.getStartDateTime()) + " ~ " + DateTimeUtil.dateTimeToStringNullable(emailReq.getEndDateTime()));
         return bookingData;
     }
 

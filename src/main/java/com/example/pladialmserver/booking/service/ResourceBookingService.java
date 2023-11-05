@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
@@ -23,12 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.pladialmserver.global.Constants.Email.*;
+import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -157,7 +157,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), REJECT_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
 
         // 장비 예약 반려 알림
         try {
@@ -185,7 +185,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), APPROVE_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
             notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);
@@ -206,7 +206,7 @@ public class ResourceBookingService implements ProductBookingService {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
         emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(resourceBooking.getUser(), RETURN_BOOKING_TEXT, resourceBooking.getResource().getName(), resourceBooking.getStartDate(), resourceBooking.getEndDate()), BOOKING_TEMPLATE);
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 반납 알림
         try {
             notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.RETURNED, user);

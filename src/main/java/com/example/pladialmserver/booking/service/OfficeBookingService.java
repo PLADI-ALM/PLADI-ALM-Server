@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.AdminBookingRes;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
@@ -25,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.example.pladialmserver.global.Constants.EmailNotification.*;
+import static com.example.pladialmserver.global.Constants.EmailNotification.BOOKING_TEMPLATE;
 
 @Service
 @Transactional(readOnly = true)
@@ -120,6 +124,14 @@ public class OfficeBookingService {
         checkSTList.forEach(OfficeBooking::usingBookingOffice);
         // 저장
         officeBookingRepository.saveAll(checkSTList);
+
+        String title = COMPANY_NAME + OFFICE + SPACE + BOOKING_TEXT + BOOKING_END;
+        // 이메일 알림
+        checkETList.forEach(officeBooking -> {
+            emailUtil.sendEmail(officeBooking.getUser().getEmail(), title,
+                    emailUtil.createBookingData(SendEmailReq.toDto(officeBooking, END_BOOKING_TEXT)), BOOKING_TEMPLATE);
+
+        });
     }
 
     /**
@@ -166,6 +178,11 @@ public class OfficeBookingService {
         // 예약 취소
         officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+        // 이메일 알림
+        String title = COMPANY_NAME + OFFICE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
+        emailUtil.sendEmail(officeBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(SendEmailReq.toDto(officeBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
+
         // 회의실 예약 반려 알림
         try {
             notificationService.sendNotification(officeBooking.getOffice().getName(), Constants.NotificationCategory.OFFICE, Constants.NotificationType.DENIED, user);

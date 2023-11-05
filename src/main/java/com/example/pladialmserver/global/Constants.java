@@ -6,10 +6,9 @@ public class Constants {
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final String DATE_HOUR_PATTERN = "yyyy-MM-dd HH";
 
-    public static class Email{
+    public static class EmailNotification {
         public static final String SPACE = " ";
-
-        public static final String COMPANY_NAME = "[플레디] ";
+        public static final String COMPANY_NAME = "[플래디] ";
         public static final String FIND_EMAIL_CODE_TITLE = "사내 시스템 이메일 인증 번호";
         public static final String NEW_BOOKING_TEXT = "새로운 예약 요청이 들어왔습니다. 예약 상태를 확인해주세요.";
         public static final String APPROVE_BOOKING_TEXT = "요청하신 예약이 승인되었습니다.";
@@ -27,6 +26,8 @@ public class Constants {
         public static final String BOOKING_TEMPLATE = "booking";
         public static final String RESOURCE = "장비";
         public static final String CAR = "차량";
+        public static final String OFFICE = "회의실";
+        public static final String PRODUCT = "자원명";
 
     }
 
