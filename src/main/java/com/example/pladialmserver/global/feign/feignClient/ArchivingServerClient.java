@@ -11,7 +11,7 @@ public interface ArchivingServerClient {
     @PostMapping("/users")
     void addUser(@RequestBody UserReq userReq);
 
-    @GetMapping("/users")
+    @PostMapping("/users/change")
     void changeUser(@RequestBody UserReq userReq);
 
     @DeleteMapping("/users")
