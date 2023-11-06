@@ -64,7 +64,7 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
     @Override
     public List<OfficeBooking> findByStatusAndDateAndEndTime(BookingStatus status) {
         return jpaQueryFactory.selectFrom(officeBooking)
-                .where(officeBooking.status.eq(BookingStatus.BOOKED)
+                .where(officeBooking.status.eq(BookingStatus.USING)
                         .and(officeBooking.date.eq(LocalDate.now()))
                         .and(officeBooking.endTime.hour().eq(LocalTime.now().getHour())))
                 .fetch();
