@@ -4,6 +4,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.office.dto.response.AdminOfficeRes;
 import com.example.pladialmserver.office.dto.response.AdminOfficesDetailsRes;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.service.OfficeService;
@@ -128,7 +129,7 @@ public class OfficeAdminController {
             @ApiResponse(responseCode = "400", description = "(B0001)날짜와 시간을 모두 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping
-    public ResponseCustom<Page<OfficeRes>> searchOffice(
+    public ResponseCustom<Page<AdminOfficeRes>> searchOffice(
             @Account User user,
             @Parameter(description = "회의실 이름",example = "회의실1")@RequestParam(required = false) String facilityName,
             Pageable pageable
