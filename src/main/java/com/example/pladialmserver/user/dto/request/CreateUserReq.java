@@ -30,7 +30,7 @@ public class CreateUserReq {
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", required = true)
     @NotBlank(message = "U0011")
     private String role;
-    @Schema(type = "String", description = "푸쉬알림 토큰", example = "{fcm token}", required = false)
+    @Schema(type = "String", description = "푸쉬알림 토큰", example = "fcmToken", required = false)
     @NotBlank(message = "T0001")
     private String fcmToken;
 }

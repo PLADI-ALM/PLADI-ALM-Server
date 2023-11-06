@@ -53,14 +53,14 @@ public class OfficeService {
             if (!bookedOfficeIds.isEmpty()) {
                 if (facilityName != null && !facilityName.isEmpty()) {
                     // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                    allOffices = officeRepository.findByFacilityNameAndOfficeIdNotInIAndIsEnableTrueAndIsActiveTrue(facilityName, bookedOfficeIds, pageable);
+                    allOffices = officeRepository.findByFacilityNameContainingAndOfficeIdNotInIAndIsEnableTrueAndIsActiveTrue(facilityName, bookedOfficeIds, pageable);
                 }else {
                     allOffices = officeRepository.findAllByOfficeIdNotInAndIsEnableTrueAndIsActiveTrue(bookedOfficeIds, pageable);
                 }
             } else {
                 if (facilityName != null && !facilityName.isEmpty()) {
                     // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                    allOffices = officeRepository.findByFacilityNameAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
+                    allOffices = officeRepository.findByFacilityNameContainingAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
                 }else {
                     allOffices = officeRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
                 }
@@ -68,7 +68,7 @@ public class OfficeService {
         }else{
             if (facilityName != null && !facilityName.isEmpty()) {
                 // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                allOffices = officeRepository.findByFacilityNameAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
+                allOffices = officeRepository.findByFacilityNameContainingAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
             }else {
                 allOffices = officeRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
             }

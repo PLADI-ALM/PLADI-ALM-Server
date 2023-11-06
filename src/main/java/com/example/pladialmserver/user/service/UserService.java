@@ -2,7 +2,7 @@ package com.example.pladialmserver.user.service;
 
 import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
-import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient;
+import com.example.pladialmserver.global.feign.publisher.ArchivingServerEventPublisher;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
@@ -36,7 +36,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
-    private final ArchivingServerClient archivingServerClient;
+    private final ArchivingServerEventPublisher archivingServerEventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final EmailUtil emailUtil;
@@ -106,6 +106,13 @@ public class UserService {
     public ResponsibilityListRes getResponsibilityList(String name) {
         return ResponsibilityListRes.toDto(userRepository.findAllByName(name));
     }
+    // 직원 접근 탈퇴
+    public void resignUser(User user) {
+        jwtUtil.deleteRefreshToken(user.getUserId());
+        userRepository.delete(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.deleteUser(user);
+    }
 
     // ===================================================================================================================
     // [관리자-사용자]
@@ -123,7 +130,10 @@ public class UserService {
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
-        userRepository.save(User.toEntity(createUserReq, department));
+        User user = User.toEntity(createUserReq, department);
+        userRepository.save(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.addUser(user);
     }
 
     // 직원 수정
@@ -137,6 +147,8 @@ public class UserService {
         // 수정 및 저장
         user.updateUser(updateUserReq, department);
         userRepository.save(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.changeUserProfile(user);
     }
 
     // 부서 리스트
@@ -161,11 +173,9 @@ public class UserService {
 
     // 직원 탈퇴
     @Transactional
-    public void resignUser(User admin, Long userId) {
+    public void resignUserByAdmin(User admin, Long userId) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
-        jwtUtil.deleteRefreshToken(user.getUserId());
-        userRepository.delete(user);
+        resignUser(user);
     }
-
 }
