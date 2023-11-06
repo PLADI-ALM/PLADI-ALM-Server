@@ -1,5 +1,6 @@
 package com.example.pladialmserver.global.feign.feignClient;
 
+import com.example.pladialmserver.global.feign.dto.UpdateUserReq;
 import com.example.pladialmserver.global.feign.dto.UserReq;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public interface ArchivingServerClient {
     void addUser(@RequestBody UserReq userReq);
 
     @PatchMapping("/users")
-    void changeUser(@RequestBody UserReq userReq);
+    void changeUser(@RequestBody UpdateUserReq userReq);
 
     @DeleteMapping("/users")
     void deleteUser(@RequestBody UserReq userReq);
