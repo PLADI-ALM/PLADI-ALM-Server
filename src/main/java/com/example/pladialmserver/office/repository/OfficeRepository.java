@@ -23,16 +23,16 @@ public interface OfficeRepository extends JpaRepository<Office, Long>,OfficeCust
     @Query("SELECT ofc.office " +
             "FROM OfficeFacility ofc " +
             "JOIN ofc.office o " +
-            "WHERE o.isEnable = true AND o.isActive = true AND ofc.facility.name = :facilityName")
-    Page<Office> findByFacilityNameAAndIsEnableTrueAndIsActiveTrue(@Param("facilityName") String facilityName, Pageable pageable);
+            "WHERE o.isEnable = true AND o.isActive = true AND ofc.facility.name LIKE %:facilityName%")
+    Page<Office> findByFacilityNameContainingAAndIsEnableTrueAndIsActiveTrue(@Param("facilityName") String facilityName, Pageable pageable);
 
     @Query("SELECT ofc.office " +
             "FROM OfficeFacility ofc " +
             "JOIN ofc.office o " +
-            "WHERE o.isEnable = true AND o.isActive = true AND ofc.facility.name = :facilityName" +
+            "WHERE o.isEnable = true AND o.isActive = true AND ofc.facility.name LIKE %:facilityName% " +
             " AND ofc.office.officeId " +
             "NOT IN :bookedOfficeIds")
-    Page<Office> findByFacilityNameAndOfficeIdNotInIAndIsEnableTrueAndIsActiveTrue(@Param("facilityName") String facilityName, @Param("bookedOfficeIds") List<Long> bookedOfficeIds, Pageable pageable);
+    Page<Office> findByFacilityNameContainingAndOfficeIdNotInIAndIsEnableTrueAndIsActiveTrue(@Param("facilityName") String facilityName, @Param("bookedOfficeIds") List<Long> bookedOfficeIds, Pageable pageable);
 
 
     Optional<Office> findByOfficeIdAndIsEnable(Long officeId, boolean isEnable);
