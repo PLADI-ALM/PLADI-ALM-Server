@@ -8,10 +8,10 @@ import lombok.Data;
 public class UserReq {
     private Long userId;
     private String name;
-    private String role;
+    private Role role;
 
     @Builder
-    public UserReq(Long userId, String name, String role) {
+    public UserReq(Long userId, String name, Role role) {
         this.userId = userId;
         this.name = name;
         this.role = role;

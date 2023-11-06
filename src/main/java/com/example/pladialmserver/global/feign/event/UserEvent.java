@@ -1,6 +1,7 @@
 package com.example.pladialmserver.global.feign.event;
 
 import com.example.pladialmserver.global.feign.dto.UserReq;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.Getter;
 
@@ -8,13 +9,13 @@ import lombok.Getter;
 public class UserEvent {
     private Long userId;
     private String name;
-    private String role;
+    private Role role;
 
     public static UserEvent toEvent(User user){
         UserEvent userJoinEvent = new UserEvent();
         userJoinEvent.userId = user.getUserId();
         userJoinEvent.name = user.getName();
-        userJoinEvent.role = user.getRole().getValue();
+        userJoinEvent.role = user.getRole();
         return userJoinEvent;
     }
 
@@ -22,7 +23,7 @@ public class UserEvent {
         return UserReq.builder()
                 .userId(this.userId)
                 .name(this.name)
-                .role(this.role)
+                .role(role)
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.pladialmserver.global.feign.handler;
 
 import com.example.pladialmserver.global.feign.event.DeleteUserEvent;
-import com.example.pladialmserver.global.feign.event.UpdateUserEvent;
 import com.example.pladialmserver.global.feign.event.UserEvent;
 import com.example.pladialmserver.global.feign.feignClient.ArchivingServerClient;
 import feign.FeignException;
@@ -31,7 +30,7 @@ public class ArchivingServerEventHandlerImpl implements ArchivingServerEventHand
     @Async
     @EventListener
     @Override
-    public void changeUserProfile(UpdateUserEvent userEvent) {
+    public void changeUserProfile(UserEvent userEvent) {
         try {
             archivingServerClient.changeUser(userEvent.toDto());
         } catch (FeignException e) {
