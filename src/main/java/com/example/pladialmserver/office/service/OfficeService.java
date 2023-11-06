@@ -230,26 +230,18 @@ public class OfficeService {
 
     }
 
-    public Page<OfficeRes> findAvailableAdminOffices(User user,String officeName, Pageable pageable) {
+    public Page<AdminOfficeRes> findAvailableAdminOffices(User user,String officeName, Pageable pageable) {
         checkAdminRole(user);
 
         Page<Office> allOffices;
 
-
             if (officeName != null && !officeName.isEmpty()) {
                 // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                allOffices = officeRepository.findByNameAndIsEnableTrue(officeName, pageable);
+                allOffices = officeRepository.findByNameContainingAndIsEnableTrue(officeName, pageable);
             }else {
                 allOffices = officeRepository.findAllByIsEnableTrue(pageable);
             }
 
-
-        return allOffices.map(office -> {
-            List<Facility> facilities = office.getFacilityList().stream()
-                    .map(OfficeFacility::getFacility)
-                    .collect(Collectors.toList());
-            return OfficeRes.toDto(office, facilities);
-        });
-
+        return allOffices.map(AdminOfficeRes::toDto);
     }
 }

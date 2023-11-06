@@ -38,8 +38,11 @@ public interface OfficeRepository extends JpaRepository<Office, Long>,OfficeCust
     Optional<Office> findByOfficeIdAndIsEnable(Long officeId, boolean isEnable);
 
     Optional<Office> findByOfficeIdAndIsEnableAndIsActive(Long officeId, boolean isEnable, boolean isActive);
-
-    Page<Office> findByNameAndIsEnableTrue(@Param("name") String name, Pageable pageable);
+    @Query("SELECT o " +
+            "FROM Office o" +
+            " WHERE o.name LIKE %:name%" +
+            " AND o.isEnable = true")
+    Page<Office> findByNameContainingAndIsEnableTrue(@Param("name") String name, Pageable pageable);
     Page<Office> findByNameAndOfficeIdNotInAndIsEnableTrue(@Param("name") String name, @Param("bookedOfficeIds") List<Long> bookedOfficeIds, Pageable pageable);
 
     @Query("SELECT o " +
