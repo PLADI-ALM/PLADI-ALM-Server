@@ -122,4 +122,15 @@ public class UserController {
             @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name) {
         return ResponseCustom.OK(userService.getResponsibilityList(name));
     }
+
+    @Operation(summary = "직원 탈퇴 (장채은)", description = "직원을 탈퇴한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)직원 탈퇴 성공"),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @DeleteMapping("")
+    public ResponseCustom resignUser(@Account User user){
+        userService.resignUser(user);
+        return ResponseCustom.OK();
+    }
 }

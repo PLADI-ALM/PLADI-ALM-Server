@@ -106,6 +106,13 @@ public class UserService {
     public ResponsibilityListRes getResponsibilityList(String name) {
         return ResponsibilityListRes.toDto(userRepository.findAllByName(name));
     }
+    // 직원 접근 탈퇴
+    public void resignUser(User user) {
+        jwtUtil.deleteRefreshToken(user.getUserId());
+        userRepository.delete(user);
+        // 사용자 아카이빙 서버로 정보 전달
+        archivingServerEventPublisher.deleteUser(user);
+    }
 
     // ===================================================================================================================
     // [관리자-사용자]
@@ -166,13 +173,9 @@ public class UserService {
 
     // 직원 탈퇴
     @Transactional
-    public void resignUser(User admin, Long userId) {
+    public void resignUserByAdmin(User admin, Long userId) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
-        jwtUtil.deleteRefreshToken(user.getUserId());
-        userRepository.delete(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.deleteUser(user);
+        resignUser(user);
     }
-
 }
