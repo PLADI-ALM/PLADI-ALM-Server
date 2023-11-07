@@ -49,10 +49,18 @@ public class Constants {
         public static final String OFFICE = "회의실";
     }
 
-    public static class NotificationType{
-        public static final String SUCCESS = "예약이 완료되었습니다.";
-        public static final String DENIED = "예약이 반려되었습니다.";
-        public static final String CANCELED = "예약이 취소되었습니다.";
-        public static final String RETURNED = "예약이 반납되었습니다.";
+    public static class Notification {
+        public static final String BODY_SUCCESS = "예약이 완료되었습니다.";
+        public static final String BODY_DENIED = "예약이 반려되었습니다.";
+        public static final String BODY_CANCELED = "예약이 취소되었습니다.";
+        public static final String BODY_RETURNED = "예약이 종료되었습니다.";
+        public static final String TITLE_SUCCESS = "예약 완료";
+        public static final String TITLE_DENIED = "예약 반려";
+        public static final String TITLE_CANCELED = "예약 취소";
+        public static final String TITLE_RETURNED = "예약 종료";
+        public static final String SUCCESS = "완료";
+        public static final String DENIED = "반려";
+        public static final String CANCEL = "취소";
+        public static final String RETURN = "종료";
     }
 }

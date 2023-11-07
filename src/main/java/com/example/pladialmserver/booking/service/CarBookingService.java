@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -90,7 +89,7 @@ public class CarBookingService implements ProductBookingService{
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차랑 예약 반려 알림
         try {
-            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.DENIED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -118,7 +117,7 @@ public class CarBookingService implements ProductBookingService{
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차량 예약 허가 알림
         try {
-            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.SUCCESS, user);
+            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_SUCCESS, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -138,7 +137,7 @@ public class CarBookingService implements ProductBookingService{
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차랑 예약 반납 알림
         try {
-            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.RETURNED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_RETURNED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -201,7 +200,7 @@ public class CarBookingService implements ProductBookingService{
         carBookingRepository.save(carBooking);
         // 차량 예약 취소 알림
         try {
-            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.NotificationType.CANCELED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }

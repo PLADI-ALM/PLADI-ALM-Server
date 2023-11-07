@@ -1,8 +1,6 @@
 package com.example.pladialmserver.notification.service;
 
-import com.example.pladialmserver.booking.entity.CarBooking;
-import com.example.pladialmserver.booking.entity.OfficeBooking;
-import com.example.pladialmserver.booking.entity.ResourceBooking;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.notification.dto.FcmMessage;
 import com.example.pladialmserver.notification.entity.PushNotification;
 import com.example.pladialmserver.notification.repository.PushNotificationRepository;
@@ -11,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.apache.tomcat.util.bcel.Const;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -29,13 +28,30 @@ public class PushNotificationService {
     private final PushNotificationRepository notificationRepository;
 
     @Transactional
-    public void sendNotification(String title, String category, String type, User user) throws IOException {
+    public void sendNotification(String category, String type, User user) throws IOException {
+        String title = getTitle(category, type);
         String messageBody = title + category + type;
         if (user.getFcmToken() != null) {
             FcmMessage fcmMessage = FcmMessage.makeMessage(user.getFcmToken(), title, messageBody);
             Response response = sendMessage(objectMapper.writeValueAsString(fcmMessage));
             notificationRepository.save(PushNotification.toEntity(title, messageBody, user));
         }
+    }
+
+    private String getTitle(String category, String type) {
+        String title = "";
+        if (category.equals(Constants.NotificationCategory.CAR)) title = extract(type, title, category);
+        if (category.equals(Constants.NotificationCategory.EQUIPMENT)) title = extract(type, title, category);
+        if (category.equals(Constants.NotificationCategory.OFFICE)) title = extract(type, title, category);
+        return title;
+    }
+
+    private String extract(String type, String title, String category) {
+        if(type.contains(Constants.Notification.SUCCESS)) title = category + Constants.Notification.TITLE_SUCCESS;
+        if(type.contains(Constants.Notification.DENIED)) title = category + Constants.Notification.TITLE_DENIED;
+        if(type.contains(Constants.Notification.CANCEL)) title = category + Constants.Notification.TITLE_CANCELED;
+        if(type.contains(Constants.Notification.RETURN)) title = category + Constants.Notification.TITLE_RETURNED;
+        return title;
     }
 
     @NotNull

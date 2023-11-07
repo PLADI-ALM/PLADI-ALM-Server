@@ -110,7 +110,7 @@ public class ResourceBookingService implements ProductBookingService {
         resourceBookingRepository.save(resourceBooking);
         // 장비 예약 취소 알림
         try {
-            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.CANCELED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,7 +161,7 @@ public class ResourceBookingService implements ProductBookingService {
 
         // 장비 예약 반려 알림
         try {
-            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.DENIED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -188,7 +188,7 @@ public class ResourceBookingService implements ProductBookingService {
                 emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
-            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.SUCCESS, user);
+            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_SUCCESS, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,7 +209,7 @@ public class ResourceBookingService implements ProductBookingService {
                 emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 반납 알림
         try {
-            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.EQUIPMENT, Constants.NotificationType.RETURNED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_RETURNED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
