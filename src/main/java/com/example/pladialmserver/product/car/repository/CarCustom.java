@@ -1,8 +1,14 @@
 package com.example.pladialmserver.product.car.repository;
 
-public interface CarCustom {
-//    Page<CarRes> findAvailableCars(String carName, LocalDate startDate, LocalDate endDate, Pageable pageable);
+import com.example.pladialmserver.product.car.dto.CarRes;
+import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import org.springframework.data.domain.Page;
 
-//    Page<CarRes> findAllCars(Pageable pageable);
+import java.time.LocalDateTime;
+
+public interface CarCustom {
+
+Page<CarRes> findAvailableCars(String carName, LocalDateTime startDate, LocalDateTime endDate, org.springframework.data.domain.Pageable pageable);
+
 
 }
