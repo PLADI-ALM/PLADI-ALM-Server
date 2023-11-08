@@ -2,6 +2,8 @@ package com.example.pladialmserver.booking.repository.carBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
+import com.example.pladialmserver.booking.entity.QCarBooking;
+import com.example.pladialmserver.booking.entity.QResourceBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -144,23 +146,6 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         return DateTimeUtil.dateTimeToTime(localDateTime).equals(LocalTime.MIN);
     }
 
-//
-//
-//    private BooleanExpression carNameContaining(String carName) {
-//        return hasText(carName) ? car.name.contains(carName) : null;
-//    }
-//    @Override
-//    public List<Long> findBookedCarIdsByDateAndCarName(LocalDate startDate, LocalDate endDate, String carName) {
-//        return jpaQueryFactory
-//                .select(QCarBooking.carBooking.car.carId)
-//                .from(QCarBooking.carBooking)
-//                .where(
-//                QCarBooking.carBooking.startDate.before(endDate.atTime(23, 59, 59)),
-//                QCarBooking.carBooking.endDate.after(startDate.atStartOfDay()),
-//                        carNameContaining(carName))
-////                        QCarBooking.carBooking.car.name.like("%" + carName + "%"))
-//                .fetch();
-//        }
 
     @Override
     public Page<BookingRes> getBookingsByUser(User user, Pageable pageable) {
@@ -177,5 +162,16 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), res.size());
         return new PageImpl<>(res.subList(start, end), pageable, res.size());
+    }
+
+    @Override
+    public List<Long> findBookedCarIdsByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return jpaQueryFactory
+                .select(QCarBooking.carBooking.car.carId)
+                .from(QCarBooking.carBooking)
+                .where(QCarBooking.carBooking.startDate.before(endDate),
+                        QCarBooking.carBooking.endDate.after(startDate),
+                        QCarBooking.carBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED))
+                .fetch();
     }
 }

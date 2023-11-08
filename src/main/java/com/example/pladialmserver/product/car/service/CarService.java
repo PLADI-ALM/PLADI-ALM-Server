@@ -44,24 +44,7 @@ public class CarService implements ProductService {
      * 전체 차량 목록 조회 and 예약 가능한 차량 목록 조회
      */
     public Page<CarRes> findAvailableCars(String carName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        Page<Car> allCars;
-
-        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new BaseException(BaseResponseCode.END_DATE_BEFORE_START_DATE);
-        }
-        if (carName != null && startDate != null && endDate != null) {
-            List<Long> bookedCarIds = carBookingRepository.findBookedCarIdsByDateAndCarName(startDate, endDate, carName);
-
-            if (!bookedCarIds.isEmpty()) {
-                allCars = carRepository.findByNameAndCarIdNotInAAndIsEnableTrueAAndIsActiveTrue(carName, bookedCarIds, pageable);
-            } else {
-                allCars = carRepository.findByNameContainingAAndIsEnableTrueAndIsActiveTrue(carName, pageable);
-            }
-        } else {
-            allCars = carRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
-        }
-
-        return allCars.map(CarRes::toDto);
+       return carRepository.findAvailableCars(carName,startDate,endDate,pageable);
     }
 
 

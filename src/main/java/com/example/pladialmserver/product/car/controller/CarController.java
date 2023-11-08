@@ -56,9 +56,8 @@ public class CarController {
             @Parameter(description = "종료 예약 날짜", example = "2023-10-29 12:00") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_TIME_PATTERN) LocalDateTime endDate,
             Pageable pageable
     ) {
-        if ((carName != null && (startDate == null || endDate == null)) ||
-                (carName == null && (startDate != null || endDate != null))) {
-            throw new BaseException(BaseResponseCode.NAME_OR_DATE_IS_NULL);
+        if ((startDate == null && endDate != null) || (startDate != null && endDate == null)) {
+            throw new BaseException(BaseResponseCode.START_DATE_OR_END_DATE_IS_NULL);
         }
         return ResponseCustom.OK(carService.findAvailableCars(carName, startDate, endDate, pageable));
     }
