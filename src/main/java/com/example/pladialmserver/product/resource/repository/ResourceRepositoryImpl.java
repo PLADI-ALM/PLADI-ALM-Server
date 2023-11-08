@@ -25,7 +25,6 @@ import static org.springframework.util.StringUtils.hasText;
 public class ResourceRepositoryImpl implements ResourceCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private final ResourceBookingRepository resourceBookingRepository;
 
     private BooleanExpression resourceNameContaining(String resourceName) {
         return hasText(resourceName) ? resource.name.contains(resourceName) : null;
@@ -75,13 +74,7 @@ public class ResourceRepositoryImpl implements ResourceCustom {
     }
 
     @Override
-    public Page<ResourceRes> findAvailableResources(String resourceName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        List<Long> bookedResourceIds = new ArrayList<>();
-
-        if (startDate != null && endDate != null) {
-            bookedResourceIds = resourceBookingRepository.findBookedResourceIdsByDate(startDate, endDate);
-        }
-
+    public Page<ResourceRes> findAvailableResources(String resourceName,  List<Long> bookedResourceIds, Pageable pageable) {
         Predicate filterPredicate = resourceFilter(resourceName, bookedResourceIds);
 
         List<ResourceRes> results = jpaQueryFactory

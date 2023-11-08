@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,12 @@ public class ResourceService implements ProductService {
      * 전체 장비 목록 조회 and 예약 가능한 장비 목록 조회
      */
     public Page<ResourceRes> findAvailableResources(String resourceName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        return resourceRepository.findAvailableResources(resourceName, startDate, endDate, pageable);
+        List<Long> bookedResourceIds = Collections.emptyList();
+
+        if (startDate != null && endDate != null) {
+            bookedResourceIds = resourceBookingRepository.findBookedResourceIdsByDate(startDate, endDate);
+        }
+        return resourceRepository.findAvailableResources(resourceName, bookedResourceIds, pageable);
     }
 
 
