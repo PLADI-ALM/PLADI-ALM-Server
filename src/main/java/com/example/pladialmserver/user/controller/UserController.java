@@ -7,6 +7,7 @@ import com.example.pladialmserver.user.dto.request.CheckEmailCodeReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
 import com.example.pladialmserver.user.dto.request.ResponsibilityListRes;
 import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
+import com.example.pladialmserver.user.dto.response.NotificationRes;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -141,7 +143,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/notification")
-    public ResponseCustom getUserNotification(
+    public ResponseCustom<Page<NotificationRes>> getUserNotification(
             @Account User user,
             Pageable pageable
     )
