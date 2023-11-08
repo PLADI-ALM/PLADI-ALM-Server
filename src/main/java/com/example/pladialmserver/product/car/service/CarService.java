@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static com.example.pladialmserver.global.Constants.EmailNotification.*;
@@ -44,7 +45,13 @@ public class CarService implements ProductService {
      * 전체 차량 목록 조회 and 예약 가능한 차량 목록 조회
      */
     public Page<CarRes> findAvailableCars(String carName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-       return carRepository.findAvailableCars(carName,startDate,endDate,pageable);
+        List<Long> bookedCarIds = Collections.emptyList();
+
+        if (startDate != null && endDate != null) {
+            bookedCarIds = carBookingRepository.findBookedCarIdsByDate(startDate, endDate);
+        }
+
+        return carRepository.findAvailableCars(carName,bookedCarIds,pageable);
     }
 
 

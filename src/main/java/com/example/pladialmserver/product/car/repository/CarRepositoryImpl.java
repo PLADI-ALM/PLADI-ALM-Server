@@ -26,7 +26,6 @@ import static io.jsonwebtoken.lang.Strings.hasText;
 @RequiredArgsConstructor
 public class CarRepositoryImpl implements CarCustom {
     private final JPAQueryFactory jpaQueryFactory;
-    private final CarBookingRepository carBookingRepository;
 
 
 
@@ -51,13 +50,7 @@ public class CarRepositoryImpl implements CarCustom {
     }
 
     @Override
-    public Page<CarRes> findAvailableCars(String carName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        List<Long> bookedCarIds = new ArrayList<>();
-
-        if (startDate != null && endDate != null) {
-            bookedCarIds = carBookingRepository.findBookedCarIdsByDate(startDate, endDate);
-        }
-
+    public Page<CarRes> findAvailableCars(String carName, List<Long> bookedCarIds, Pageable pageable) {
         Predicate filterPredicate = carFilter(carName, bookedCarIds);
 
         List<CarRes> results = jpaQueryFactory
