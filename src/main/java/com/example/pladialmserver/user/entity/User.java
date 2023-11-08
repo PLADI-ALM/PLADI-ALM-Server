@@ -82,7 +82,6 @@ public class User extends BaseEntity {
                 .phone(req.getPhone())
                 .department(department)
                 .role(Role.getRoleByName(req.getRole()))
-                .fcmToken(req.getFcmToken())
                 .build();
     }
 
