@@ -5,9 +5,12 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.feign.publisher.ArchivingServerEventPublisher;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
+import com.example.pladialmserver.notification.entity.PushNotification;
+import com.example.pladialmserver.notification.repository.PushNotificationRepository;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.*;
 import com.example.pladialmserver.user.dto.response.DepartmentListDto;
+import com.example.pladialmserver.user.dto.response.NotificationRes;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Department;
@@ -36,6 +39,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
+    private final PushNotificationRepository notificationRepository;
     private final ArchivingServerEventPublisher archivingServerEventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -177,5 +181,10 @@ public class UserService {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         resignUser(user);
+    }
+
+    public Page<NotificationRes> getUserNotification(User user, Pageable pageable) {
+        Page<PushNotification> notifications = notificationRepository.findByUserAndIsEnableOrderByCreatedAtDesc(user, true, pageable);
+        return notifications.map(NotificationRes::toDto);
     }
 }

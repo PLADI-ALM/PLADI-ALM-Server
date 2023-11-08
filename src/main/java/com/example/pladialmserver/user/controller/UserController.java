@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -132,5 +133,19 @@ public class UserController {
     public ResponseCustom resignUser(@Account User user){
         userService.resignUser(user);
         return ResponseCustom.OK();
+    }
+
+    @Operation(summary = "사용자 푸쉬 알림 조회 (김민기)", description = "사용자 푸쉬 알림 내역을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("/notification")
+    public ResponseCustom getUserNotification(
+            @Account User user,
+            Pageable pageable
+    )
+    {
+        return ResponseCustom.OK(userService.getUserNotification(user, pageable));
     }
 }

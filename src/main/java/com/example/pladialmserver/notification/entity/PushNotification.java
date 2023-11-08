@@ -1,5 +1,6 @@
 package com.example.pladialmserver.notification.entity;
 
+import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,11 +12,11 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class PushNotification {
+public class PushNotification extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Long notificationIdx;
+    private Long notificationId;
 
     @Column(nullable = false)
     private String notificationType;
@@ -24,7 +25,7 @@ public class PushNotification {
     private String notificationInfo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="userIdx")
+    @JoinColumn(name="userId")
     private User user;
 
     @Builder
