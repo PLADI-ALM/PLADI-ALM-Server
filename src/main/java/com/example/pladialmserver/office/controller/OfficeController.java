@@ -126,7 +126,7 @@ public class OfficeController {
      */
     @Operation(summary = "회의실 예약자 정보 확인 (장채은)", description = "회의실 예약자 정보를 확인한다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약자 정보 확인 성공", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약자 정보 확인 성공"),
             @ApiResponse(responseCode = "404", description = "(O0001)존재하지 않는 회의실입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{officeId}/booking")
