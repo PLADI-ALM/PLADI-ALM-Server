@@ -35,7 +35,7 @@ public class CarRes {
     @QueryProjection
     public CarRes(Long carId, String imgUrl, String name, String location, String description){
         this.carId=carId;
-        this.imgUrl=imgUrl;
+        this.imgUrl=AwsS3ImageUrlUtil.toUrl(imgUrl);
         this.name=name;
         this.location=location;
         this.description=description;
