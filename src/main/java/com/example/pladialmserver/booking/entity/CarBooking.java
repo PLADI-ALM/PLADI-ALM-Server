@@ -47,6 +47,9 @@ public class CarBooking extends BaseEntity {
     @Size(max = 100)
     private String memo;
 
+    @Size(max = 100)
+    private String remark;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.WAITING;
 
