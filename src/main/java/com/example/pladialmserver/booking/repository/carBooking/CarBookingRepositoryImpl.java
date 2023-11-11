@@ -3,7 +3,6 @@ package com.example.pladialmserver.booking.repository.carBooking;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.entity.QCarBooking;
-import com.example.pladialmserver.booking.entity.QResourceBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -50,24 +49,19 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
     }
 
     @Override
-    public List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate standardDate) {
-
-        // 해당 일의 00:00
-        LocalDateTime startDateTime = LocalDateTime.of(standardDate, LocalTime.MIN);
-        // 해당 일의 23:59
-        LocalDateTime endDateTime = LocalDateTime.of(standardDate, LocalTime.MAX);
+    public ProductBookingRes findCarBookingByDate(Car car, LocalDateTime standardDate) {
 
         // 해당 날짜가 포함된 예약
-        List<CarBooking> bookings = jpaQueryFactory
+        CarBooking booking = jpaQueryFactory
                 .selectFrom(carBooking)
                 .where(carBooking.car.eq(car),
                         (carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
-                        ((carBooking.startDate.between(startDateTime, endDateTime))
-                                .or(carBooking.endDate.between(startDateTime, endDateTime)))
+                        (carBooking.startDate.before(standardDate)),
+                        (carBooking.endDate.after(standardDate))
                 ).orderBy(carBooking.startDate.asc())
-                .fetch();
+                .fetchOne();
 
-        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());
+        return ProductBookingRes.toDto(booking);
     }
 
     @Override

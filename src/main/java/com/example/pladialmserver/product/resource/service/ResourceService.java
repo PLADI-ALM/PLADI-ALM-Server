@@ -201,10 +201,10 @@ public class ResourceService implements ProductService {
 
     // 해당 날짜의 장비 예약 내역 조회
     @Override
-    public List<ProductBookingRes> getProductBookingByDate(Long resourceId, LocalDate date) {
+    public ProductBookingRes getProductBookingByDate(Long resourceId, LocalDateTime dateTime) {
         // 장비 유무 확인
         Resource resource = resourceRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
-        return resourceBookingRepository.findResourceBookingByDate(resource, date);
+        return resourceBookingRepository.findResourceBookingByDate(resource, dateTime);
     }
 }
