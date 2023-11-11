@@ -25,5 +25,5 @@ public interface CarRepository extends JpaRepository<Car, Long>,CarCustom {
             "WHERE c.isEnable = true AND c.isActive = true")
     Page<Car> findAllByIsEnableTrueAndIsActiveTrue(Pageable pageable);
 
-    Optional<Car> findByCarIdAndIsEnableAndIsActive(Long carId, boolean isEnable, boolean isActive);
+    Optional<Car> findByCarIdAndIsEnable(Long carId, boolean isEnable);
 }

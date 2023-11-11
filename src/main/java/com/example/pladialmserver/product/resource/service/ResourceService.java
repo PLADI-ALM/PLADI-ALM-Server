@@ -73,7 +73,7 @@ public class ResourceService implements ProductService {
      */
     @Override
     public ProductDetailRes getProductDetail(Long resourceId) {
-        Resource resource = resourceRepository.findByResourceIdAndIsEnableAndIsActive(resourceId, true,true)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         return ProductDetailRes.toDto(resource);
     }
