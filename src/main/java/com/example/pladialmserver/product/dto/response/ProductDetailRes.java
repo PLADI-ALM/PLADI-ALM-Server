@@ -10,10 +10,12 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ProductDetailRes {
-    @Schema(type = "String", description = "이름", example = "벤츠")
+    @Schema(type = "String", description = "이름", example = "12라2940")
     private String name;
     @Schema(type = "String", description = "보관장소", example = "지하 3층 주차장")
     private String location;
+    @Schema(type = "String", description = "제조사", example = "벤츠")
+    private String manufacturer;
     @Schema(type = "Long", description = "책임자 Id", example = "1")
     private Long responsibilityId;
     @Schema(type = "String", description = "책임자 이름", example = "박소정")
@@ -28,6 +30,7 @@ public class ProductDetailRes {
     public static ProductDetailRes toDto(Resource resource) {
         return ProductDetailRes.builder()
                 .name(resource.getName())
+                .manufacturer(resource.getManufacturer())
                 .location(resource.getLocation())
                 .responsibilityId(resource.getUser().getUserId())
                 .responsibilityName(resource.getUser().getName())
@@ -40,6 +43,7 @@ public class ProductDetailRes {
     public static ProductDetailRes toDto(Car car) {
         return ProductDetailRes.builder()
                 .name(car.getName())
+                .manufacturer(car.getManufacturer())
                 .location(car.getLocation())
                 .responsibilityId(car.getUser().getUserId())
                 .responsibilityName(car.getUser().getName())

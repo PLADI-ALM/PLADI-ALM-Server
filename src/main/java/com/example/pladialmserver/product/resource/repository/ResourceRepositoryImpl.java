@@ -83,6 +83,7 @@ public class ResourceRepositoryImpl implements ResourceCustom {
                             resource.resourceId,
                             resource.imgKey,
                             resource.name,
+                            resource.manufacturer,
                             resource.location,
                             resource.description)
                     )
