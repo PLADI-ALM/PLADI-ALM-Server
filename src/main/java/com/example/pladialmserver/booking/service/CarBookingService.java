@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.ReturnProductReq;
 import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
@@ -11,6 +12,8 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.notification.service.PushNotificationService;
+import com.example.pladialmserver.product.car.entity.Car;
+import com.example.pladialmserver.product.car.repository.CarRepository;
 import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -35,6 +38,7 @@ import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 @RequiredArgsConstructor
 public class CarBookingService implements ProductBookingService{
     private final CarBookingRepository carBookingRepository;
+    private final CarRepository carRepository;
     private final EmailUtil emailUtil;
     private final PushNotificationService notificationService;
 
@@ -101,19 +105,10 @@ public class CarBookingService implements ProductBookingService{
      */
     @Override
     @Transactional
-    public void returnBookingProductByAdmin(User user, Long carBookingId) {
+    public void returnBookingProductByAdmin(User user, Long carBookingId, ReturnProductReq request) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
-        returnBookingCar(carBooking);
-        // 이메일 알림
-        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_RETURN;
-        emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
-        // 차랑 예약 반납 알림
-        try {
-            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_RETURNED, user);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        returnBookingCar(carBooking, request);
+        sendReturnNotification(carBooking.getUser(), carBooking);
     }
 
     /**
@@ -136,14 +131,41 @@ public class CarBookingService implements ProductBookingService{
         return carBookings.map(AdminProductRes::toDto);
     }
 
-    private void returnBookingCar(CarBooking carBooking) {
+    /**
+     * 차량 예약 반납
+     */
+    @Override
+    @Transactional
+    public void returnBookingProduct(User user, Long carBookingId, ReturnProductReq request) {
+        CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.BASIC);
+        returnBookingCar(carBooking, request);
+        sendReturnNotification(carBooking.getCar().getUser(), carBooking);
+    }
+
+    private void sendReturnNotification(User user, CarBooking carBooking) {
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_RETURN;
+        emailUtil.sendEmail(user.getEmail(), title,
+                emailUtil.createBookingData(SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
+        // 차랑 예약 반납 알림
+        try {
+            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_RETURNED, user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void returnBookingCar(CarBooking carBooking, ReturnProductReq request) {
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if (!carBooking.checkBookingStatus(BookingStatus.USING))
             throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
         // 차량 반납
-        carBooking.returnBookingCar();
+        carBooking.returnBookingCar(request.getRemark());
         carBookingRepository.save(carBooking);
+
+        Car car = carBooking.getCar();
+        car.setLocation(request.getReturnLocation());
+        carRepository.save(car);
     }
 
     @Override

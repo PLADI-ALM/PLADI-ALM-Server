@@ -47,6 +47,9 @@ public class CarBooking extends BaseEntity {
     @Size(max = 100)
     private String memo;
 
+    @Size(max = 100)
+    private String remark;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.BOOKED;
 
@@ -78,9 +81,10 @@ public class CarBooking extends BaseEntity {
         return status.equals(bookingStatus);
     }
 
-    public void returnBookingCar() {
+    public void returnBookingCar(String remark) {
         changeBookingStatus(BookingStatus.FINISHED);
-        returnDate = LocalDateTime.now();
+        this.returnDate = LocalDateTime.now();
+        this.remark = remark;
     }
 
 

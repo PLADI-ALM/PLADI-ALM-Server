@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.ReturnProductReq;
 import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
@@ -12,6 +13,8 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
+import com.example.pladialmserver.product.resource.entity.Resource;
+import com.example.pladialmserver.product.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,7 @@ public class ResourceBookingService implements ProductBookingService {
     private final ResourceBookingRepository resourceBookingRepository;
     private final EmailUtil emailUtil;
     private final PushNotificationService notificationService;
+    private final ResourceRepository resourceRepository;
 
 
     // 장비 예약 목록 조회
@@ -71,14 +75,18 @@ public class ResourceBookingService implements ProductBookingService {
     }
 
     // 장비 예약 반납 공통 메서드
-    private void returnBookingResource(ResourceBooking resourceBooking) {
+    private void returnBookingResource(ResourceBooking resourceBooking, ReturnProductReq request) {
         // 사용중 아니라면 -> 사용중 상태에서만 반납이 가능함
         if (!resourceBooking.checkBookingStatus(BookingStatus.USING))
             throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
         // 장비 반납
-        resourceBooking.returnBookingResource();
+        resourceBooking.returnBookingResource(request.getRemark());
         resourceBookingRepository.save(resourceBooking);
+
+        Resource resource = resourceBooking.getResource();
+        resource.setLocation(request.getReturnLocation());
+        resourceRepository.save(resource);
     }
 
     /**
@@ -198,13 +206,16 @@ public class ResourceBookingService implements ProductBookingService {
      */
     @Override
     @Transactional
-    public void returnBookingProductByAdmin(User user, Long resourceBookingId) {
+    public void returnBookingProductByAdmin(User user, Long resourceBookingId, ReturnProductReq request) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);
-        returnBookingResource(resourceBooking);
+        returnBookingResource(resourceBooking, request);
+        sendReturnNotification(resourceBooking.getUser(), resourceBooking);
+    }
 
+    private void sendReturnNotification(User user, ResourceBooking resourceBooking) {
         // 이메일 전송
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_RETURN;
-        emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
+        emailUtil.sendEmail(user.getEmail(), title,
                 emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 반납 알림
         try {
@@ -232,6 +243,14 @@ public class ResourceBookingService implements ProductBookingService {
         );
 
         return resourceBookings.map(AdminProductRes::toDto);
+    }
+
+    @Override
+    @Transactional
+    public void returnBookingProduct(User user, Long resourceBookingId, ReturnProductReq request) {
+        ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.BASIC);
+        returnBookingResource(resourceBooking, request);
+        sendReturnNotification(resourceBooking.getResource().getUser(), resourceBooking);
     }
 
 }

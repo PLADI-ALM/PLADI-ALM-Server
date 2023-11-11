@@ -83,6 +83,9 @@ dependencies {
 	implementation 'com.google.firebase:firebase-admin:6.8.1'
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 
+	//테스트용 H2
+	implementation 'com.h2database:h2'
+
 }
 
 tasks.named('test') {

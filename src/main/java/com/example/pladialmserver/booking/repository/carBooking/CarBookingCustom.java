@@ -17,7 +17,7 @@ public interface CarBookingCustom {
 
     List<String> getCarBookedDate(Car car, LocalDate standardDate, LocalDate date);
 
-    List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate date);
+    ProductBookingRes findCarBookingByDate(Car car, LocalDateTime dateTime);
 
     Page<BookingRes> getBookingsByUser(User user, Pageable pageable);
 

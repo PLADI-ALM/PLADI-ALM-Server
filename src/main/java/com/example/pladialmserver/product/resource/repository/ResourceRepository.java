@@ -27,8 +27,6 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, Resou
 
     Optional<Resource> findByResourceIdAndIsEnable(Long resourceId, boolean isEnable);
 
-    Optional<Resource> findByResourceIdAndIsEnableAndIsActive(Long resourceId, boolean isEnable,boolean isActive);
-
     @Query("SELECT r " +
             "FROM Resource r " +
             "WHERE r.isEnable = true AND r.isActive = true")
