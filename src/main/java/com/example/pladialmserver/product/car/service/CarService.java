@@ -57,7 +57,7 @@ public class CarService implements ProductService {
 
     @Override
     public ProductDetailRes getProductDetail(Long carId) {
-        Car car = carRepository.findByCarIdAndIsEnableAndIsActive(carId, true, true)
+        Car car = carRepository.findByCarIdAndIsEnable(carId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
         return ProductDetailRes.toDto(car);
     }
