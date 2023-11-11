@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.controller;
 
+import com.example.pladialmserver.booking.dto.request.ReturnProductReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
@@ -183,6 +184,26 @@ public class BookingController {
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId
     ) {
         carBookingService.cancelBookingProduct(user, carBookingId);
+        return ResponseCustom.OK();
+    }
+
+    /**
+     * 차량 예약 반납
+     */
+    @Operation(summary = "차량 예약 반납 (박소정)", description = "차량 예약을 반납한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(B0007)이미 취소된 예약입니다. (B0008)이미 사용이 완료된 예약입니다. (B0009)사용중인 상태에서만 반납이 가능합니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @PatchMapping("/resources/{carBookingId}")
+    public ResponseCustom returnBookingCar(
+            @Account User user,
+            @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId,
+            @RequestBody ReturnProductReq request
+    ) {
+        carBookingService.returnBookingProduct(user, carBookingId, request);
         return ResponseCustom.OK();
     }
 }

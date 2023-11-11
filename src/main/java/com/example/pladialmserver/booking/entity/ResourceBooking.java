@@ -74,9 +74,10 @@ public class ResourceBooking extends BaseEntity {
             .build();
   }
 
-  public void returnBookingResource() {
+  public void returnBookingResource(String remark) {
     changeBookingStatus(BookingStatus.FINISHED);
-    returnDate = LocalDateTime.now();
+    this.returnDate = LocalDateTime.now();
+    this.remark = remark;
   }
 
   public void changeBookingStatus(BookingStatus bookingStatus) {

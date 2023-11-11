@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.controller;
 
+import com.example.pladialmserver.booking.dto.request.ReturnProductReq;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.service.ResourceBookingService;
 import com.example.pladialmserver.global.resolver.Account;
@@ -95,9 +96,10 @@ public class ResourceBookingAdminController {
     @PatchMapping("/{resourceBookingId}/return")
     public ResponseCustom returnBookingResource(
             @Account User user,
-            @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId
+            @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId,
+            ReturnProductReq request
     ) {
-        bookingService.returnBookingProductByAdmin(user, resourceBookingId);
+        bookingService.returnBookingProductByAdmin(user, resourceBookingId, request);
         return ResponseCustom.OK();
     }
 
