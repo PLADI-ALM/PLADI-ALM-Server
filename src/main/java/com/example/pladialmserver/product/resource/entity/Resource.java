@@ -66,14 +66,18 @@ public class Resource extends BaseEntity {
 
   public void updateResource(CreateResourceReq request, User responsibility) {
     if(!request.getName().equals(name)) name = request.getName();
-    if(!request.getLocation().equals(location)) location = request.getLocation();
-    if(!request.getDescription().equals(description)) description = request.getDescription();
-    if(!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();
-    if(!responsibility.equals(user)) user = responsibility;
+    if (!request.getLocation().equals(location)) location = request.getLocation();
+    if (!request.getDescription().equals(description)) description = request.getDescription();
+    if (!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();
+    if (!responsibility.equals(user)) user = responsibility;
   }
 
   // 활성화/비활성화
   public void activateResource() {
     isActive = !isActive;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
   }
 }

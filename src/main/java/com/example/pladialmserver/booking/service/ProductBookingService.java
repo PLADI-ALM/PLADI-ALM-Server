@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.service;
 
+import com.example.pladialmserver.booking.dto.request.ReturnProductReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
@@ -22,7 +23,9 @@ public interface ProductBookingService {
 
     void allowProductBooking(User user, Long productId);
 
-    void returnBookingProductByAdmin(User user, Long productId);
+    void returnBookingProductByAdmin(User user, Long productId, ReturnProductReq request);
 
     Page<AdminProductRes> getBookingProducts(User user, Pageable pageable, boolean active);
+
+    void returnBookingProduct(User user, Long productBookingId, ReturnProductReq request);
 }

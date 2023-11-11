@@ -48,6 +48,9 @@ public class ResourceBooking extends BaseEntity {
   @Size(max = 100)
   private String memo;
 
+  @Size(max = 100)
+  private String remark;
+
   @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.WAITING;
 
@@ -71,9 +74,10 @@ public class ResourceBooking extends BaseEntity {
             .build();
   }
 
-  public void returnBookingResource() {
+  public void returnBookingResource(String remark) {
     changeBookingStatus(BookingStatus.FINISHED);
-    returnDate = LocalDateTime.now();
+    this.returnDate = LocalDateTime.now();
+    this.remark = remark;
   }
 
   public void changeBookingStatus(BookingStatus bookingStatus) {

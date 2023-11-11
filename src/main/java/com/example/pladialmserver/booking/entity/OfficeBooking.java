@@ -50,6 +50,9 @@ public class OfficeBooking extends BaseEntity {
     @Size(max = 30)
     private String memo;
 
+    @Size(max = 100)
+    private String remark;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(20) default 'BOOKED'")
     private BookingStatus status;
