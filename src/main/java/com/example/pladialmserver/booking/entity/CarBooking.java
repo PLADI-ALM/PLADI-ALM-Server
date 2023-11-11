@@ -48,7 +48,7 @@ public class CarBooking extends BaseEntity {
     private String memo;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status = BookingStatus.WAITING;
+    private BookingStatus status = BookingStatus.BOOKED;
 
     @Builder
     public CarBooking(User user, Car car, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime returnDate, String memo) {
