@@ -170,7 +170,6 @@ public class ResourceBookingService implements ProductBookingService {
     /**
      * 관리자 장비 예약 허가
      */
-    @Override
     @Transactional
     public void allowProductBooking(User user, Long resourceBookingId) {
         ResourceBooking resourceBooking = checkResourceBookingAuthentication(user, resourceBookingId, Role.ADMIN);

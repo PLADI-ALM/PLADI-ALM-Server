@@ -97,33 +97,6 @@ public class CarBookingService implements ProductBookingService{
     }
 
     /**
-     * 관리자 차량 예약 허가
-     */
-    @Override
-    @Transactional
-    public void allowProductBooking(User user, Long carBookingId) {
-        CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.ADMIN);
-        // 예약대기가 아닌 경우
-        if (!carBooking.checkBookingStatus(BookingStatus.WAITING))
-            throw new BaseException(BaseResponseCode.INVALID_BOOKING_STATUS);
-        // 이미 예약된 날짜 여부 확인
-        if (carBookingRepository.existsDateTime(carBooking.getCar(), carBooking.getStartDate(), carBooking.getEndDate()))
-            throw new BaseException(BaseResponseCode.ALREADY_BOOKED_TIME);
-        // 예약 허가
-        carBooking.changeBookingStatus(BookingStatus.BOOKED);
-        // 이메일 알림
-        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_APPROVE;
-        emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
-                emailUtil.createBookingData(SendEmailReq.toDto(carBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
-        // 차량 예약 허가 알림
-        try {
-            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_SUCCESS, user);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 관리자 차량 예약 반납
      */
     @Override

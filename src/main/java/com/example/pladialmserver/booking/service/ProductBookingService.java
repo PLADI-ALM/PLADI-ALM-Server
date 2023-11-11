@@ -20,8 +20,6 @@ public interface ProductBookingService {
 
     void rejectProductBooking(User user, Long productId);
 
-    void allowProductBooking(User user, Long productId);
-
     void returnBookingProductByAdmin(User user, Long productId);
 
     Page<AdminProductRes> getBookingProducts(User user, Pageable pageable, boolean active);
