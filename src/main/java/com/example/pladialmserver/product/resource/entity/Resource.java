@@ -71,6 +71,7 @@ public class Resource extends BaseEntity {
 
   public void updateResource(CreateResourceReq request, User responsibility) {
     if(!request.getName().equals(name)) name = request.getName();
+    if(!request.getManufacturer().equals(manufacturer)) manufacturer = request.getManufacturer();
     if(!request.getLocation().equals(location)) location = request.getLocation();
     if(!request.getDescription().equals(description)) description = request.getDescription();
     if(!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();
