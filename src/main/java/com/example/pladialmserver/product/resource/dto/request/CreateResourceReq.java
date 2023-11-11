@@ -14,6 +14,10 @@ public class CreateResourceReq {
     @NotBlank(message = "R0007")
     private String name;
 
+    @Schema(type = "String", description = "제조사", maxLength = 30)
+    @Size(max = 30, message = "R0012")
+    private String manufacturer;
+
     @Schema(type = "String", description = "장비 보관장소")
     @NotBlank(message = "R0008")
     private String location;

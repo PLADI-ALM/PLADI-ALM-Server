@@ -53,7 +53,7 @@ public class ResourceAdminController {
     @Operation(summary = "관리자 장비 추가 (박소정)", description = "관리자가 장비를 추가한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "400", description = "(R0004)설명은 255자 이하로 작성해주세요. (R0005)장비명은 50자 이하로 작성해주세요. (R0006)보관장소를 입력해주세요. (R0007)장비명을 입력해주세요. (R0008)책임자를 입력해주세요. (R0009)설명을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(R0004)설명은 255자 이하로 작성해주세요. (R0005)장비명은 50자 이하로 작성해주세요. (R0006)보관장소를 입력해주세요. (R0007)장비명을 입력해주세요. (R0008)책임자를 입력해주세요. (R0009)설명을 입력해주세요. (R0012)제조사는 30자 이하로 작성해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })

@@ -84,6 +84,7 @@ public enum BaseResponseCode {
     NOT_EMPTY_DESCRIPTION("R0009", HttpStatus.BAD_REQUEST, "설명을 입력해주세요."),
     INVALID_STATUS_BY_RESOURCE_DELETION("R0010", HttpStatus.CONFLICT, "해당 장비의 예약 현황 수정이 필요합니다."),
     START_DATE_OR_END_DATE_IS_NULL("R0001",HttpStatus.BAD_REQUEST,"시작,종료 날짜와 시간을 모두 입력해주세요."),
+    MANUFACTURER_NAME_SIZE_OVER("R0012", HttpStatus.BAD_REQUEST, "제조사는 30자 이하로 작성해주세요."),
 
 
     // Car
