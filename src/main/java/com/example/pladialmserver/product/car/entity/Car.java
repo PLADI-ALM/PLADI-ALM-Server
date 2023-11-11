@@ -51,8 +51,12 @@ public class Car extends BaseEntity {
         this.manufacturer = manufacturer;
         this.description = description;
         this.imgKey = imgKey;
-        this.location=location;
-        this.isActive=isActive;
-        this.user=user;
+        this.location = location;
+        this.isActive = isActive;
+        this.user = user;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

@@ -145,24 +145,19 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
     }
 
     @Override
-    public List<ProductBookingRes> findResourceBookingByDate(Resource resource, LocalDate standardDate) {
-
-        // 해당 일의 00:00
-        LocalDateTime startDateTime = LocalDateTime.of(standardDate, LocalTime.MIN);
-        // 해당 일의 23:59
-        LocalDateTime endDateTime = LocalDateTime.of(standardDate, LocalTime.MAX);
+    public ProductBookingRes findResourceBookingByDate(Resource resource, LocalDateTime standardDate) {
 
         // 해당 날짜가 포함된 예약
-        List<ResourceBooking> bookings = jpaQueryFactory
+        ResourceBooking booking = jpaQueryFactory
                 .selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource),
                         (resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
-                        ((resourceBooking.startDate.between(startDateTime, endDateTime))
-                                .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
+                        (resourceBooking.startDate.before(standardDate)),
+                        (resourceBooking.endDate.after(standardDate))
                 ).orderBy(resourceBooking.startDate.asc())
-                .fetch();
+                .fetchOne();
 
-        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());
+        return ProductBookingRes.toDto(booking);
     }
 
 

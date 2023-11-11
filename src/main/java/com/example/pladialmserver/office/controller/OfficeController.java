@@ -57,6 +57,8 @@ public class OfficeController {
             @Parameter(description = "시설",example = "빔 프로젝터")@RequestParam(required = false) String facilityName,
             Pageable pageable
     ) {
+        if(LocalDateTime.now().isAfter(DateTimeUtil.localDateAndTimeToLocalDateTime(date, startTime))) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        if (!startTime.isBefore(endTime) && !endTime.equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
         // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
         if ((date != null && (startTime == null || endTime == null)) ||
                 (date == null && (startTime != null || endTime != null))) {

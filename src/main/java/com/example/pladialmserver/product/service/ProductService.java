@@ -6,6 +6,7 @@ import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.user.entity.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductService {
@@ -13,7 +14,7 @@ public interface ProductService {
 
     void bookProduct(User user, Long id, ProductReq request);
 
-    List<ProductBookingRes> getProductBookingByDate(Long carId, LocalDate date);
+    ProductBookingRes getProductBookingByDate(Long carId, LocalDateTime dateTime);
 
     List<String> getProductBookedDate(Long carId, String month, LocalDate date);
 }

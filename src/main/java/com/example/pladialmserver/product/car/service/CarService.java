@@ -57,7 +57,7 @@ public class CarService implements ProductService {
 
     @Override
     public ProductDetailRes getProductDetail(Long carId) {
-        Car car = carRepository.findByCarIdAndIsEnableAndIsActive(carId, true, true)
+        Car car = carRepository.findByCarIdAndIsEnable(carId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
         return ProductDetailRes.toDto(car);
     }
@@ -87,10 +87,10 @@ public class CarService implements ProductService {
     }
 
     @Override
-    public List<ProductBookingRes> getProductBookingByDate(Long resourceId, LocalDate date) {
+    public ProductBookingRes getProductBookingByDate(Long resourceId, LocalDateTime dateTime) {
         Car car = carRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
-        return carBookingRepository.findCarBookingByDate(car, date);
+        return carBookingRepository.findCarBookingByDate(car, dateTime);
     }
 
     @Override

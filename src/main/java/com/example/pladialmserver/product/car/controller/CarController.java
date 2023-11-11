@@ -28,8 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
-import static com.example.pladialmserver.global.Constants.DATE_TIME_PATTERN;
+import static com.example.pladialmserver.global.Constants.*;
 
 @Api(tags = "차량 API")
 @RestController
@@ -106,19 +105,19 @@ public class CarController {
 
 
     /**
-     * 해당 날짜의 차량 예약 내역 조회
+     * 해당 일시의 차량 예약 내역 조회
      */
-    @Operation(summary = "해당 날짜의 차량 예약 내역 조회 (박소정)", description = "해당 날짜의 차량 예약 내역을 조회한다.")
+    @Operation(summary = "해당 일시의 차량 예약 내역 조회 (박소정)", description = "해당 일시의 차량 예약 내역을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(C0001)존재하지 않는 차량입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("/{carId}/booking")
-    public ResponseCustom<List<ProductBookingRes>> getCarBookingByDate(
+    public ResponseCustom<ProductBookingRes> getCarBookingByDate(
             @Account User user,
             @Parameter(description = "(Long) 차량 Id", example = "1") @PathVariable(name = "carId") Long carId,
-            @Parameter(description = "차량 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-30") @RequestParam @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {
-        return ResponseCustom.OK(carService.getProductBookingByDate(carId, date));
+            @Parameter(description = "차량 예약 현황 조회 날짜 (YYYY-MM-DD HH)", example = "2023-10-30 11") @RequestParam @DateTimeFormat(pattern = DATE_HOUR_PATTERN) LocalDateTime dateTime) {
+        return ResponseCustom.OK(carService.getProductBookingByDate(carId, dateTime));
     }
 
     /**
