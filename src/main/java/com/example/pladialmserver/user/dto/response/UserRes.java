@@ -20,6 +20,8 @@ public class UserRes {
     private String phone;
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반")
     private String role;
+    @Schema(type = "String", description = "자산(컴퓨터, 태블릿)", example = "A123434, B123434")
+    private String asserts;
 
     public static UserRes toDto (User user){
         return UserRes.builder()
@@ -29,6 +31,7 @@ public class UserRes {
                 .department(user.getDepartment().getName())
                 .phone(user.getPhone())
                 .role(user.getRole().getValue())
+                .asserts(user.getAsserts())
                 .build();
     }
 }

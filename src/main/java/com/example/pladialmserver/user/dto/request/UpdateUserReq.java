@@ -21,4 +21,6 @@ public class UpdateUserReq {
     @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", required = true)
     @NotBlank(message = "U0011")
     private String role;
+    @Schema(type = "String", description = "자산(컴퓨터, 태블릿)", example = "A123434, B123434")
+    private String asserts;
 }
