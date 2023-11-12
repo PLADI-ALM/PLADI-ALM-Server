@@ -14,8 +14,8 @@ public class SearchEquipmentRes {
     private Long equipmentId;
     @Schema(type = "String", description = "비품 이름", example = "비품1")
     private String name;
-    @Schema(type = "int", description = "비품 수량", example = "1")
-    private int quantity;
+    @Schema(type = "String", description = "비품 수량", example = "1")
+    private String quantity;
     @Schema(type = "String", description = "비품 카테고리", example = "기타")
     private String category;
     @Schema(type = "String", description = "담당자", example = "누구게")

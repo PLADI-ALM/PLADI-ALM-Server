@@ -12,9 +12,9 @@ public class UpdateEquipmentReq {
     @Schema(type = "String", description = "이름", example = "맥심커피", required = true)
     @NotBlank(message = "E0003")
     private String name;
-    @Schema(type = "int", description = "비품 수량", example = "1", required = true)
+    @Schema(type = "String", description = "비품 수량", example = "10박스", required = true)
     @NotNull(message = "E0003")
-    private int quantity;
+    private String quantity;
     @Schema(type = "Long", description = "비품 담당자", example = "1", required = true)
     @NotNull(message = "E0003")
     private Long userId;
