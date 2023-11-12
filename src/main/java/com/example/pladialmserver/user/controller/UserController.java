@@ -6,6 +6,7 @@ import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.*;
 import com.example.pladialmserver.user.dto.response.NotificationRes;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
+import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.service.UserService;
 import io.swagger.annotations.Api;
@@ -152,7 +153,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)직원 수정 성공"),
             @ApiResponse(responseCode = "400", description = "(U0007)성명을 입력해주세요. \n U0008)부서를 입력해주세요. \n(U0010)휴대폰 번호 형식을 확인해주세요. \n(U0009)휴대폰번호를 입력해주세요. \n(U0010)직책을 입력해주세요. \n(U0011)역할을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두] \n (U0012)부서를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다. \n (U0012)부서를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(U0019)존재하는 휴대폰번호입니다. [자신 휴대폰번호 제외]", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PatchMapping("")
@@ -160,5 +161,15 @@ public class UserController {
                                      @RequestBody @Valid UpdateUserReq updateUserReq) {
         userService.updateUser(user, updateUserReq);
         return ResponseCustom.OK();
+    }
+
+    @Operation(summary = "직원 개별 조회 (장채은)", description = "개별 직원의 정보를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)직원 개별 조회 성공"),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @GetMapping("")
+    public ResponseCustom<UserRes> getUserInfo(@Account User user){
+        return ResponseCustom.OK(userService.getUserInfo(user));
     }
 }
