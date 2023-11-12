@@ -46,9 +46,9 @@ public class EquipmentService {
     public void updateEquipment(Long equipmentId, UpdateEquipmentReq updateEquipmentReq, User user) {
         Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
 
-        User updateKeeper = userRepository.findByUserIdAndIsEnable(updateEquipmentReq.getUserId(), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        User register = userRepository.findByUserIdAndIsEnable(updateEquipmentReq.getUserId(), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         EquipmentCategory updateCategory = extractCategory(updateEquipmentReq.getCategory());
-        equipment.toUpdateInfo(updateEquipmentReq, updateKeeper, updateCategory);
+        equipment.toUpdateInfo(updateEquipmentReq, register, updateCategory);
     }
 
     private EquipmentCategory extractCategory(String name) {

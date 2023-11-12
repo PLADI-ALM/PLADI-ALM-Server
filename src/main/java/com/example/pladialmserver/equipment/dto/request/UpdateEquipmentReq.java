@@ -15,7 +15,7 @@ public class UpdateEquipmentReq {
     @Schema(type = "int", description = "비품 수량", example = "1", required = true)
     @NotNull(message = "E0003")
     private int quantity;
-    @Schema(type = "Long", description = "비품 담당자", example = "1", required = true)
+    @Schema(type = "Long", description = "비품 등록자", example = "1", required = true)
     @NotNull(message = "E0003")
     private Long userId;
     @Schema(type = "String", description = "비품 위치", example = "s1350", required = true)
