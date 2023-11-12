@@ -2,7 +2,6 @@ package com.example.pladialmserver.user.service;
 
 import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
-import com.example.pladialmserver.global.feign.publisher.ArchivingServerEventPublisher;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.notification.entity.PushNotification;
@@ -115,6 +114,15 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    // 직원 정보 수정
+    @Transactional
+    public void updateUser(User user, UpdateUserReq updateUserReq) {
+        if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
+        Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        user.updateUser(updateUserReq, department);
+        userRepository.save(user);
+    }
+
     // ===================================================================================================================
     // [관리자-사용자]
     // ===================================================================================================================
@@ -137,14 +145,13 @@ public class UserService {
 
     // 직원 수정
     @Transactional
-    public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
+    public void updateUserByAdmin(User admin, Long userId, AdminUpdateUserReq updateUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
-        // 정보 변경 사용자 정보 확인
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
         Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        // 수정 및 저장
-        user.updateUser(updateUserReq, department);
+        user.updateUser(UpdateUserReq.toDto(updateUserReq), department);
+        user.updateRole(updateUserReq.getRole());
         userRepository.save(user);
     }
 
@@ -180,4 +187,5 @@ public class UserService {
         Page<PushNotification> notifications = notificationRepository.findByUserAndIsEnableOrderByCreatedAtDesc(user, true, pageable);
         return notifications.map(NotificationRes::toDto);
     }
+
 }

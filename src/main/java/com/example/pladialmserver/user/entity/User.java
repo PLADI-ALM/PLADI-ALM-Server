@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -94,9 +93,12 @@ public class User extends BaseEntity {
         if(!req.getName().equals(name)) name = req.getName();
         if(!department.equals(this.department)) this.department = department;
         if(!req.getPhone().equals(phone)) phone = req.getPhone();
-        if(!req.getAsserts().equals(asserts)) asserts = req.getAsserts();
-        Role reqRole = Role.getRoleByName(req.getRole());
-        if(!reqRole.equals(role)) role = reqRole;
+        if(!req.getAsserts().equals(asserts)) this.asserts = req.getAsserts();
+    }
+
+    public void updateRole(String role){
+        Role reqRole = Role.getRoleByName(role);
+        if(!reqRole.equals(this.role)) this.role = reqRole;
     }
 
     public void updatePassword(String password){
