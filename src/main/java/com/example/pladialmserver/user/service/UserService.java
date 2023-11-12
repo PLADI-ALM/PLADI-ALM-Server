@@ -174,11 +174,13 @@ public class UserService {
     }
 
     // 직원 계정 목록 조회
-    public Page<UserRes> getUserList(User admin, String name, String department, Pageable pageable) {
+    public Page<UserRes> getUserList(User admin, String name, String department, String affiliation, Pageable pageable) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         Department dpmEntity = null;
+        Affiliation affEntity = null;
         if(StringUtils.hasText(department)) dpmEntity = departmentRepository.findByNameAndIsEnable(department, true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        return userRepository.findAllByName(name, dpmEntity, pageable).map(UserRes::toDto);
+        if(StringUtils.hasText(affiliation)) affEntity = affiliationRepository.findByNameAndIsEnable(affiliation, true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
+        return userRepository.findAllByName(name, dpmEntity, affEntity, pageable).map(UserRes::toDto);
     }
 
     // 직원 개별 정보
