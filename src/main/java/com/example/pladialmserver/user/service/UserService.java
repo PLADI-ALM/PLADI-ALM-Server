@@ -121,8 +121,7 @@ public class UserService {
     @Transactional
     public void updateUser(User user, UpdateUserReq updateUserReq) {
         if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
-        Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        user.updateUser(updateUserReq, department);
+        user.updateUser(updateUserReq);
         userRepository.save(user);
     }
 
@@ -162,9 +161,10 @@ public class UserService {
         Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
         Affiliation affiliation = affiliationRepository.findByNameAndIsEnable(updateUserReq.getAffiliation(), true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
 
-        user.updateUser(UpdateUserReq.toDto(updateUserReq), department);
+        user.updateUser(UpdateUserReq.toDto(updateUserReq));
         user.updateRole(updateUserReq.getRole());
         user.updateAffiliation(affiliation);
+        user.updateDepartment(department);
         userRepository.save(user);
     }
 

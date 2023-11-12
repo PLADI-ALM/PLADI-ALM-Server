@@ -95,9 +95,8 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public void updateUser(UpdateUserReq req, Department department){
+    public void updateUser(UpdateUserReq req){
         if(!req.getName().equals(name)) name = req.getName();
-        if(!department.equals(this.department)) this.department = department;
         if(!req.getPhone().equals(phone)) phone = req.getPhone();
         if(!req.getAsserts().equals(asserts)) this.asserts = req.getAsserts();
     }
@@ -109,6 +108,10 @@ public class User extends BaseEntity {
 
     public void updateAffiliation(Affiliation affiliation){
         if(!affiliation.equals(this.affiliation)) this.affiliation = affiliation;
+    }
+
+    public void updateDepartment(Department department){
+        if(!department.equals(this.department)) this.department = department;
     }
 
     public void updatePassword(String password){
