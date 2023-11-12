@@ -62,11 +62,15 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "affiliation_id")
+    Affiliation affiliation;
+
     @OneToMany(mappedBy = "user")
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken, String asserts) {
+    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken, String asserts, Affiliation affiliation) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -75,9 +79,10 @@ public class User extends BaseEntity {
         this.role = role;
         this.fcmToken = fcmToken;
         this.asserts = asserts;
+        this.affiliation = affiliation;
     }
 
-    public static User toEntity(CreateUserReq req, Department department){
+    public static User toEntity(CreateUserReq req, Department department, Affiliation affiliation){
         return User.builder()
                 .name(req.getName())
                 .email(req.getEmail())
@@ -86,6 +91,7 @@ public class User extends BaseEntity {
                 .department(department)
                 .role(Role.getRoleByName(req.getRole()))
                 .asserts(req.getAsserts())
+                .affiliation(affiliation)
                 .build();
     }
 
@@ -99,6 +105,10 @@ public class User extends BaseEntity {
     public void updateRole(String role){
         Role reqRole = Role.getRoleByName(role);
         if(!reqRole.equals(this.role)) this.role = reqRole;
+    }
+
+    public void updateAffiliation(Affiliation affiliation){
+        if(!affiliation.equals(this.affiliation)) this.affiliation = affiliation;
     }
 
     public void updatePassword(String password){
