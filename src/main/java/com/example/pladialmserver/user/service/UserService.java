@@ -40,7 +40,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final PushNotificationRepository notificationRepository;
-    private final ArchivingServerEventPublisher archivingServerEventPublisher;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final EmailUtil emailUtil;
@@ -114,8 +113,6 @@ public class UserService {
     public void resignUser(User user) {
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.deleteUser(user);
     }
 
     // ===================================================================================================================
@@ -136,8 +133,6 @@ public class UserService {
         // 사용자 저장
         User user = User.toEntity(createUserReq, department);
         userRepository.save(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.addUser(user);
     }
 
     // 직원 수정
@@ -151,8 +146,6 @@ public class UserService {
         // 수정 및 저장
         user.updateUser(updateUserReq, department);
         userRepository.save(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.changeUserProfile(user);
     }
 
     // 부서 리스트
