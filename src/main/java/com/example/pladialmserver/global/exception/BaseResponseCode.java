@@ -46,6 +46,8 @@ public enum BaseResponseCode {
     EMAIL_CODE_NOT_FOUND("U0017", HttpStatus.NOT_FOUND, "이메일 코드가 일치하지 않습니다."),
     BLACKLIST_EMAIL_CODE("U0018", HttpStatus.NOT_FOUND, "없거나 이미 만료된 이메일 코드입니다."),
     EXISTS_PHONE("U0019", HttpStatus.CONFLICT, "존재하는 휴대폰번호입니다."),
+    NOT_EMPTY_AFFILIATION("U0020", HttpStatus.BAD_REQUEST, "소속을 입력해주세요."),
+    AFFILIATION_NOT_FOUND("U0021", HttpStatus.NOT_FOUND, "소속을 찾을 수 없습니다."),
 
     // Booking
     DATE_OR_TIME_IS_NULL("B0001", HttpStatus.BAD_REQUEST, "날짜와 시간을 모두 입력해주세요."),

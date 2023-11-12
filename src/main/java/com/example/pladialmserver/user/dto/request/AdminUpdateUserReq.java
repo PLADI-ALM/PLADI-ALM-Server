@@ -18,7 +18,10 @@ public class AdminUpdateUserReq {
     @Pattern(message = "U0010", regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$")
     @NotBlank(message = "U0009")
     private String phone;
-    @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", required = true)
+    @Schema(type = "String", description = "소속", example = "플래디", required = true, allowableValues = {"플래디", "스튜디오아이", "피디룸"})
+    @NotBlank(message = "U0020")
+    private String affiliation;
+    @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", required = true, allowableValues = {"일반", "관리자"})
     @NotBlank(message = "U0011")
     private String role;
     @Schema(type = "String", description = "자산(컴퓨터, 태블릿)", example = "A123434, B123434")

@@ -12,9 +12,11 @@ import com.example.pladialmserver.user.dto.response.DepartmentListDto;
 import com.example.pladialmserver.user.dto.response.NotificationRes;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
+import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.AffiliationRepository;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final PushNotificationRepository notificationRepository;
+    private final AffiliationRepository affiliationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final EmailUtil emailUtil;
@@ -141,10 +144,11 @@ public class UserService {
         if(userRepository.existsByPhoneAndIsEnable(createUserReq.getPhone(), true)) throw new BaseException(EXISTS_PHONE);
         // 회원 생성 리소스 접근
         Department department = departmentRepository.findByNameAndIsEnable(createUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Affiliation affiliation = affiliationRepository.findByNameAndIsEnable(createUserReq.getAffiliation(), true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
-        User user = User.toEntity(createUserReq, department);
+        User user = User.toEntity(createUserReq, department, affiliation);
         userRepository.save(user);
     }
 
@@ -152,11 +156,15 @@ public class UserService {
     @Transactional
     public void updateUserByAdmin(User admin, Long userId, AdminUpdateUserReq updateUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
+
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
         Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Affiliation affiliation = affiliationRepository.findByNameAndIsEnable(updateUserReq.getAffiliation(), true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
+
         user.updateUser(UpdateUserReq.toDto(updateUserReq), department);
         user.updateRole(updateUserReq.getRole());
+        user.updateAffiliation(affiliation);
         userRepository.save(user);
     }
 
