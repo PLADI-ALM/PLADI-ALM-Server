@@ -52,6 +52,9 @@ public class User extends BaseEntity {
     @Size(max = 300)
     private String fcmToken;
 
+    @Size(max = 300)
+    private String asserts;
+
     @ManyToOne
     @JoinColumn(nullable = false, name = "department_id")
     private Department department;
@@ -64,7 +67,7 @@ public class User extends BaseEntity {
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken) {
+    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken, String asserts) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -72,6 +75,7 @@ public class User extends BaseEntity {
         this.phone=phone;
         this.role = role;
         this.fcmToken = fcmToken;
+        this.asserts = asserts;
     }
 
     public static User toEntity(CreateUserReq req, Department department){
@@ -82,6 +86,7 @@ public class User extends BaseEntity {
                 .phone(req.getPhone())
                 .department(department)
                 .role(Role.getRoleByName(req.getRole()))
+                .asserts(req.getAsserts())
                 .build();
     }
 
@@ -89,6 +94,7 @@ public class User extends BaseEntity {
         if(!req.getName().equals(name)) name = req.getName();
         if(!department.equals(this.department)) this.department = department;
         if(!req.getPhone().equals(phone)) phone = req.getPhone();
+        if(!req.getAsserts().equals(asserts)) asserts = req.getAsserts();
         Role reqRole = Role.getRoleByName(req.getRole());
         if(!reqRole.equals(role)) role = reqRole;
     }
