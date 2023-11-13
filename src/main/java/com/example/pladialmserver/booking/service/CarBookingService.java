@@ -193,6 +193,12 @@ public class CarBookingService implements ProductBookingService{
         // 예약 취소
         carBooking.changeBookingStatus(BookingStatus.CANCELED);
         carBookingRepository.save(carBooking);
+
+        // 이메일 전송
+        String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_CANCEL;
+        emailUtil.sendEmail(carBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(SendEmailReq.toDto(carBooking, CANCEL_BOOKING_TEXT)), BOOKING_TEMPLATE);
+
         // 차량 예약 취소 알림
         try {
             notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_CANCELED, user);

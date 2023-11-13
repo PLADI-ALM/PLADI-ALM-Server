@@ -97,6 +97,12 @@ public class OfficeBookingService {
         // 예약 취소
         officeBooking.cancelBookingOffice();
         officeBookingRepository.save(officeBooking);
+
+        // 이메일 전송
+        String title = COMPANY_NAME + OFFICE + SPACE + BOOKING_TEXT + BOOKING_CANCEL;
+        emailUtil.sendEmail(officeBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(SendEmailReq.toDto(officeBooking, CANCEL_BOOKING_TEXT)), BOOKING_TEMPLATE);
+
         // 회의실 예약 취소 알림
         try {
             notificationService.sendNotification(Constants.NotificationCategory.OFFICE, Constants.Notification.BODY_CANCELED, user);
