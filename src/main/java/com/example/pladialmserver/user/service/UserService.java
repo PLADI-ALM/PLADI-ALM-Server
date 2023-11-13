@@ -123,6 +123,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 직원 개별 정보
+    public UserRes getUserInfo(User user) {
+        return UserRes.toDto(user);
+    }
+
     // ===================================================================================================================
     // [관리자-사용자]
     // ===================================================================================================================
@@ -169,7 +174,7 @@ public class UserService {
     }
 
     // 직원 개별 정보
-    public UserRes getUserInfo(User admin, Long userId) {
+    public UserRes getUserInfoByAdmin(User admin, Long userId) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         return UserRes.toDto(user);

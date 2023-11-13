@@ -93,7 +93,7 @@ public class AdminUserController {
     @GetMapping("/{userId}")
     public ResponseCustom<UserRes> getUserInfo(@Account User user,
                                                      @Parameter(description = "(Long) 변경하려는 사용자 id", example = "1") @PathVariable(name = "userId") Long userId){
-        return ResponseCustom.OK(userService.getUserInfo(user, userId));
+        return ResponseCustom.OK(userService.getUserInfoByAdmin(user, userId));
     }
 
     @Operation(summary = "직원 탈퇴 (장채은)", description = "직원을 탈퇴 시킨다.")
