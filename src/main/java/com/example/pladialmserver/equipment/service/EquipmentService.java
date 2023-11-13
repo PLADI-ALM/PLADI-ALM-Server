@@ -9,6 +9,7 @@ import com.example.pladialmserver.equipment.repository.EquipmentCategoryReposito
 import com.example.pladialmserver.equipment.repository.EquipmentRepository;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +45,10 @@ public class EquipmentService {
     @Transactional
     public void updateEquipment(Long equipmentId, UpdateEquipmentReq updateEquipmentReq, User user) {
         Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
-        if(!equipment.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
-        User updateKeeper = userRepository.findByUserIdAndIsEnable(updateEquipmentReq.getUserId(), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        User register = userRepository.findByUserIdAndIsEnable(updateEquipmentReq.getUserId(), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         EquipmentCategory updateCategory = extractCategory(updateEquipmentReq.getCategory());
-        equipment.toUpdateInfo(updateEquipmentReq, updateKeeper, updateCategory);
+        equipment.toUpdateInfo(updateEquipmentReq, register, updateCategory);
     }
 
     private EquipmentCategory extractCategory(String name) {
@@ -64,7 +64,7 @@ public class EquipmentService {
     @Transactional
     public void deleteEquipment(Long equipmentId, User user) {
         Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
-        if(!equipment.getUser().equals(user)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
         equipmentRepository.delete(equipment);
     }

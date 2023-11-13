@@ -1,5 +1,6 @@
 package com.example.pladialmserver.booking.dto.response;
 
+import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -46,4 +47,14 @@ public class BookingRes {
                 .build();
     }
 
+    public static BookingRes toDto(CarBooking carBooking) {
+        return BookingRes.builder()
+                .id(carBooking.getCarBookingId())
+                .name(carBooking.getCar().getName())
+                .detailInfo(carBooking.getCar().getLocation())
+                .startDateTime(DateTimeUtil.dateTimeToString(carBooking.getStartDate()))
+                .endDateTime(DateTimeUtil.dateTimeToString(carBooking.getEndDate()))
+                .status(carBooking.getStatus().getValue())
+                .build();
+    }
 }

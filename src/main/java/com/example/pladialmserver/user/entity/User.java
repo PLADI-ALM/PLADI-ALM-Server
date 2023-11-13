@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -52,6 +51,9 @@ public class User extends BaseEntity {
     @Size(max = 300)
     private String fcmToken;
 
+    @Size(max = 300)
+    private String asserts;
+
     @ManyToOne
     @JoinColumn(nullable = false, name = "department_id")
     private Department department;
@@ -60,11 +62,15 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "affiliation_id")
+    Affiliation affiliation;
+
     @OneToMany(mappedBy = "user")
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken) {
+    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken, String asserts, Affiliation affiliation) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -72,9 +78,11 @@ public class User extends BaseEntity {
         this.phone=phone;
         this.role = role;
         this.fcmToken = fcmToken;
+        this.asserts = asserts;
+        this.affiliation = affiliation;
     }
 
-    public static User toEntity(CreateUserReq req, Department department){
+    public static User toEntity(CreateUserReq req, Department department, Affiliation affiliation){
         return User.builder()
                 .name(req.getName())
                 .email(req.getEmail())
@@ -82,15 +90,28 @@ public class User extends BaseEntity {
                 .phone(req.getPhone())
                 .department(department)
                 .role(Role.getRoleByName(req.getRole()))
+                .asserts(req.getAsserts())
+                .affiliation(affiliation)
                 .build();
     }
 
-    public void updateUser(UpdateUserReq req, Department department){
+    public void updateUser(UpdateUserReq req){
         if(!req.getName().equals(name)) name = req.getName();
-        if(!department.equals(this.department)) this.department = department;
         if(!req.getPhone().equals(phone)) phone = req.getPhone();
-        Role reqRole = Role.getRoleByName(req.getRole());
-        if(!reqRole.equals(role)) role = reqRole;
+        if(!req.getAsserts().equals(asserts)) this.asserts = req.getAsserts();
+    }
+
+    public void updateRole(String role){
+        Role reqRole = Role.getRoleByName(role);
+        if(!reqRole.equals(this.role)) this.role = reqRole;
+    }
+
+    public void updateAffiliation(Affiliation affiliation){
+        if(!affiliation.equals(this.affiliation)) this.affiliation = affiliation;
+    }
+
+    public void updateDepartment(Department department){
+        if(!department.equals(this.department)) this.department = department;
     }
 
     public void updatePassword(String password){

@@ -18,8 +18,12 @@ public class UserRes {
     private String department;
     @Schema(type = "String", description = "휴대폰번호", example = "010-0000-0000")
     private String phone;
-    @Schema(type = "String", description = "역할(일반|관리자)", example = "일반")
+    @Schema(type = "String", description = "역할(일반|관리자)", example = "일반", allowableValues = {"일반", "관리자"})
     private String role;
+    @Schema(type = "String", description = "자산(컴퓨터, 태블릿)", example = "A123434, B123434")
+    private String asserts;
+    @Schema(type = "String", description = "소속", example = "플래디", allowableValues = {"플래디", "스튜디오아이", "피디룸"})
+    private String affiliation;
 
     public static UserRes toDto (User user){
         return UserRes.builder()
@@ -29,6 +33,8 @@ public class UserRes {
                 .department(user.getDepartment().getName())
                 .phone(user.getPhone())
                 .role(user.getRole().getValue())
+                .asserts(user.getAsserts())
+                .affiliation(user.getAffiliation().getName())
                 .build();
     }
 }

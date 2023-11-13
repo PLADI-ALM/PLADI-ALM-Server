@@ -2,7 +2,6 @@ package com.example.pladialmserver.user.service;
 
 import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
-import com.example.pladialmserver.global.feign.publisher.ArchivingServerEventPublisher;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.notification.entity.PushNotification;
@@ -13,9 +12,11 @@ import com.example.pladialmserver.user.dto.response.DepartmentListDto;
 import com.example.pladialmserver.user.dto.response.NotificationRes;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.dto.response.UserRes;
+import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.AffiliationRepository;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final PushNotificationRepository notificationRepository;
-    private final ArchivingServerEventPublisher archivingServerEventPublisher;
+    private final AffiliationRepository affiliationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final EmailUtil emailUtil;
@@ -114,8 +115,19 @@ public class UserService {
     public void resignUser(User user) {
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.deleteUser(user);
+    }
+
+    // 직원 정보 수정
+    @Transactional
+    public void updateUser(User user, UpdateUserReq updateUserReq) {
+        if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
+        user.updateUser(updateUserReq);
+        userRepository.save(user);
+    }
+
+    // 직원 개별 정보
+    public UserRes getUserInfo(User user) {
+        return UserRes.toDto(user);
     }
 
     // ===================================================================================================================
@@ -131,28 +143,29 @@ public class UserService {
         if(userRepository.existsByPhoneAndIsEnable(createUserReq.getPhone(), true)) throw new BaseException(EXISTS_PHONE);
         // 회원 생성 리소스 접근
         Department department = departmentRepository.findByNameAndIsEnable(createUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
+        Affiliation affiliation = affiliationRepository.findByNameAndIsEnable(createUserReq.getAffiliation(), true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
         // 비밀번호 암호화
         createUserReq.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
         // 사용자 저장
-        User user = User.toEntity(createUserReq, department);
+        User user = User.toEntity(createUserReq, department, affiliation);
         userRepository.save(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.addUser(user);
     }
 
     // 직원 수정
     @Transactional
-    public void updateUser(User admin, Long userId, UpdateUserReq updateUserReq) {
+    public void updateUserByAdmin(User admin, Long userId, AdminUpdateUserReq updateUserReq) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
-        // 정보 변경 사용자 정보 확인
+
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(userRepository.existsByPhoneAndUserIdNotAndIsEnable(updateUserReq.getPhone(), user.getUserId(), true)) throw new BaseException(EXISTS_PHONE);
         Department department = departmentRepository.findByNameAndIsEnable(updateUserReq.getDepartment(), true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        // 수정 및 저장
-        user.updateUser(updateUserReq, department);
+        Affiliation affiliation = affiliationRepository.findByNameAndIsEnable(updateUserReq.getAffiliation(), true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
+
+        user.updateUser(UpdateUserReq.toDto(updateUserReq));
+        user.updateRole(updateUserReq.getRole());
+        user.updateAffiliation(affiliation);
+        user.updateDepartment(department);
         userRepository.save(user);
-        // 사용자 아카이빙 서버로 정보 전달
-        archivingServerEventPublisher.changeUserProfile(user);
     }
 
     // 부서 리스트
@@ -161,15 +174,17 @@ public class UserService {
     }
 
     // 직원 계정 목록 조회
-    public Page<UserRes> getUserList(User admin, String name, String department, Pageable pageable) {
+    public Page<UserRes> getUserList(User admin, String name, String department, String affiliation, Pageable pageable) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         Department dpmEntity = null;
+        Affiliation affEntity = null;
         if(StringUtils.hasText(department)) dpmEntity = departmentRepository.findByNameAndIsEnable(department, true).orElseThrow(() -> new BaseException(DEPARTMENT_NOT_FOUND));
-        return userRepository.findAllByName(name, dpmEntity, pageable).map(UserRes::toDto);
+        if(StringUtils.hasText(affiliation)) affEntity = affiliationRepository.findByNameAndIsEnable(affiliation, true).orElseThrow(() -> new BaseException(AFFILIATION_NOT_FOUND));
+        return userRepository.findAllByName(name, dpmEntity, affEntity, pageable).map(UserRes::toDto);
     }
 
     // 직원 개별 정보
-    public UserRes getUserInfo(User admin, Long userId) {
+    public UserRes getUserInfoByAdmin(User admin, Long userId) {
         if (!admin.checkRole(Role.ADMIN)) throw new BaseException(NO_AUTHENTICATION);
         User user = userRepository.findByUserIdAndIsEnable(userId, true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         return UserRes.toDto(user);
@@ -187,4 +202,5 @@ public class UserService {
         Page<PushNotification> notifications = notificationRepository.findByUserAndIsEnableOrderByCreatedAtDesc(user, true, pageable);
         return notifications.map(NotificationRes::toDto);
     }
+
 }
