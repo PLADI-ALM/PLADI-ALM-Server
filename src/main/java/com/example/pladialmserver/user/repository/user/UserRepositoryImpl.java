@@ -1,5 +1,6 @@
 package com.example.pladialmserver.user.repository.user;
 
+import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -26,7 +27,9 @@ public class UserRepositoryImpl implements UserCustom {
     private BooleanExpression findDepartment(Department department) {
         return department != null ? user.department.eq(department) : null;
     }
-
+    private BooleanExpression findAffiliation(Affiliation affiliation) {
+        return affiliation != null ? user.affiliation.eq(affiliation) : null;
+    }
 
     private JPAQuery<User> getUserListByName(String name) {
         return jpaQueryFactory.selectFrom(user)
@@ -34,9 +37,12 @@ public class UserRepositoryImpl implements UserCustom {
     }
 
     @Override
-    public Page<User> findAllByName(String name, Department department, Pageable pageable) {
+    public Page<User> findAllByName(String name, Department department, Affiliation affiliation, Pageable pageable) {
         List<User> content = getUserListByName(name)
-                .where(findDepartment(department))
+                .where(
+                        findDepartment(department),
+                        findAffiliation(affiliation)
+                        )
                 .fetch();
 
         int start = (int) pageable.getOffset();

@@ -33,9 +33,9 @@ public class AdminUserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)직원 등록 성공"),
             @ApiResponse(responseCode = "400", description = "(U0002)이메일 형식을 확인해주세요. \n(U0003)비밀번호 형식을 확인해주세요.\n(U0010)휴대폰 번호 형식을 확인해주세요. \n(U0004)이메일을 입력해주세요. \n(U0005) 비밀번호를 입력해주세요. \n(U0006) 비밀번호가 일치하지 않습니다. " +
-                    "\n(U0007)성명을 입력해주세요. \n (U0008)부서를 입력해주세요. \n(U0009)휴대폰번호를 입력해주세요. \n(U0011)역할을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+                    "\n(U0007)성명을 입력해주세요. \n (U0008)부서를 입력해주세요. \n(U0009)휴대폰번호를 입력해주세요. \n(U0011)역할을 입력해주세요. \n(U0020)소속을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 정보를 찾을 수 없는 경우] \n (U0012)부서를 찾을 수 없습니다. \n (U0013)역할을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 정보를 찾을 수 없는 경우] \n (U0012)부서를 찾을 수 없습니다. \n (U0013)역할을 찾을 수 없습니다. \n (U0013)소속을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(U0014)존재하는 이메일입니다. (U0019)존재하는 휴대폰번호입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PostMapping("")
@@ -48,9 +48,9 @@ public class AdminUserController {
     @Operation(summary = " 직원 수정 (장채은)", description = "직원을 수정한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)직원 수정 성공"),
-            @ApiResponse(responseCode = "400", description = "(U0007)성명을 입력해주세요. \n U0008)부서를 입력해주세요. \n(U0010)휴대폰 번호 형식을 확인해주세요. \n(U0009)휴대폰번호를 입력해주세요. \n(U0010)직책을 입력해주세요. \n(U0011)역할을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "400", description = "(U0007)성명을 입력해주세요. \n U0008)부서를 입력해주세요. \n(U0010)휴대폰 번호 형식을 확인해주세요. \n(U0009)휴대폰번호를 입력해주세요. \n(U0010)직책을 입력해주세요. \n(U0011)역할을 입력해주세요. \n(U0020)소속을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두] \n (U0012)부서를 찾을 수 없습니다. \n (U0013)역할을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두] \n (U0012)부서를 찾을 수 없습니다. \n (U0013)역할을 찾을 수 없습니다. \n (U0013)소속을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(U0019)존재하는 휴대폰번호입니다. [자신 휴대폰번호 제외]", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PatchMapping("/{userId}")
@@ -74,14 +74,15 @@ public class AdminUserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)직원 계정 목록 조회 성공"),
             @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(U0012)부서를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+            @ApiResponse(responseCode = "404", description = "(U0012)부서를 찾을 수 없습니다.\n (U0013)소속을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @GetMapping("")
     public ResponseCustom<Page<UserRes>> getUserList(@Account User user,
                                                      Pageable pageable,
                                                      @Parameter(description = "(String) 성명 검색", example = "홍길동") @RequestParam(name = "name", required = false) String name,
-                                                     @Parameter(description = "(String) 부서 검색", example = "마케팅") @RequestParam(name = "department", required = false) String department) {
-        return ResponseCustom.OK(userService.getUserList(user, name, department, pageable));
+                                                     @Parameter(description = "(String) 부서 검색", example = "마케팅") @RequestParam(name = "department", required = false) String department,
+                                                     @Parameter(description = "(String) 소속 검색 (플래디, 스튜디오아이, 피디룸)", example = "플래디") @RequestParam(name = "affiliation", required = false) String affiliation) {
+        return ResponseCustom.OK(userService.getUserList(user, name, department, affiliation, pageable));
     }
 
     @Operation(summary = "직원 개별 조회 (장채은)", description = "개별 직원의 정보를 조회한다.")
