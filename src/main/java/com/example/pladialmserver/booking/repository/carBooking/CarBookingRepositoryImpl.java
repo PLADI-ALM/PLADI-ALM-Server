@@ -143,10 +143,10 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
 
     @Override
     public Page<BookingRes> getBookingsByUser(User user, Pageable pageable) {
-        List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
-                .where(resourceBooking.user.eq(user)
-                        .and(resourceBooking.isEnable.eq(true)))
-                .orderBy(resourceBooking.createdAt.desc())
+        List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
+                .where(carBooking.user.eq(user)
+                        .and(carBooking.isEnable.eq(true)))
+                .orderBy(carBooking.createdAt.desc())
                 .fetch();
 
         List<BookingRes> res = bookings.stream()
