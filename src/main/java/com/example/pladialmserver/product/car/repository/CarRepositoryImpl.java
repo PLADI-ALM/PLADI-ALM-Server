@@ -58,6 +58,7 @@ public class CarRepositoryImpl implements CarCustom {
                         car.carId,
                         car.imgKey,
                         car.name,
+                        car.manufacturer,
                         car.location,
                         car.description)
                 )

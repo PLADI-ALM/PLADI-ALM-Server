@@ -14,8 +14,10 @@ public class ResourceRes {
     private Long resourceId;
     @Schema(type = "String", description = "이미지 url", example = "'img.key'")
     private String imgUrl;
-    @Schema(type = "String", description = "장비 이름", example = "'벤츠'")
+    @Schema(type = "String", description = "장비 이름", example = "'12라2049'")
     private String name;
+    @Schema(type = "String", description = "제조사", example = "'벤츠'")
+    private String manufacturer;
     @Schema(type = "String", description = "보관장소", example = "'4층 창고'")
     private String location;
     @Schema(type = "String", description = "설명", example = "'승학이 보물'")
@@ -32,10 +34,11 @@ public class ResourceRes {
     }
 
     @QueryProjection
-    public ResourceRes(Long resourceId, String imgUrl, String name, String location, String description){
+    public ResourceRes(Long resourceId, String imgUrl, String name, String manufacturer, String location, String description){
         this.resourceId=resourceId;
         this.imgUrl=AwsS3ImageUrlUtil.toUrl(imgUrl);
         this.name=name;
+        this.manufacturer=manufacturer;
         this.location=location;
         this.description=description;
     }

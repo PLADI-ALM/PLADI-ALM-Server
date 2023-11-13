@@ -29,6 +29,9 @@ public class Resource extends BaseEntity {
   private String name;
 
   @Size(max = 30)
+  private String manufacturer;
+
+  @Size(max = 30)
   private String location;
 
   @NotNull
@@ -46,8 +49,9 @@ public class Resource extends BaseEntity {
   private User user;
 
   @Builder
-  public Resource(String name, String description, String imgKey, String location, User user) {
+  public Resource(String name, String manufacturer, String description, String imgKey, String location, User user) {
     this.name = name;
+    this.manufacturer = manufacturer;
     this.description = description;
     this.imgKey = imgKey;
     this.location=location;
@@ -65,7 +69,8 @@ public class Resource extends BaseEntity {
   }
 
   public void updateResource(CreateResourceReq request, User responsibility) {
-    if(!request.getName().equals(name)) name = request.getName();
+    if (!request.getName().equals(name)) name = request.getName();
+    if (!request.getManufacturer().equals(manufacturer)) manufacturer = request.getManufacturer();
     if (!request.getLocation().equals(location)) location = request.getLocation();
     if (!request.getDescription().equals(description)) description = request.getDescription();
     if (!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();

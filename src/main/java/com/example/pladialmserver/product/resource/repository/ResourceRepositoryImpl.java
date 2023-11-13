@@ -36,6 +36,7 @@ public class ResourceRepositoryImpl implements ResourceCustom {
                 .select(new QAdminResourcesRes(
                         resource.resourceId,
                         resource.name,
+                        resource.manufacturer,
                         resource.location,
                         resource.user.name,
                         resource.user.phone,
@@ -82,6 +83,7 @@ public class ResourceRepositoryImpl implements ResourceCustom {
                             resource.resourceId,
                             resource.imgKey,
                             resource.name,
+                            resource.manufacturer,
                             resource.location,
                             resource.description)
                     )

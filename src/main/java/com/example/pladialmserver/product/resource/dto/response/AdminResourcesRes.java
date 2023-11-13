@@ -14,6 +14,9 @@ public class AdminResourcesRes {
     @Schema(type = "String", description = "장비명", example = "MacBook Pro")
     private String name;
 
+    @Schema(type = "String", description = "제조사", example = "Apple")
+    private String manufacturer;
+
     @Schema(type = "String", description = "보관장소", example = "3층 A홀")
     private String location;
 
@@ -30,9 +33,10 @@ public class AdminResourcesRes {
     private Boolean isActive;
 
     @QueryProjection
-    public AdminResourcesRes(Long resourceId, String name, String location, String responsibilityName, String responsibilityPhone, String description, Boolean isActive) {
+    public AdminResourcesRes(Long resourceId, String name, String manufacturer, String location, String responsibilityName, String responsibilityPhone, String description, Boolean isActive) {
         this.resourceId = resourceId;
         this.name = name;
+        this.manufacturer = manufacturer;
         this.location = location;
         this.responsibilityName = responsibilityName;
         this.responsibilityPhone = responsibilityPhone;
