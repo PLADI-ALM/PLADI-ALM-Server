@@ -51,10 +51,11 @@ public class Equipment extends BaseEntity {
   private EquipmentCategory equipmentCategory;
 
   @NotNull
-  private Integer quantity;
+  @Size(max = 30)
+  private String quantity;
 
   @Builder
-  public Equipment(User user, String name, String location, String description, String imgKey, Integer quantity, EquipmentCategory category) {
+  public Equipment(User user, String name, String location, String description, String imgKey, String quantity, EquipmentCategory category) {
     this.user = user;
     this.name = name;
     this.location = location;

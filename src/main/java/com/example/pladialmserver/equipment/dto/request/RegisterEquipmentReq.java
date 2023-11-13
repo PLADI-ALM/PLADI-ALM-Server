@@ -13,8 +13,8 @@ public class RegisterEquipmentReq {
     @NotBlank(message = "E0001")
     private String name;
 
-    @Schema(type = "Integer", description = "수량", example = "10", required = true)
-    private int quantity;
+    @Schema(type = "String", description = "수량", example = "10박스", required = true)
+    private String quantity;
 
     @Schema(type = "String", description = "카테고리", example = "기타", required = true)
     @NotBlank(message = "E0001")
