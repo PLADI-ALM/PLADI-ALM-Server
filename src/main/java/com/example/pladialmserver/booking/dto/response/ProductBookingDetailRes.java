@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder
 public class ProductBookingDetailRes {
     @Schema(type = "Long", description = "Id", example = "1")
-    private Long resourceId;
+    private Long id;
     @Schema(type = "String", description = "상태", example = "'예약대기' / '예약중' / '사용중' / '사용완료' / '예약취소'")
     private String status;
     @Schema(type = "String", description = "예약자 이름", example = "박소정")
@@ -29,7 +29,7 @@ public class ProductBookingDetailRes {
 
     public static ProductBookingDetailRes toDto(ResourceBooking resourceBooking) {
         return ProductBookingDetailRes.builder()
-                .resourceId(resourceBooking.getResource().getResourceId())
+                .id(resourceBooking.getResource().getResourceId())
                 .status(resourceBooking.getStatus().getValue())
                 .reservatorName(resourceBooking.getUser().getName())
                 .reservatorPhone(resourceBooking.getUser().getPhone())
@@ -42,7 +42,7 @@ public class ProductBookingDetailRes {
 
     public static ProductBookingDetailRes toDto(CarBooking carBooking) {
         return ProductBookingDetailRes.builder()
-                .resourceId(carBooking.getCar().getCarId())
+                .id(carBooking.getCar().getCarId())
                 .status(carBooking.getStatus().getValue())
                 .reservatorName(carBooking.getUser().getName())
                 .reservatorPhone(carBooking.getUser().getPhone())
