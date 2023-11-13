@@ -3,10 +3,7 @@ package com.example.pladialmserver.user.controller;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.TokenDto;
-import com.example.pladialmserver.user.dto.request.CheckEmailCodeReq;
-import com.example.pladialmserver.user.dto.request.EmailPWReq;
-import com.example.pladialmserver.user.dto.request.ResponsibilityListRes;
-import com.example.pladialmserver.user.dto.request.VerifyEmailReq;
+import com.example.pladialmserver.user.dto.request.*;
 import com.example.pladialmserver.user.dto.response.NotificationRes;
 import com.example.pladialmserver.user.dto.response.UserNameRes;
 import com.example.pladialmserver.user.entity.User;
@@ -149,5 +146,19 @@ public class UserController {
     )
     {
         return ResponseCustom.OK(userService.getUserNotification(user, pageable));
+    }
+
+    @Operation(summary = " 직원 수정 (장채은)", description = "직원을 수정한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)직원 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "(U0007)성명을 입력해주세요. \n U0008)부서를 입력해주세요. \n(U0010)휴대폰 번호 형식을 확인해주세요. \n(U0009)휴대폰번호를 입력해주세요. \n(U0010)직책을 입력해주세요. \n(U0011)역할을 입력해주세요.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두] \n (U0012)부서를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "409", description = "(U0019)존재하는 휴대폰번호입니다. [자신 휴대폰번호 제외]", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
+    })
+    @PatchMapping("")
+    public ResponseCustom updateUser(@Account User user,
+                                     @RequestBody @Valid UpdateUserReq updateUserReq) {
+        userService.updateUser(user, updateUserReq);
+        return ResponseCustom.OK();
     }
 }

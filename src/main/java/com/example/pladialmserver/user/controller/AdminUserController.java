@@ -3,7 +3,7 @@ package com.example.pladialmserver.user.controller;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
-import com.example.pladialmserver.user.dto.request.UpdateUserReq;
+import com.example.pladialmserver.user.dto.request.AdminUpdateUserReq;
 import com.example.pladialmserver.user.dto.response.DepartmentListDto;
 import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.User;
@@ -56,8 +56,8 @@ public class AdminUserController {
     @PatchMapping("/{userId}")
     public ResponseCustom updateUser(@Account User user,
                                      @Parameter(description = "(Long) 변경하려는 사용자 id", example = "1") @PathVariable(name = "userId") Long userId,
-                                     @RequestBody @Valid UpdateUserReq updateUserReq) {
-        userService.updateUser(user, userId, updateUserReq);
+                                     @RequestBody @Valid AdminUpdateUserReq updateUserReq) {
+        userService.updateUserByAdmin(user, userId, updateUserReq);
         return ResponseCustom.OK();
     }
 
