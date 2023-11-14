@@ -21,7 +21,7 @@ public class OfficeRes {
     @Schema(type = "String", description = "회의실 위치", example = "401호")
     private String location;
     @Schema(type = "String", description = "회의실 수용인원", example = "6명")
-    private Integer capacity;
+    private String capacity;
     @Schema(type = "String", description = "회의실 시설물", example = "'빔 프로젝터' / '마이크' / '화상회의' / '대형 모니터'")
     private List<String> facilityList;
     @Schema(type = "String", description = "회의실 설명", example = "'승학이 회의실'")
@@ -45,7 +45,7 @@ public class OfficeRes {
     }
 //TODO query dsl적용
     @QueryProjection
-    public OfficeRes(Long officeId, String name, String location, Integer capacity, List<String> facilityList,String description, String imgUrl,Boolean isActive){
+    public OfficeRes(Long officeId, String name, String location, String capacity, List<String> facilityList,String description, String imgUrl,Boolean isActive){
         this.officeId=officeId;
         this.name=name;
         this.location=location;

@@ -17,7 +17,7 @@ public class AdminOfficeRes {
     @Schema(type = "String", description = "회의실 위치", example = "401호")
     private String location;
     @Schema(type = "String", description = "회의실 수용인원", example = "6명")
-    private Integer capacity;
+    private String capacity;
     @Schema(type = "String", description = "회의실 설명", example = "'승학이 회의실'")
     private String description;
     @Schema(type = "Boolean", description = "활성화 유무", example = "'true' / 'false'")

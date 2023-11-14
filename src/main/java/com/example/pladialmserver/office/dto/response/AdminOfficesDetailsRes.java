@@ -20,7 +20,7 @@ public class AdminOfficesDetailsRes {
     @Schema(type = "String", description = "회의실 위치", example = "401호")
     private String location;
     @Schema(type = "String", description = "회의실 수용인원", example = "6명")
-    private Integer capacity;
+    private String capacity;
     @Schema(type = "String", description = "회의실 시설물", example = "'빔 프로젝터' / '마이크' / '화상회의' / '대형 모니터'")
     private List<String> facilityList;
     @Schema(type = "String", description = "회의실 설명", example = "'승학이 회의실'")

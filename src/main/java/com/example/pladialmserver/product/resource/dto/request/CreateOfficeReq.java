@@ -28,7 +28,7 @@ public class CreateOfficeReq {
 
     @Schema(type = "Integer", description = "수용인원", example = "6")
     @NotNull(message = "O0008")
-    private Integer capacity;
+    private String capacity;
 
     @Schema(type = "String", description = "회의실 설명", example = "회의실 설명",maxLength = 255)
     @Size(max = 255, message = "O0004")
