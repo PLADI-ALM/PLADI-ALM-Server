@@ -11,11 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OfficeRepository extends JpaRepository<Office, Long>,OfficeCustom {
-    Optional<Office> findByOfficeId(Long officeId);
-    @Query("SELECT o " +
-            "FROM Office o " +
-            "WHERE o.isEnable = true AND o.isActive = true AND o.officeId NOT IN :ids")
-    Page<Office> findAllByOfficeIdNotInAndIsEnableTrueAndIsActiveTrue(List<Long> ids, Pageable pageable);
     @Query("SELECT o " +
             "FROM Office o " +
             "WHERE o.isEnable = true AND o.isActive = true")
@@ -43,16 +38,17 @@ public interface OfficeRepository extends JpaRepository<Office, Long>,OfficeCust
             " WHERE o.name LIKE %:name%" +
             " AND o.isEnable = true")
     Page<Office> findByNameContainingAndIsEnableTrue(@Param("name") String name, Pageable pageable);
-    Page<Office> findByNameAndOfficeIdNotInAndIsEnableTrue(@Param("name") String name, @Param("bookedOfficeIds") List<Long> bookedOfficeIds, Pageable pageable);
-
-    @Query("SELECT o " +
-            "FROM Office o " +
-            "WHERE o.isEnable = true AND o.officeId NOT IN :ids")
-    Page<Office> findAllByOfficeIdNotInAndIsEnableTrue(List<Long> ids, Pageable pageable);
 
     @Query("SELECT o " +
             "FROM Office o " +
             "WHERE o.isEnable = true")
     Page<Office> findAllByIsEnableTrue(Pageable pageable);
+
+    @Query("SELECT o FROM Office o " +
+            "WHERE o.isEnable = true AND o.isActive = true " +
+            "AND o.officeId NOT IN :bookedOfficeIds")
+    Page<Office> findByOfficeIdNotInAndIsEnableTrueAndIsActiveTrue(@Param("bookedOfficeIds") List<Long> bookedOfficeIds,
+                                                                   Pageable pageable);
+
 
 }
