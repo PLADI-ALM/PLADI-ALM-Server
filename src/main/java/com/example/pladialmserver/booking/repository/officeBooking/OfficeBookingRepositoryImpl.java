@@ -2,6 +2,7 @@ package com.example.pladialmserver.booking.repository.officeBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
+import com.example.pladialmserver.booking.entity.QOfficeBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.office.dto.response.OfficeReservatorRes;
 import com.example.pladialmserver.office.dto.response.QOfficeReservatorRes;
@@ -100,5 +101,17 @@ public class OfficeBookingRepositoryImpl implements OfficeBookingCustom{
                         officeBooking.status.notIn(BookingStatus.CANCELED))
                 .fetchFirst();
     }
+
+//    @Override
+//    public List<Long> findBookedOfficeIdsByDateAndTime(LocalDate date, LocalTime startTime, LocalTime endTime) {
+//        return jpaQueryFactory
+//                .select(QOfficeBooking.officeBooking.office.officeId)
+//                .from(QOfficeBooking.officeBooking)
+//                .where(QOfficeBooking.officeBooking.date.eq(date)
+//                        .and(QOfficeBooking.officeBooking.startTime.lt(endTime)
+//                                .and(QOfficeBooking.officeBooking.endTime.gt(startTime)))
+//                        .and(QOfficeBooking.officeBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
+//                .fetch();
+//    }
 
 }

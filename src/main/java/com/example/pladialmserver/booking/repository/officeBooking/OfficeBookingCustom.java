@@ -21,4 +21,6 @@ public interface OfficeBookingCustom {
 
     void updateBookingStatusForResigning(User user);
     OfficeReservatorRes findOfficeReservatorByOfficeAndDateTime(Office office, LocalDate date, LocalTime time);
+
+//    List<Long> findBookedOfficeIdsByDateAndTime(LocalDate date, LocalTime startTime, LocalTime endTime);
 }

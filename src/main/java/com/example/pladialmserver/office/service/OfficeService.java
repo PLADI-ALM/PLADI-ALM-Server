@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,20 +43,21 @@ public class OfficeService {
      * 전체 회의실 목록 조회 and 예약 가능한 회의실 목록 조회
      */
     public Page<OfficeRes> findAvailableOffices(LocalDate date, LocalTime startTime, LocalTime endTime, String facilityName,Pageable pageable) {
-
-        Page<Office> allOffices;
+        List<Long> bookedOfficeIds = Collections.emptyList();
 
         if (date != null && startTime != null && endTime != null) {
             // 입력된 날짜와 시간에 이미 예약된 회의실의 ID 목록을 조회
-            List<Long> bookedOfficeIds = officeBookingRepository.findBookedOfficeIdsByDateAndTime(date, startTime, endTime);
+            bookedOfficeIds = officeBookingRepository.findBookedOfficeIdsByDateAndTime(date, startTime, endTime);
+        }
+        Page<Office> allOffices;
 
-            // 예약된 회의실을 제외한 회의실 목록을 페이징 처리하여 조회
+        // 예약된 회의실을 제외한 회의실 목록을 페이징 처리하여 조회
             if (!bookedOfficeIds.isEmpty()) {
                 if (facilityName != null && !facilityName.isEmpty()) {
                     // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
                     allOffices = officeRepository.findByFacilityNameContainingAndOfficeIdNotInIAndIsEnableTrueAndIsActiveTrue(facilityName, bookedOfficeIds, pageable);
                 }else {
-                    allOffices = officeRepository.findAllByOfficeIdNotInAndIsEnableTrueAndIsActiveTrue(bookedOfficeIds, pageable);
+                    allOffices = officeRepository.findByOfficeIdNotInAndIsEnableTrueAndIsActiveTrue(bookedOfficeIds, pageable);
                 }
             } else {
                 if (facilityName != null && !facilityName.isEmpty()) {
@@ -65,14 +67,6 @@ public class OfficeService {
                     allOffices = officeRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
                 }
             }
-        }else{
-            if (facilityName != null && !facilityName.isEmpty()) {
-                // 시설 이름이 입력되었다면 해당 시설을 포함하는 회의실만 조회
-                allOffices = officeRepository.findByFacilityNameContainingAAndIsEnableTrueAndIsActiveTrue(facilityName, pageable);
-            }else {
-                allOffices = officeRepository.findAllByIsEnableTrueAndIsActiveTrue(pageable);
-            }
-        }
 
         return allOffices.map(office -> {
             List<Facility> facilities = office.getFacilityList().stream()

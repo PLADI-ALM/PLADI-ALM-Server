@@ -44,15 +44,16 @@ public class OfficeRes {
                 .build();
     }
 //TODO query dsl적용
-//    @QueryProjection
-//    public OfficeRes(Long officeId, String name, String location, Integer capacity, List<String> facilityList,String description, String imgUrl){
-//        this.officeId=officeId;
-//        this.name=name;
-//        this.location=location;
-//        this.capacity=capacity;
-//        this.facilityList=facilityList;
-//        this.description=description;
-//        this.imgUrl=imgUrl;
-//    }
+    @QueryProjection
+    public OfficeRes(Long officeId, String name, String location, Integer capacity, List<String> facilityList,String description, String imgUrl,Boolean isActive){
+        this.officeId=officeId;
+        this.name=name;
+        this.location=location;
+        this.capacity=capacity;
+        this.description=description;
+        this.facilityList=facilityList;
+        this.imgUrl=imgUrl;
+        this.isActive=isActive;
+    }
 
 }

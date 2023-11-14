@@ -51,19 +51,25 @@ public class OfficeController {
     @GetMapping
     public ResponseCustom<Page<OfficeRes>> searchOffice(
             @Account User user,
-            @Parameter(description = "예약 날짜",example = "2023-09-20") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
+            @Parameter(description = "예약 날짜",example = "2023-11-30") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date,
             @Parameter(description = "시작 예약 시간",example = "12:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime startTime,
             @Parameter(description = "종료 예약 시간",example = "13:00") @RequestParam(required = false) @DateTimeFormat(pattern = TIME_PATTERN) LocalTime endTime,
             @Parameter(description = "시설",example = "빔 프로젝터")@RequestParam(required = false) String facilityName,
             Pageable pageable
     ) {
-        if(LocalDateTime.now().isAfter(DateTimeUtil.localDateAndTimeToLocalDateTime(date, startTime))) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
-        if (!startTime.isBefore(endTime) && !endTime.equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
-        // 날짜와 시작 시간 또는 종료 시간 중 하나라도 입력되지 않았다면 에러 반환
         if ((date != null && (startTime == null || endTime == null)) ||
                 (date == null && (startTime != null || endTime != null))) {
             throw new BaseException(BaseResponseCode.DATE_OR_TIME_IS_NULL);
         }
+        // 날짜와 시간 중 하나라도 입력되지 않았다면 기본 로직을 수행
+        if (date == null || startTime == null || endTime == null) {
+            return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime, facilityName, pageable));
+        }
+        // 현재보다 과거 날짜 및 시간로 등록하는 경우
+        if(LocalDateTime.now().isAfter(DateTimeUtil.localDateAndTimeToLocalDateTime(date, startTime))) throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        // 끝나는 시간이 시작시간보다 빠른경우
+        if (!startTime.isBefore(endTime) && !endTime.equals(LocalTime.MIDNIGHT)) throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
+
         return ResponseCustom.OK(officeService.findAvailableOffices(date, startTime, endTime,facilityName,pageable));
     }
 
