@@ -13,6 +13,7 @@ public class Constants {
         public static final String NEW_BOOKING_TEXT = "새로운 예약 요청이 들어왔습니다. 예약 상태를 확인해주세요.";
         public static final String APPROVE_BOOKING_TEXT = "요청하신 예약이 승인되었습니다.";
         public static final String REJECT_BOOKING_TEXT = "요청하신 예약이 반려되었습니다.";
+        public static final String CANCEL_BOOKING_TEXT = "요청하신 예약이 취소되었습니다.";
         public static final String RETURN_BOOKING_TEXT = "요청하신 예약 반납 확인되었습니다.";
         public static final String END_BOOKING_TEXT = "요청하신 예약 시간이 종료되었습니다.";
         public static final String BOOKING_TEXT = "예약 ";
@@ -20,6 +21,7 @@ public class Constants {
         public static final String BOOKING_APPROVE = "승인";
         public static final String BOOKING_REJECT = "반려";
         public static final String BOOKING_RETURN = "반납";
+        public static final String BOOKING_CANCEL = "취소";
         public static final String BOOKING_END = "종료";
         public static final String EMAIL_CODE = "emailCode";
         public static final String EMAIL_TEMPLATE = "email";

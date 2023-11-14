@@ -116,6 +116,12 @@ public class ResourceBookingService implements ProductBookingService {
         // 예약 취소
         resourceBooking.changeBookingStatus(BookingStatus.CANCELED);
         resourceBookingRepository.save(resourceBooking);
+
+        // 이메일 전송
+        String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_CANCEL;
+        emailUtil.sendEmail(resourceBooking.getUser().getEmail(), title,
+                emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, CANCEL_BOOKING_TEXT)), BOOKING_TEMPLATE);
+
         // 장비 예약 취소 알림
         try {
             notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_CANCELED, user);
