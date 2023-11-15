@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
@@ -83,7 +84,9 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                     .orderBy(carBooking.startDate.asc())
                     .fetchFirst();
 
-            return Collections.singletonList(DateTimeUtil.dateTimeToString(booking.getStartDate()));
+            return Optional.ofNullable(booking)
+                    .map(b -> Collections.singletonList(DateTimeUtil.dateTimeToString(b.getStartDate())))
+                    .orElse(null);
         } else {
             // 해당 월의 예약 현황 조회
             List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)

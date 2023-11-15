@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
@@ -75,7 +76,9 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                     .orderBy(resourceBooking.startDate.asc())
                     .fetchFirst();
 
-            return Collections.singletonList(DateTimeUtil.dateTimeToString(booking.getStartDate()));
+            return Optional.ofNullable(booking)
+                    .map(b -> Collections.singletonList(DateTimeUtil.dateTimeToString(b.getStartDate())))
+                    .orElse(null);
         } else {
             // 해당 월의 예약 현황 조회
             List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
