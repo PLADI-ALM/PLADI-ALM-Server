@@ -59,6 +59,15 @@ public class ResourceController {
         if ((startDate == null && endDate != null) || (startDate != null && endDate == null)) {
             throw new BaseException(BaseResponseCode.START_DATE_OR_END_DATE_IS_NULL);
         }
+        // 현재보다 과거 날짜 및 시간으로 등록하는 경우의 예외 처리
+        if (startDate != null && LocalDateTime.now().isAfter(startDate)) {
+            throw new BaseException(BaseResponseCode.DATE_MUST_BE_THE_FUTURE);
+        }
+        // 끝나는 시간이 시작 시간보다 빠른 경우의 예외 처리
+        if (startDate != null && endDate != null && !endDate.isAfter(startDate)) {
+            throw new BaseException(BaseResponseCode.START_TIME_MUST_BE_IN_FRONT);
+        }
+
         return ResponseCustom.OK(resourceService.findAvailableResources(resourceName, startDate, endDate, pageable));
     }
 
