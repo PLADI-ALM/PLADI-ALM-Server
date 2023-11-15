@@ -32,7 +32,7 @@ public class Office extends BaseEntity {
     private String location;
 
     @NotNull
-    private Integer capacity;
+    private String capacity;
 
     @Size(max = 30)
     private String description;
@@ -45,7 +45,7 @@ public class Office extends BaseEntity {
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();
     @Builder
-     public Office(String name, String location, Integer capacity, String description, String imgKey,Boolean isActive){
+     public Office(String name, String location, String capacity, String description, String imgKey,Boolean isActive){
          this.name=name;
          this.location=location;
          this.capacity=capacity;
