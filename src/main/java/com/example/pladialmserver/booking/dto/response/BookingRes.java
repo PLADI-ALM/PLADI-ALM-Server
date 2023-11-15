@@ -22,6 +22,8 @@ public class BookingRes {
     private String startDateTime;
     @Schema(type = "String", description = "예약일자(종료일)", example = "2023-10-01 13:00")
     private String endDateTime;
+    @Schema(type = "String", description = "이용목적", example = "목적목적")
+    private String memo;
     @Schema(type = "String", description = "상태", example = "'예약대기' / '예약중' / '사용중' / '사용완료' / '예약취소'")
     private String status;
 
@@ -32,6 +34,7 @@ public class BookingRes {
                 .detailInfo(officeBooking.getOffice().getLocation())
                 .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(), officeBooking.getStartTime()))
                 .endDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(), officeBooking.getEndTime()))
+                .memo(officeBooking.getMemo())
                 .status(officeBooking.getStatus().getValue())
                 .build();
     }
@@ -43,6 +46,7 @@ public class BookingRes {
                 .detailInfo(resourceBooking.getResource().getLocation())
                 .startDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getEndDate()))
+                .memo(resourceBooking.getMemo())
                 .status(resourceBooking.getStatus().getValue())
                 .build();
     }
@@ -54,6 +58,7 @@ public class BookingRes {
                 .detailInfo(carBooking.getCar().getLocation())
                 .startDateTime(DateTimeUtil.dateTimeToString(carBooking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateTimeToString(carBooking.getEndDate()))
+                .memo(carBooking.getMemo())
                 .status(carBooking.getStatus().getValue())
                 .build();
     }
