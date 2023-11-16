@@ -114,16 +114,24 @@ public class CarService implements ProductService {
 
     @Transactional
     public void activateCarByAdmin(User user, Long carId) {
-        // 관리자 권한 확인
-        checkAdminRole(user);
         // 차량 유무 확인
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+
+        //차량 책임자 확인
+        checkCarOwner(user, car.getUser());
         car.activateResource();
     }
 
     // 관리자 권한 확인
     private void checkAdminRole(User user) {
         if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+    }
+
+    // 차량 책임자 확인
+    private void checkCarOwner(User currentUser, User carOwner) {
+        if (!currentUser.equals(carOwner)) {
+            throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        }
     }
 }
