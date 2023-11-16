@@ -11,7 +11,8 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum Role {
   BASIC("일반"),
-  ADMIN("관리자");
+  ADMIN("관리자"),
+  CAR_MANAGER("차량 책임자");
 
   private final String value;
 

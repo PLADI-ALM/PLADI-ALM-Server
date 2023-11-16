@@ -59,4 +59,8 @@ public class Car extends BaseEntity {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public void activateResource() {
+        isActive = !isActive;
+    }
 }

@@ -15,7 +15,9 @@ import com.example.pladialmserver.product.car.repository.CarRepository;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
+import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.service.ProductService;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -100,5 +102,20 @@ public class CarService implements ProductService {
         // 예약 현황 조회할 월
         LocalDate standardDate = DateTimeUtil.stringToFirstLocalDate(month);
         return carBookingRepository.getCarBookedDate(car, standardDate, date);
+    }
+
+    @Transactional
+    public void activateCarByAdmin(User user, Long carId) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 차량 유무 확인
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        car.activateResource();
+    }
+
+    // 관리자 권한 확인
+    private void checkAdminRole(User user) {
+        if(!user.checkRole(Role.CAR_MANAGER)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 }
