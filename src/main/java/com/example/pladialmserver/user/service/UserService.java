@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,6 +129,15 @@ public class UserService {
     // 직원 개별 정보
     public UserRes getUserInfo(User user) {
         return UserRes.toDto(user);
+    }
+
+    // 자산 정보 확인 알림 / 메일 전송
+    @Scheduled(cron = "0 0 9 1 */3 ?", zone = "GMT+9:00")
+    public void sendAssetsEmail(){
+        userRepository.findByAssetsIsNotNull().forEach(user -> {
+            emailUtil.sendEmail(user.getEmail(), COMPANY_NAME + ASSETS_TITLE
+                    , emailUtil.createAssetsData(SendAssetsEmailReq.toDto(user)), ASSETS_TEMPLATE);
+        });
     }
 
     // ===================================================================================================================
