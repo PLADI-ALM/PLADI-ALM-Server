@@ -15,7 +15,7 @@ import com.example.pladialmserver.product.car.repository.CarRepository;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.entity.Resource;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
@@ -104,6 +104,14 @@ public class CarService implements ProductService {
         return carBookingRepository.getCarBookedDate(car, standardDate, date);
     }
 
+    @Override
+    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String carname, Pageable pageable) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 장비 조회
+        return carRepository.search(carname, pageable);
+    }
+
     @Transactional
     public void activateCarByAdmin(User user, Long carId) {
         // 관리자 권한 확인
@@ -116,6 +124,6 @@ public class CarService implements ProductService {
 
     // 관리자 권한 확인
     private void checkAdminRole(User user) {
-        if(!user.checkRole(Role.CAR_MANAGER)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 }

@@ -1,11 +1,9 @@
 package com.example.pladialmserver.product.car.repository;
 
-import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
-import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
 import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.dto.QCarRes;
-import com.example.pladialmserver.product.resource.dto.response.QResourceRes;
-import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
+import com.example.pladialmserver.product.resource.dto.response.QAdminResourcesRes;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,13 +13,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.pladialmserver.product.car.entity.QCar.car;
-import static com.example.pladialmserver.product.resource.entity.QResource.resource;
-import static io.jsonwebtoken.lang.Strings.hasText;
 
 @RequiredArgsConstructor
 public class CarRepositoryImpl implements CarCustom {
@@ -74,6 +68,33 @@ public class CarRepositoryImpl implements CarCustom {
                 .where(filterPredicate)
                 .fetchCount();
 
+        return new PageImpl<>(results, pageable, total);
+    }
+
+    @Override
+    public Page<AdminResourcesRes> search(String carName, Pageable pageable) {
+        List<AdminResourcesRes> results = jpaQueryFactory
+                .select(new QAdminResourcesRes(
+                        car.carId,
+                        car.name,
+                        car.manufacturer,
+                        car.location,
+                        car.user.name,
+                        car.user.phone,
+                        car.description,
+                        car.isActive)
+                )
+                .from(car)
+                .where(
+                        carNameContaining(carName),
+                        car.isEnable.eq(true)
+                )
+                .orderBy(car.name.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = results.size();
         return new PageImpl<>(results, pageable, total);
     }
 
