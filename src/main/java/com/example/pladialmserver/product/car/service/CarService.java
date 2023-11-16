@@ -16,7 +16,6 @@ import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
 import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
-import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
