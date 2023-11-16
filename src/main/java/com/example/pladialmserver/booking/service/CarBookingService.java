@@ -180,6 +180,7 @@ public class CarBookingService implements ProductBookingService{
     }
 
     @Override
+    @Transactional
     public void cancelBookingProduct(User user, Long carBookingId) {
         CarBooking carBooking = checkCarBookingAuthentication(user, carBookingId, Role.BASIC);
 
