@@ -34,5 +34,5 @@ public class CreateUserReq {
     @NotBlank(message = "U0011")
     private String role;
     @Schema(type = "String", description = "자산(컴퓨터, 태블릿)", example = "A123434, B123434")
-    private String asserts;
+    private String assets;
 }

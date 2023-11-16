@@ -20,20 +20,20 @@ public class UpdateUserReq {
     @NotBlank(message = "U0009")
     private String phone;
     @Schema(type = "String", description = "자산(컴퓨터, 태블릿)", example = "A123434, B123434")
-    private String asserts;
+    private String assets;
 
     @Builder
-    public UpdateUserReq(String name, String phone, String asserts) {
+    public UpdateUserReq(String name, String phone, String assets) {
         this.name = name;
         this.phone = phone;
-        this.asserts = asserts;
+        this.assets = assets;
     }
 
     public static UpdateUserReq  toDto(AdminUpdateUserReq req){
         return UpdateUserReq.builder()
                 .name(req.getName())
                 .phone(req.getPhone())
-                .asserts(req.getAsserts())
+                .assets(req.getAssets())
                 .build();
     }
 
