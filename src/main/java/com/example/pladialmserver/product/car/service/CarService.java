@@ -15,6 +15,7 @@ import com.example.pladialmserver.product.car.repository.CarRepository;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.Role;
@@ -102,6 +103,14 @@ public class CarService implements ProductService {
         // 예약 현황 조회할 월
         LocalDate standardDate = DateTimeUtil.stringToFirstLocalDate(month);
         return carBookingRepository.getCarBookedDate(car, standardDate, date);
+    }
+
+    @Override
+    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String carname, Pageable pageable) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 장비 조회
+        return carRepository.search(carname, pageable);
     }
 
     @Transactional
