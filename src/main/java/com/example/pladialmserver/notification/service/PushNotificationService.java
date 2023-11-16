@@ -5,6 +5,7 @@ import com.example.pladialmserver.notification.dto.FcmMessage;
 import com.example.pladialmserver.notification.entity.PushNotification;
 import com.example.pladialmserver.notification.repository.PushNotificationRepository;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class PushNotificationService {
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/pladi-alm-7702202947/messages:send";
     private final ObjectMapper objectMapper;
     private final PushNotificationRepository notificationRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void sendNotification(String category, String type, User user) throws IOException {
@@ -36,6 +38,12 @@ public class PushNotificationService {
             Response response = sendMessage(objectMapper.writeValueAsString(fcmMessage));
             notificationRepository.save(PushNotification.toEntity(title, messageBody, user));
         }
+    }
+
+    public void sendAssetsNotification() {
+        List<User> all = userRepository.findAll();
+        String title = Constants.NotificationCategory.ASSETS;
+
     }
 
     private String getTitle(String category, String type) {

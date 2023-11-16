@@ -49,6 +49,7 @@ public class Constants {
         public static final String CAR = "차량";
         public static final String EQUIPMENT = "장비";
         public static final String OFFICE = "회의실";
+        public static final String ASSETS = "자산 정보 확인 요청";
     }
 
     public static class Notification {

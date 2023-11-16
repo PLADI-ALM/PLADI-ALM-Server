@@ -202,5 +202,4 @@ public class UserService {
         Page<PushNotification> notifications = notificationRepository.findByUserAndIsEnableOrderByCreatedAtDesc(user, true, pageable);
         return notifications.map(NotificationRes::toDto);
     }
-
 }
