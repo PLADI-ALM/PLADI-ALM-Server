@@ -17,7 +17,7 @@ public class NotificationController {
 
     private final PushNotificationService notificationService;
 
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     @GetMapping("/")
     public ResponseCustom sendAssetsNotification() {
         notificationService.sendAssetsNotification();
