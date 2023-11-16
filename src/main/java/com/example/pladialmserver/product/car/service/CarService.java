@@ -124,6 +124,6 @@ public class CarService implements ProductService {
 
     // 관리자 권한 확인
     private void checkAdminRole(User user) {
-        if(!user.checkRole(Role.CAR_MANAGER)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
+        if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
     }
 }
