@@ -26,6 +26,8 @@ public class Constants {
         public static final String EMAIL_CODE = "emailCode";
         public static final String EMAIL_TEMPLATE = "email";
         public static final String BOOKING_TEMPLATE = "booking";
+        public static final String ASSETS_TEMPLATE = "assets";
+        public static final String ASSETS_TITLE = "자산 정보 확인 요청";
         public static final String RESOURCE = "장비";
         public static final String CAR = "차량";
         public static final String OFFICE = "회의실";

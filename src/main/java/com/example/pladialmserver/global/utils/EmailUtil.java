@@ -3,6 +3,7 @@ package com.example.pladialmserver.global.utils;
 import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.user.dto.request.SendAssetsEmailReq;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -87,6 +88,15 @@ public class EmailUtil {
         bookingData.put("remark", REMARK);
         bookingData.put("remarkReason", emailReq.getRemarkReason());
         return bookingData;
+    }
+
+    public Map<String, String> createAssetsData(SendAssetsEmailReq emailReq){
+        Map<String, String> assetsData = new HashMap<>();
+        assetsData.put("name", emailReq.getName());
+        assetsData.put("affiliation", emailReq.getAffiliation());
+        assetsData.put("department", emailReq.getDepartment());
+        assetsData.put("assets", emailReq.getAssets());
+        return assetsData;
     }
 
 
