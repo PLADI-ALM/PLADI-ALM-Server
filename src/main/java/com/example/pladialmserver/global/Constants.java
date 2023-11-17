@@ -32,6 +32,7 @@ public class Constants {
         public static final String CAR = "차량";
         public static final String OFFICE = "회의실";
         public static final String PRODUCT = "자원명";
+        public static final String REMARK = "특이사항 : ";
 
     }
 

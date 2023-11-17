@@ -21,6 +21,7 @@ public class SendEmailReq {
     private String office_product;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+    private String remarkReason;
 
 
     public static SendEmailReq toDto(ResourceBooking resourceBooking, String text) {
@@ -31,6 +32,7 @@ public class SendEmailReq {
                 .office_product(PRODUCT)
                 .startDateTime(resourceBooking.getStartDate())
                 .endDateTime(resourceBooking.getEndDate())
+                .remarkReason(resourceBooking.getRemark())
                 .build();
     }
 
@@ -42,6 +44,7 @@ public class SendEmailReq {
                 .office_product(PRODUCT)
                 .startDateTime(carBooking.getStartDate())
                 .endDateTime(carBooking.getEndDate())
+                .remarkReason(carBooking.getRemark())
                 .build();
     }
 

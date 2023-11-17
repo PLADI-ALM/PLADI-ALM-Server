@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.pladialmserver.global.Constants.EmailNotification.EMAIL_CODE;
+import static com.example.pladialmserver.global.Constants.EmailNotification.REMARK;
 import static com.example.pladialmserver.global.exception.BaseResponseCode.BLACKLIST_EMAIL_CODE;
 
 @Component
@@ -84,6 +85,8 @@ public class EmailUtil {
         bookingData.put("officeProduct", emailReq.getOffice_product());
         bookingData.put("resourceName", emailReq.getProductName());
         bookingData.put("reservationTime", DateTimeUtil.dateTimeToStringNullable(emailReq.getStartDateTime()) + " ~ " + DateTimeUtil.dateTimeToStringNullable(emailReq.getEndDateTime()));
+        bookingData.put("remark", REMARK);
+        bookingData.put("remarkReason", emailReq.getRemarkReason());
         return bookingData;
     }
 
