@@ -3,7 +3,6 @@ package com.example.pladialmserver.global.utils;
 import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
-import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.pladialmserver.global.Constants.EmailNotification.EMAIL_CODE;
-import static com.example.pladialmserver.global.Constants.EmailNotification.PRODUCT;
+import static com.example.pladialmserver.global.Constants.EmailNotification.REMARK;
 import static com.example.pladialmserver.global.exception.BaseResponseCode.BLACKLIST_EMAIL_CODE;
 
 @Component
@@ -78,13 +77,15 @@ public class EmailUtil {
         return emailData;
     }
 
-    public Map<String, String> createBookingData( SendEmailReq emailReq){
+    public Map<String, String> createBookingData(SendEmailReq emailReq){
         Map<String, String> bookingData = new HashMap<>();
         bookingData.put("text", emailReq.getText());
         bookingData.put("reservatorName", emailReq.getReservatorName());
         bookingData.put("officeProduct", emailReq.getOffice_product());
         bookingData.put("resourceName", emailReq.getProductName());
         bookingData.put("reservationTime", DateTimeUtil.dateTimeToStringNullable(emailReq.getStartDateTime()) + " ~ " + DateTimeUtil.dateTimeToStringNullable(emailReq.getEndDateTime()));
+        bookingData.put("remark", REMARK);
+        bookingData.put("remarkReason", emailReq.getRemarkReason());
         return bookingData;
     }
 

@@ -1,10 +1,14 @@
 package com.example.pladialmserver.booking.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ReturnProductReq {
     @Schema(type = "String", description = "반납장소", example = "3F")

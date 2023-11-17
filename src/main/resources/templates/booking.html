@@ -35,6 +35,10 @@
                   <p><span th:text="${booking.officeProduct}"></span> : <span th:text="${booking.resourceName}"></span></p>
                   <p></p>
                   <p>예약시간 : <span th:text="${booking.reservationTime}"></span></p>
+                  <p></p>
+                  <div th:if="${booking.remarkReason}">
+                    <p><span th:text="${booking.remark}"></span> <span th:text="${booking.remarkReason}"></span></p>
+                  </div>
                 </td>
               </tr>
               <tr style="display: block;">
