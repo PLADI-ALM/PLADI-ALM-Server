@@ -86,6 +86,10 @@ dependencies {
 	//테스트용 H2
 	implementation 'com.h2database:h2'
 
+	//spring security test
+	testImplementation 'org.springframework.security:spring-security-test:5.3.3.RELEASE'
+
+
 }
 
 tasks.named('test') {

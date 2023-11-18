@@ -3,9 +3,11 @@ package com.example.pladialmserver.global;
 import com.example.pladialmserver.booking.controller.BookingController;
 import com.example.pladialmserver.booking.controller.OfficeBookingAdminController;
 import com.example.pladialmserver.booking.controller.ResourceBookingAdminController;
+import com.example.pladialmserver.booking.service.CarBookingService;
 import com.example.pladialmserver.booking.service.OfficeBookingService;
 import com.example.pladialmserver.booking.service.ResourceBookingService;
 import com.example.pladialmserver.equipment.controller.EquipmentController;
+import com.example.pladialmserver.equipment.service.EquipmentService;
 import com.example.pladialmserver.global.resolver.LoginResolver;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.office.controller.OfficeAdminController;
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(
@@ -38,10 +41,11 @@ import org.springframework.test.web.servlet.MockMvc;
                 ResourceBookingAdminController.class,
         }
 )
+@MockBean(JpaMetamodelMappingContext.class)
 public abstract class ControllerTestSupport {
     @Autowired protected MockMvc mockMvc;
-    @Autowired protected LoginResolver loginResolver;
     @Autowired protected ObjectMapper objectMapper;
+    @MockBean protected LoginResolver loginResolver;
     @MockBean protected JwtUtil jwtUtil;
     @MockBean protected User user;
     @MockBean protected UserService userService;
@@ -49,5 +53,7 @@ public abstract class ControllerTestSupport {
     @MockBean protected ResourceService resourceService;
     @MockBean protected OfficeBookingService officeBookingService;
     @MockBean protected ResourceBookingService resourceBookingService;
+    @MockBean protected CarBookingService carBookingService;
+    @MockBean protected EquipmentService equipmentService;
 
 }

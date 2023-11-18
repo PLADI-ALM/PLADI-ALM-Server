@@ -2,6 +2,7 @@ package com.example.pladialmserver.user.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -28,4 +29,9 @@ public class Affiliation extends BaseEntity {
   @NotNull
   @Size(max = 30)
   private String name;
+
+  @Builder
+  public Affiliation(String name){
+    this.name=name;
+  }
 }

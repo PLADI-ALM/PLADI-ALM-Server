@@ -2,6 +2,7 @@ package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
@@ -25,5 +26,10 @@ public class Facility extends BaseEntity {
     @NotNull
     @Size(max = 30)
     private String name;
+
+    @Builder
+    public Facility(String name){
+        this.name=name;
+    }
 
 }
