@@ -25,7 +25,7 @@ import java.util.List;
 @DynamicUpdate
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE user SET is_enable = false, update_at = current_timestamp WHERE user_id = ?")
+@SQLDelete(sql = "UPDATE users SET is_enable = false, update_at = current_timestamp WHERE user_id = ?")
 @EntityListeners(UserEntityListener.class)
 public class User extends BaseEntity {
 
