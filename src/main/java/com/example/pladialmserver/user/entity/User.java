@@ -123,4 +123,8 @@ public class User extends BaseEntity {
         return this.role == role;
     }
 
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
 }

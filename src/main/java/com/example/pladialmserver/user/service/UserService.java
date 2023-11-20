@@ -48,9 +48,11 @@ public class UserService {
     private final EmailUtil emailUtil;
 
     // 로그인
+    @Transactional
     public TokenDto login(EmailPWReq loginReq) {
         User user = userRepository.findByEmailAndIsEnable(loginReq.getEmail(), true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         if(!passwordEncoder.matches(loginReq.getPassword(), user.getPassword())) throw new BaseException(INVALID_PASSWORD);
+        if (StringUtils.hasText(loginReq.getFcmToken())) user.updateFcmToken(loginReq.getFcmToken());
         return jwtUtil.createToken(user.getUserId(), user.getRole());
     }
 
