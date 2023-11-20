@@ -93,8 +93,6 @@ public class EmailUtil {
     public Map<String, String> createAssetsData(SendAssetsEmailReq emailReq){
         Map<String, String> assetsData = new HashMap<>();
         assetsData.put("name", emailReq.getName());
-        assetsData.put("affiliation", emailReq.getAffiliation());
-        assetsData.put("department", emailReq.getDepartment());
         assetsData.put("assets", emailReq.getAssets());
         return assetsData;
     }
