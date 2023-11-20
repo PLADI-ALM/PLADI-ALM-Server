@@ -17,4 +17,6 @@ public class EmailPWReq {
     @Pattern(message = "U0003", regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,15}$")
     @NotBlank(message = "U0005")
     private String password;
+    @Schema(type = "String", description = "푸쉬 알림 토큰", example = "eAnBcQicRUaSkPCm638VIG...")
+    private String fcmToken;
 }
