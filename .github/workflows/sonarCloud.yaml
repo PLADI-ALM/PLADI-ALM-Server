@@ -1,9 +1,8 @@
 name: SonarCloud
 on:
-  push:
+  pull_request:
     branches:
       - develop
-  pull_request:
 
 jobs:
   SonarCloud:
@@ -18,23 +17,23 @@ jobs:
         with:
           java-version: 11
           distribution: 'zulu' # Alternative distribution options are available
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Make application-secret.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application-secret.yml
-          echo "${{ secrets.PROPERTIES_SECRET }}" > ./application-secret.yml
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Make application-secret.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application-secret.yml
+          echo "${{ secrets.PROPERTIES_SECRET }}" > ./application-secret.yml
       - name: Build and analyze
         run: ./gradlew test sonar --info
         env:
