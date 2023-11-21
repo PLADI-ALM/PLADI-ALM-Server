@@ -24,6 +24,11 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - name: Make application-secret.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application-secret.yml
+          echo "${{ secrets.PROPERTIES_SECRET }}" > ./application-secret.yml
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
