@@ -97,7 +97,7 @@ public class ResourceBookingAdminController {
     public ResponseCustom returnBookingResource(
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId,
-            ReturnProductReq request
+            @RequestBody ReturnProductReq request
     ) {
         bookingService.returnBookingProductByAdmin(user, resourceBookingId, request);
         return ResponseCustom.OK();
