@@ -24,6 +24,11 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      - name: Make application-secret.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application-secret.yml
+          echo "${{ secrets.PROPERTIES_SECRET }}" > ./application-secret.yml
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
