@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
-import static io.jsonwebtoken.lang.Strings.hasText;
 
 
 @RequiredArgsConstructor
@@ -110,14 +110,17 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 if (!DateTimeUtil.dateTimeToDate(b.getStartDate()).isEqual(DateTimeUtil.dateTimeToDate(b.getEndDate()))) {
                     // 연속인 경우 & 다음 날 00시 또는 이상인 경우 -> startDate 더해주기
                     if (isContinuity &&
-                            b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1))) || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
+                            b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))
+                            || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
                         bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
+                    } else if (!isContinuity && ChronoUnit.DAYS.between(b.getStartDate(), b.getEndDate()) == 1) {
+                        break;
+                    } else {
+                        List<String> dates = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
+                                .map(DateTimeUtil::dateToString)
+                                .collect(Collectors.toList());
+                        bookedDate.addAll(dates);
                     }
-                    // 중간 날짜 더해주기
-                    List<String> dates = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
-                            .map(DateTimeUtil::dateToString)
-                            .collect(Collectors.toList());
-                    bookedDate.addAll(dates);
                 }
                 // 시작일 & 종료일 동일한 경우
                 else {

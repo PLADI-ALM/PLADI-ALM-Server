@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -120,12 +121,15 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                     if (isContinuity &&
                             b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1))) || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
                         bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
+                    } else if (!isContinuity && ChronoUnit.DAYS.between(b.getStartDate(), b.getEndDate()) == 1) {
+                        break;
+                    } else {
+                        // 중간 날짜 더해주기
+                        List<String> dates = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
+                                .map(DateTimeUtil::dateToString)
+                                .collect(Collectors.toList());
+                        bookedDate.addAll(dates);
                     }
-                    // 중간 날짜 더해주기
-                    List<String> dates = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
-                            .map(DateTimeUtil::dateToString)
-                            .collect(Collectors.toList());
-                    bookedDate.addAll(dates);
                 }
                 // 시작일 & 종료일 동일한 경우
                 else {
