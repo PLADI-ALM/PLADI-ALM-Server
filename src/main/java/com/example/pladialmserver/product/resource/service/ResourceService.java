@@ -127,6 +127,14 @@ public class ResourceService implements ProductService {
         return resourceRepository.search(resourceName, pageable);
     }
 
+    @Override
+    public List<String> getResourceBookedTime(Long resourceId, LocalDate date) {
+        // 장비 유무 확인
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+        return resourceBookingRepository.getBookedTime(resource, date);
+    }
+
     /**
      * 관리자 장비 추가
      */

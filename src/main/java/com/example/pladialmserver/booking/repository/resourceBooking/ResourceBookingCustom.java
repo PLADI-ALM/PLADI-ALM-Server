@@ -20,4 +20,6 @@ public interface ResourceBookingCustom {
     ProductBookingRes findResourceBookingByDate(Resource resource, LocalDateTime dateTime);
 
     List<Long> findBookedResourceIdsByDate(LocalDateTime startDate, LocalDateTime endDate);
+
+    List<String> getBookedTime(Resource resource, LocalDate date);
 }

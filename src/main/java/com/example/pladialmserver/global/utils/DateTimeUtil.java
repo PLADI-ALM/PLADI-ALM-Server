@@ -63,4 +63,9 @@ public class DateTimeUtil {
     public static LocalDateTime getMidNightDateTime(LocalDateTime localDateTime) {
         return LocalDateTime.of(localDateTime.toLocalDate(), LocalTime.MIN);
     }
+
+    // localDateTime => string(HH:MM)
+    public static String dateTimeToStringTime(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(TIME_PATTERN));
+    }
 }

@@ -112,6 +112,11 @@ public class CarService implements ProductService {
         return carRepository.search(carname, pageable);
     }
 
+    @Override
+    public List<String> getResourceBookedTime(Long resourceId, LocalDate date) {
+        return null;
+    }
+
     @Transactional
     public void activateCarByAdmin(User user, Long carId) {
         // 차량 유무 확인
