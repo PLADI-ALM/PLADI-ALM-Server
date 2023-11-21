@@ -213,8 +213,10 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and((resourceBooking.startDate.between(startDateTime, endDateTime))
-                                .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
+                        .and(resourceBooking.startDate.before(endDateTime)
+                                .and(resourceBooking.endDate.after(startDateTime))
+                                .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
+                        )
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
 

@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
+import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
 
 @RequiredArgsConstructor
 public class CarBookingRepositoryImpl implements CarBookingCustom {
@@ -186,8 +187,10 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
                         .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and((carBooking.startDate.between(startDateTime, endDateTime))
-                                .or(carBooking.endDate.between(startDateTime, endDateTime)))
+                        .and(carBooking.startDate.before(endDateTime)
+                                .and(carBooking.endDate.after(startDateTime))
+                                .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))
+                        )
                 ).orderBy(carBooking.startDate.asc())
                 .fetch();
 
