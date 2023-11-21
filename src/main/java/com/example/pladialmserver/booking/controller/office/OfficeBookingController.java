@@ -1,4 +1,4 @@
-package com.example.pladialmserver.booking.controller;
+package com.example.pladialmserver.booking.controller.office;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.dto.response.OfficeBookingDetailRes;

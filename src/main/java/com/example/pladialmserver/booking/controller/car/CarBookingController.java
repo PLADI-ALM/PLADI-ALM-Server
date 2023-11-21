@@ -1,4 +1,4 @@
-package com.example.pladialmserver.booking.controller;
+package com.example.pladialmserver.booking.controller.car;
 
 import com.example.pladialmserver.booking.dto.request.ReturnProductReq;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
