@@ -7,11 +7,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AdminResourcesRes {
-    @Schema(type = "Long", description = "장비/차량 Id", example = "1")
+public class AdminProductsRes {
+    @Schema(type = "Long", description = "id", example = "1")
     private Long id;
 
-    @Schema(type = "String", description = "장비/차량명", example = "MacBook Pro")
+    @Schema(type = "String", description = "이름", example = "MacBook Pro")
     private String name;
 
     @Schema(type = "String", description = "제조사", example = "Apple")
@@ -33,7 +33,7 @@ public class AdminResourcesRes {
     private Boolean isActive;
 
     @QueryProjection
-    public AdminResourcesRes(Long id, String name, String manufacturer, String location, String responsibilityName, String responsibilityPhone, String description, Boolean isActive) {
+    public AdminProductsRes(Long id, String name, String manufacturer, String location, String responsibilityName, String responsibilityPhone, String description, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.manufacturer = manufacturer;

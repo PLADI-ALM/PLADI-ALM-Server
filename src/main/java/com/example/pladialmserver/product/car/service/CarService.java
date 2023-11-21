@@ -4,6 +4,7 @@ import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
 import com.example.pladialmserver.global.Constants;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
@@ -15,10 +16,14 @@ import com.example.pladialmserver.product.car.repository.CarRepository;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
+import com.example.pladialmserver.product.resource.dto.request.CreateProductReq;
+import com.example.pladialmserver.product.resource.dto.response.AdminProductDetailsRes;
+import com.example.pladialmserver.product.resource.dto.response.AdminProductsRes;
+import com.example.pladialmserver.product.resource.dto.response.ProductList;
 import com.example.pladialmserver.product.service.ProductService;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
+import com.example.pladialmserver.user.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 
@@ -40,6 +48,7 @@ public class CarService implements ProductService {
 
     private final CarRepository carRepository;
     private final CarBookingRepository carBookingRepository;
+    private final UserRepository userRepository;
     private final EmailUtil emailUtil;
     private final PushNotificationService notificationService;
 
@@ -79,7 +88,7 @@ public class CarService implements ProductService {
         String title = COMPANY_NAME + CAR + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(car.getUser().getEmail(), title,
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, NEW_BOOKING_TEXT)), BOOKING_TEMPLATE);
-        // 장비 예약 알림
+        // 차량 예약 알림
         try {
             notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_SUCCESS, car.getUser());
         } catch (IOException e) {
@@ -105,23 +114,81 @@ public class CarService implements ProductService {
     }
 
     @Override
-    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String carname, Pageable pageable) {
+    public Page<AdminProductsRes> getProductByAdmin(User user, String carname, Pageable pageable) {
         // 관리자 권한 확인
         checkAdminRole(user);
-        // 장비 조회
+        // 차량 조회
         return carRepository.search(carname, pageable);
     }
 
     @Override
-    public List<String> getResourceBookedTime(Long carId, LocalDate date) {
+    public List<String> getProductBookedTime(Long carId, LocalDate date) {
         // 차량 유무 확인
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
         return carBookingRepository.getBookedTime(car, date);
     }
 
+    @Override
     @Transactional
-    public void activateCarByAdmin(User user, Long carId) {
+    public void createProductByAdmin(User user, CreateProductReq request) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        carRepository.save(Car.toDto(request, responsibility));
+    }
+
+    @Override
+    @Transactional
+    public void updateProductByAdmin(User user, Long carId, CreateProductReq request) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 차량 유무 확인
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        // 차량 수정
+        car.updateCar(request, responsibility);
+    }
+
+    @Override
+    @Transactional
+    public void deleteProductByAdmin(User user, Long carId) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+        // 차량 유무 확인
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        // 차량 예약 내역 상태 확인
+        List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
+        if (carBookingRepository.existsByCarAndStatusIn(car, bookingStatus))
+            throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
+        // 차량 삭제
+        carRepository.delete(car);
+    }
+
+    @Override
+    public AdminProductDetailsRes getAdminProductsDetails(User user, Long carId) {
+        // 관리자 권한 확인
+        checkAdminRole(user);
+
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+
+        List<CarBooking> carBookingLists = carBookingRepository.findAllByCarOrderByStartDateDesc(car);
+
+        List<ProductList> productLists = carBookingLists.stream()
+                .map(ProductList::toDto)
+                .collect(Collectors.toList());
+
+        return AdminProductDetailsRes.toDto(car, productLists);
+    }
+
+    @Override
+    @Transactional
+    public void activateProductByAdmin(User user, Long carId) {
         // 차량 유무 확인
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));

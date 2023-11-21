@@ -1,6 +1,8 @@
 package com.example.pladialmserver.product.car.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
+import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
+import com.example.pladialmserver.product.resource.dto.request.CreateProductReq;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -56,11 +58,30 @@ public class Car extends BaseEntity {
         this.user = user;
     }
 
+    public static Car toDto(CreateProductReq request, User responsibility) {
+        return Car.builder()
+                .name(request.getName())
+                .location(request.getLocation())
+                .description(request.getDescription())
+                .imgKey((request.getImgKey() == null) ? null : request.getImgKey())
+                .user(responsibility)
+                .build();
+    }
+
     public void setLocation(String location) {
         this.location = location;
     }
 
     public void activateResource() {
         isActive = !isActive;
+    }
+
+    public void updateCar(CreateProductReq request, User responsibility) {
+        if (!request.getName().equals(name)) name = request.getName();
+        if (!request.getManufacturer().equals(manufacturer)) manufacturer = request.getManufacturer();
+        if (!request.getLocation().equals(location)) location = request.getLocation();
+        if (!request.getDescription().equals(description)) description = request.getDescription();
+        if (!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();
+        if (!responsibility.equals(user)) user = responsibility;
     }
 }
