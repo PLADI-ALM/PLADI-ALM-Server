@@ -11,8 +11,6 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class TokenDto {
     @Schema(type = "String", description = "AccessToken", example = "bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTY3NTg2OTcsInVzZXJJZHgiOjEsInN1YiI6IjEifQ.DSBuBlStkjhT05vuzjWd-cg7naG5KikUxII734u3nUw")
     @NotBlank(message = "G0001")
