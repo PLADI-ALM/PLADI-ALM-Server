@@ -22,4 +22,6 @@ public interface ProductService {
     List<String> getProductBookedDate(Long carId, String month, LocalDate date);
 
     Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable);
+
+    List<String> getResourceBookedTime(Long resourceId, LocalDate date);
 }
