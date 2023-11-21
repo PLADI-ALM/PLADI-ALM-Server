@@ -19,7 +19,7 @@ public interface ProductService {
 
     ProductBookingRes getProductBookingByDate(Long carId, LocalDateTime dateTime);
 
-    List<String> getProductBookedDate(Long carId, String month, LocalDate date);
+    List<String> getProductBookedDate(Long carId, String month);
 
     Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable);
 

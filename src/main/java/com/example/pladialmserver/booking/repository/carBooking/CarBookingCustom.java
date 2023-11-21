@@ -15,7 +15,7 @@ import java.util.List;
 public interface CarBookingCustom {
     boolean existsDateTime(Car car, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    List<String> getCarBookedDate(Car car, LocalDate standardDate, LocalDate date);
+    List<String> getCarBookedDate(Car car, LocalDate standardDate);
 
     ProductBookingRes findCarBookingByDate(Car car, LocalDateTime dateTime);
 

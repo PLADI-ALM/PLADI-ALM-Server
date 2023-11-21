@@ -92,7 +92,7 @@ public class ResourceController {
     /**
      * 장비 월별 예약 현황 조회
      */
-    @Operation(summary = "장비 월별 예약 현황 조회 (박소정)", description = "월별로 장비 예약이 불가능한 날짜를 조회를 진행한다. /n 일 기준 예약이 아예 불가한 날짜 반환")
+    @Operation(summary = "장비 월별 예약 현황 조회 (박소정)", description = "해당 월의 장비 예약이 불가능한 날짜를 조회한다. (YYYY-MM-DD)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
@@ -101,9 +101,8 @@ public class ResourceController {
     public ResponseCustom<List<String>> getResourceBookedDate(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
-            @Parameter(description = "장비 예약 현황 조회 년도월 (YYYY-MM)", example = "2023-10") @RequestParam String month,
-            @Parameter(description = "장비 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-23") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {
-        return ResponseCustom.OK(resourceService.getProductBookedDate(resourceId, month, date));
+            @Parameter(description = "장비 예약 현황 조회 년도월 (YYYY-MM)", example = "2023-10") @RequestParam String month) {
+        return ResponseCustom.OK(resourceService.getProductBookedDate(resourceId, month));
     }
 
     /**
