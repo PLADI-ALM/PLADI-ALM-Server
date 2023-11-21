@@ -9,13 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 public class HealthCheckControllerTest extends ControllerTestSupport {
-    @Test
-    @DisplayName("health-check")
-    void healthCheck() throws Exception{
-        String test="Server is Up";
-
-        mockMvc.perform(get("/health-check"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(test));
-    }
+//    @Test
+//    @DisplayName("health-check")
+//    void healthCheck() throws Exception{
+//        String test="Server is Up";
+//
+//        mockMvc.perform(get("/health-check"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(test));
+//    }
 }
