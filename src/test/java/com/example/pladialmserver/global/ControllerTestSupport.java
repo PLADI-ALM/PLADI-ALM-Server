@@ -1,8 +1,11 @@
 package com.example.pladialmserver.global;
 
-import com.example.pladialmserver.booking.controller.BookingController;
-import com.example.pladialmserver.booking.controller.OfficeBookingAdminController;
-import com.example.pladialmserver.booking.controller.ResourceBookingAdminController;
+import com.example.pladialmserver.booking.controller.car.CarBookingAdminController;
+import com.example.pladialmserver.booking.controller.car.CarBookingController;
+import com.example.pladialmserver.booking.controller.office.OfficeBookingAdminController;
+import com.example.pladialmserver.booking.controller.office.OfficeBookingController;
+import com.example.pladialmserver.booking.controller.resource.ResourceBookingAdminController;
+import com.example.pladialmserver.booking.controller.resource.ResourceBookingController;
 import com.example.pladialmserver.booking.service.CarBookingService;
 import com.example.pladialmserver.booking.service.OfficeBookingService;
 import com.example.pladialmserver.booking.service.ResourceBookingService;
@@ -36,9 +39,12 @@ import org.springframework.test.web.servlet.MockMvc;
                 OfficeController.class,
                 OfficeAdminController.class,
                 EquipmentController.class,
-                BookingController.class,
                 OfficeBookingAdminController.class,
                 ResourceBookingAdminController.class,
+                CarBookingAdminController.class,
+                OfficeBookingController.class,
+                ResourceBookingController.class,
+                CarBookingController.class
         }
 )
 @MockBean(JpaMetamodelMappingContext.class)
