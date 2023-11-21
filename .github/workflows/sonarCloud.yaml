@@ -30,13 +30,8 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Make application-secret.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application-secret.yml
-          echo "${{ secrets.PROPERTIES_DEV }}" > ./application-secret.yml
       - name: Build and analyze
-        run: ./gradlew test sonar --info
+        run: ./gradlew build sonar --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
