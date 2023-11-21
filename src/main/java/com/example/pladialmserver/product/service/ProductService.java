@@ -3,7 +3,9 @@ package com.example.pladialmserver.product.service;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
+import com.example.pladialmserver.product.dto.request.CreateProductReq;
+import com.example.pladialmserver.product.dto.response.AdminProductDetailsRes;
+import com.example.pladialmserver.product.dto.response.AdminProductsRes;
 import com.example.pladialmserver.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +23,17 @@ public interface ProductService {
 
     List<String> getProductBookedDate(Long carId, String month);
 
-    Page<AdminResourcesRes> getResourcesByAdmin(User user, String keyword, Pageable pageable);
+    Page<AdminProductsRes> getProductByAdmin(User user, String keyword, Pageable pageable);
 
-    List<String> getResourceBookedTime(Long resourceId, LocalDate date);
+    List<String> getProductBookedTime(Long productId, LocalDate date);
+
+    void createProductByAdmin(User user, CreateProductReq request);
+
+    void updateProductByAdmin(User user, Long productId, CreateProductReq request);
+
+    void deleteProductByAdmin(User user, Long productId);
+
+    AdminProductDetailsRes getAdminProductsDetails(User user, Long productId);
+
+    void activateProductByAdmin(User user, Long productId);
 }

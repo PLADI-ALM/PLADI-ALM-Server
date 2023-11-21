@@ -7,7 +7,7 @@ import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.product.resource.dto.ResourceRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
@@ -118,7 +118,7 @@ public class ResourceController {
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
             @Parameter(description = "장비 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-23") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {
-        return ResponseCustom.OK(resourceService.getResourceBookedTime(resourceId, date));
+        return ResponseCustom.OK(resourceService.getProductBookedTime(resourceId, date));
     }
 
 

@@ -13,7 +13,7 @@ import com.example.pladialmserver.office.entity.OfficeFacility;
 import com.example.pladialmserver.office.repository.FacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeFacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeRepository;
-import com.example.pladialmserver.product.resource.dto.request.CreateOfficeReq;
+import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;

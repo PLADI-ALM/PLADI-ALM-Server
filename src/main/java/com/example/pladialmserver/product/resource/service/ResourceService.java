@@ -12,11 +12,11 @@ import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourcesDetailsRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
-import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
-import com.example.pladialmserver.product.resource.dto.response.ResourcesList;
+import com.example.pladialmserver.product.dto.request.CreateProductReq;
+import com.example.pladialmserver.product.dto.response.AdminProductDetailsRes;
+import com.example.pladialmserver.product.dto.response.AdminProductsRes;
+import com.example.pladialmserver.product.dto.response.ProductList;
+import com.example.pladialmserver.product.resource.dto.ResourceRes;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.resource.repository.ResourceRepository;
 import com.example.pladialmserver.product.service.ProductService;
@@ -120,7 +120,7 @@ public class ResourceService implements ProductService {
     /**
      * 관리자 장비 목록 조회
      */
-    public Page<AdminResourcesRes> getResourcesByAdmin(User user, String resourceName, Pageable pageable) {
+    public Page<AdminProductsRes> getProductByAdmin(User user, String resourceName, Pageable pageable) {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 장비 조회
@@ -128,7 +128,7 @@ public class ResourceService implements ProductService {
     }
 
     @Override
-    public List<String> getResourceBookedTime(Long resourceId, LocalDate date) {
+    public List<String> getProductBookedTime(Long resourceId, LocalDate date) {
         // 장비 유무 확인
         Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
@@ -138,8 +138,9 @@ public class ResourceService implements ProductService {
     /**
      * 관리자 장비 추가
      */
+    @Override
     @Transactional
-    public void createResourceByAdmin(User user, CreateResourceReq request) {
+    public void createProductByAdmin(User user, CreateProductReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
         User responsibility = userRepository.findByUserIdAndIsEnable(request.getResponsibility(), true)
@@ -150,8 +151,9 @@ public class ResourceService implements ProductService {
     /**
      * 관리자 장비 수정
      */
+    @Override
     @Transactional
-    public void updateResourceByAdmin(User user, Long resourceId, CreateResourceReq request) {
+    public void updateProductByAdmin(User user, Long resourceId, CreateProductReq request) {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 장비 유무 확인
@@ -166,39 +168,42 @@ public class ResourceService implements ProductService {
     /**
      * 관리자 장비 삭제
      */
+    @Override
     @Transactional
-    public void deleteResourceByAdmin(User user, Long resourceId) {
+    public void deleteProductByAdmin(User user, Long resourceId) {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 장비 유무 확인
-        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId,true)
+        Resource resource = resourceRepository.findByResourceIdAndIsEnable(resourceId, true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
         // 장비 예약 내역 상태 확인
         List<BookingStatus> bookingStatus = new ArrayList<>(Arrays.asList(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING));
-        if(resourceBookingRepository.existsByResourceAndStatusIn(resource, bookingStatus)) throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
+        if (resourceBookingRepository.existsByResourceAndStatusIn(resource, bookingStatus))
+            throw new BaseException(BaseResponseCode.INVALID_STATUS_BY_RESOURCE_DELETION);
         // 장비 삭제
         resourceRepository.delete(resource);
     }
 
-    public AdminResourcesDetailsRes getAdminResourcesDetails(User user, Long resourceId) {
+    @Override
+    public AdminProductDetailsRes getAdminProductsDetails(User user, Long resourceId) {
         // 관리자 권한 확인
         checkAdminRole(user);
 
         Resource resource = resourceRepository.findById(resourceId)
-                .orElseThrow(() ->new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(BaseResponseCode.RESOURCE_NOT_FOUND));
 
-        List<ResourceBooking> resourceBookings=resourceBookingRepository.findAllByResourceOrderByStartDateDesc(resource);
+        List<ResourceBooking> resourceBookings = resourceBookingRepository.findAllByResourceOrderByStartDateDesc(resource);
 
-        List<ResourcesList> resourcesLists = resourceBookings.stream()
-                .map(ResourcesList::toDto)
+        List<ProductList> productLists = resourceBookings.stream()
+                .map(ProductList::toDto)
                 .collect(Collectors.toList());
 
-        return AdminResourcesDetailsRes.toDto(resource, resourcesLists);
+        return AdminProductDetailsRes.toDto(resource, productLists);
     }
 
     // 관리자 장비 활성화/비활성화
     @Transactional
-    public void activateResourceByAdmin(User user, Long resourceId) {
+    public void activateProductByAdmin(User user, Long resourceId) {
         // 관리자 권한 확인
         checkAdminRole(user);
         // 장비 유무 확인

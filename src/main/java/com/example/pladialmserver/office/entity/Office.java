@@ -1,7 +1,7 @@
 package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
-import com.example.pladialmserver.product.resource.dto.request.CreateOfficeReq;
+import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

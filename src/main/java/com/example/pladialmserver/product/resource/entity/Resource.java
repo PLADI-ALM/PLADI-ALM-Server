@@ -2,7 +2,7 @@ package com.example.pladialmserver.product.resource.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
-import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
+import com.example.pladialmserver.product.dto.request.CreateProductReq;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -58,17 +58,17 @@ public class Resource extends BaseEntity {
     this.user=user;
   }
 
-  public static Resource toDto(CreateResourceReq request, User responsibility) {
+  public static Resource toDto(CreateProductReq request, User responsibility) {
     return Resource.builder()
             .name(request.getName())
             .location(request.getLocation())
             .description(request.getDescription())
-            .imgKey((request.getImgKey()==null) ? null : request.getImgKey())
+            .imgKey((request.getImgKey() == null) ? null : request.getImgKey())
             .user(responsibility)
             .build();
   }
 
-  public void updateResource(CreateResourceReq request, User responsibility) {
+  public void updateResource(CreateProductReq request, User responsibility) {
     if (!request.getName().equals(name)) name = request.getName();
     if (!request.getManufacturer().equals(manufacturer)) manufacturer = request.getManufacturer();
     if (!request.getLocation().equals(location)) location = request.getLocation();

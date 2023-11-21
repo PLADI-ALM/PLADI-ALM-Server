@@ -2,9 +2,9 @@ package com.example.pladialmserver.product.resource.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.product.resource.dto.request.CreateResourceReq;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourcesDetailsRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminResourcesRes;
+import com.example.pladialmserver.product.dto.request.CreateProductReq;
+import com.example.pladialmserver.product.dto.response.AdminProductDetailsRes;
+import com.example.pladialmserver.product.dto.response.AdminProductsRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
@@ -40,11 +40,11 @@ public class ResourceAdminController {
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("")
-    public ResponseCustom<Page<AdminResourcesRes>> getResources(
+    public ResponseCustom<Page<AdminProductsRes>> getResources(
             @Account User user,
             @Parameter(description = "(String) 장비명 검색어", example = "MacBook") @RequestParam(required = false) String keyword,
             @PageableDefault(size = 8) Pageable pageable) {
-        return ResponseCustom.OK(resourceService.getResourcesByAdmin(user, keyword, pageable));
+        return ResponseCustom.OK(resourceService.getProductByAdmin(user, keyword, pageable));
     }
 
     /**
@@ -60,8 +60,8 @@ public class ResourceAdminController {
     @PostMapping("")
     public ResponseCustom createResource(
             @Account User user,
-            @RequestBody @Valid CreateResourceReq request) {
-        resourceService.createResourceByAdmin(user, request);
+            @RequestBody @Valid CreateProductReq request) {
+        resourceService.createProductByAdmin(user, request);
         return ResponseCustom.OK();
     }
 
@@ -78,9 +78,9 @@ public class ResourceAdminController {
     @PatchMapping("/{resourceId}")
     public ResponseCustom updateResource(
             @Account User user,
-            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name="resourceId") Long resourceId,
-            @RequestBody @Valid CreateResourceReq request) {
-        resourceService.updateResourceByAdmin(user, resourceId, request);
+            @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId,
+            @RequestBody @Valid CreateProductReq request) {
+        resourceService.updateProductByAdmin(user, resourceId, request);
         return ResponseCustom.OK();
     }
 
@@ -99,7 +99,7 @@ public class ResourceAdminController {
     public ResponseCustom updateResource(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name="resourceId") Long resourceId) {
-        resourceService.deleteResourceByAdmin(user, resourceId);
+        resourceService.deleteProductByAdmin(user, resourceId);
         return ResponseCustom.OK();
     }
 
@@ -110,14 +110,14 @@ public class ResourceAdminController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
-            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 장비입니다.",content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+            @ApiResponse(responseCode = "404", description = "(R0003)존재하지 않는 장비입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
     })
     @GetMapping("/{resourceId}")
-    public ResponseCustom<AdminResourcesDetailsRes> getAdminResourcesDetails(
+    public ResponseCustom<AdminProductDetailsRes> getAdminResourcesDetails(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name = "resourceId") Long resourceId) {
         {
-            return ResponseCustom.OK(resourceService.getAdminResourcesDetails(user, resourceId));
+            return ResponseCustom.OK(resourceService.getAdminProductsDetails(user, resourceId));
         }
     }
 
@@ -134,7 +134,7 @@ public class ResourceAdminController {
     public ResponseCustom activateResource(
             @Account User user,
             @Parameter(description = "(Long) 장비 Id", example = "1") @PathVariable(name="resourceId") Long resourceId) {
-        resourceService.activateResourceByAdmin(user, resourceId);
+        resourceService.activateProductByAdmin(user, resourceId);
         return ResponseCustom.OK();
     }
 }
