@@ -22,4 +22,6 @@ public interface CarBookingCustom {
     Page<BookingRes> getBookingsByUser(User user, Pageable pageable);
 
     List<Long> findBookedCarIdsByDate(LocalDateTime startDate, LocalDateTime endDate);
+
+    List<String> getBookedTime(Car car, LocalDate date);
 }

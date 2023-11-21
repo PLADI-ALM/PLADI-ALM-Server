@@ -113,8 +113,11 @@ public class CarService implements ProductService {
     }
 
     @Override
-    public List<String> getResourceBookedTime(Long resourceId, LocalDate date) {
-        return null;
+    public List<String> getResourceBookedTime(Long carId, LocalDate date) {
+        // 차량 유무 확인
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        return carBookingRepository.getBookedTime(car, date);
     }
 
     @Transactional

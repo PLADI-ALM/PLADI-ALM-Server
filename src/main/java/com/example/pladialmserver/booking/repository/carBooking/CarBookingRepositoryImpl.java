@@ -3,7 +3,6 @@ package com.example.pladialmserver.booking.repository.carBooking;
 import com.example.pladialmserver.booking.dto.response.BookingRes;
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.entity.QCarBooking;
-import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.product.car.entity.Car;
@@ -24,9 +23,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
-import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
 
 @RequiredArgsConstructor
 public class CarBookingRepositoryImpl implements CarBookingCustom {
@@ -174,5 +173,37 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                         QCarBooking.carBooking.endDate.after(startDate),
                         QCarBooking.carBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED))
                 .fetch();
+    }
+
+    @Override
+    public List<String> getBookedTime(Car car, LocalDate standardDate) {
+        // 기준 날짜의 첫 시간 (00:00)
+        LocalDateTime startDateTime = standardDate.atStartOfDay();
+        // 기준 날짜의 마지막 시간 (23:00)
+        LocalDateTime endDateTime = standardDate.atTime(23, 0);
+
+        // 기준 날짜에 포함된 예약
+        List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
+                .where(carBooking.car.eq(car)
+                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and((carBooking.startDate.between(startDateTime, endDateTime))
+                                .or(carBooking.endDate.between(startDateTime, endDateTime)))
+                ).orderBy(carBooking.startDate.asc())
+                .fetch();
+
+        // 0시부터 24시
+        List<LocalDateTime> hoursList = IntStream.range(0, 24)
+                .mapToObj(startDateTime::plusHours)
+                .collect(Collectors.toList());
+
+        List<String> answer = new ArrayList<>();
+        for (CarBooking b : bookings) {
+            for (LocalDateTime dateTime : hoursList) {
+                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()) || dateTime.isEqual(b.getEndDate()))
+                    answer.add(DateTimeUtil.dateTimeToStringTime(dateTime));
+            }
+        }
+
+        return answer;
     }
 }
