@@ -150,6 +150,6 @@ public class CarController {
             @Parameter(description = "(Long) 차량 Id", example = "1") @PathVariable(name = "carId") Long carId,
             @Parameter(description = "차량 예약 현황 조회 년도월 (YYYY-MM)", example = "2023-10") @RequestParam String month,
             @Parameter(description = "차량 예약 현황 조회 날짜 (YYYY-MM-DD)", example = "2023-10-23") @RequestParam(required = false) @DateTimeFormat(pattern = DATE_PATTERN) LocalDate date) {
-        return ResponseCustom.OK(carService.getProductBookedDate(carId, month, date));
+        return ResponseCustom.OK(carService.getProductBookedDate(carId, month));
     }
 }
