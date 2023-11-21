@@ -20,31 +20,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class OfficeControllerTest extends ControllerTestSupport {
 
-//    @DisplayName("회의실 목록 조회")
-//    @Test
-//    @WithMockUser
-//    void searchOffice() throws Exception {
-//        // given
-//        LocalDate date = LocalDate.of(2023, 11, 30);
-//        LocalTime startTime = LocalTime.of(12, 0);
-//        LocalTime endTime = LocalTime.of(13, 0);
-//        String facilityName = "빔 프로젝터";
-//        Pageable pageable = PageRequest.of(0, 10);
-//
-//        // mocking
-//        when(officeService.findAvailableOffices(date, startTime, endTime, facilityName, pageable))
-//                .thenReturn(new PageImpl<>(Collections.emptyList()));
-//
-//        // when-then
-//        mockMvc.perform(get("/offices")
-//                        .param("date", date.toString())
-//                        .param("startTime", startTime.toString())
-//                        .param("endTime", endTime.toString())
-//                        .param("facilityName", facilityName)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//    }
+    @DisplayName("회의실 목록 조회")
+    @Test
+    @WithMockUser
+    void searchOffice() throws Exception {
+        // given
+        LocalDate date = LocalDate.of(2023, 11, 30);
+        LocalTime startTime = LocalTime.of(12, 0);
+        LocalTime endTime = LocalTime.of(13, 0);
+        String facilityName = "빔 프로젝터";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // mocking
+        when(officeService.findAvailableOffices(date, startTime, endTime, facilityName, pageable))
+                .thenReturn(new PageImpl<>(Collections.emptyList()));
+
+        // when-then
+        mockMvc.perform(get("/offices")
+                        .param("date", date.toString())
+                        .param("startTime", startTime.toString())
+                        .param("endTime", endTime.toString())
+                        .param("facilityName", facilityName)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
     @DisplayName("회의실 개별 조회")
     @Test

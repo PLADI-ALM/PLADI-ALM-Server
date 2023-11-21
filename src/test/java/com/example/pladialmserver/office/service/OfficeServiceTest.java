@@ -51,36 +51,36 @@ public class OfficeServiceTest extends IntegrationTestSupport {
 
     }
 
-//    @Test
-//    @DisplayName("회의실 목록 조회 테스트")
-//    void findAvailableOfficesTest() {
-//        // given
-//        LocalDate date = LocalDate.now().plusDays(1);
-//        LocalTime startTime = LocalTime.of(10, 0);
-//        LocalTime endTime = LocalTime.of(12, 0);
-//
-//        Office office = createAndSaveOffice("회의실 A", "1층");
-//        Facility facility = createAndSaveFacility("빔 프로젝터");
-//        createAndSaveOfficeFacility(office, facility);
-//
-//        Affiliation affiliation = createAndSaveAffiliation("플래디");
-//        Department department = createAndSaveDepartment("개발부서");
-//        User user = createAndSaveUser("testuser", "testuser@example.com", department, affiliation);
-//
-//        createAndSaveOfficeBooking(office, date, startTime.minusHours(1), endTime.minusHours(1), user);
-//
-//        // when
-//        Pageable pageable = PageRequest.of(0, 10);
-//        Page<OfficeRes> result = officeService.findAvailableOffices(date, startTime, endTime, facility.getName(), pageable);
-//
-//        // then
-//        assertNotNull(result);
-//        assertEquals(1, result.getTotalElements());
-//        result.getContent().forEach(officeRes -> {
-//            assertEquals("회의실 A", officeRes.getName());
-//            assertTrue(officeRes.getFacilityList().contains("빔 프로젝터"));
-//        });
-//    }
+    @Test
+    @DisplayName("회의실 목록 조회 테스트")
+    void findAvailableOfficesTest() {
+        // given
+        LocalDate date = LocalDate.now().plusDays(1);
+        LocalTime startTime = LocalTime.of(10, 0);
+        LocalTime endTime = LocalTime.of(12, 0);
+
+        Office office = createAndSaveOffice("회의실 A", "1층");
+        Facility facility = createAndSaveFacility("빔 프로젝터");
+        createAndSaveOfficeFacility(office, facility);
+
+        Affiliation affiliation = createAndSaveAffiliation("플래디");
+        Department department = createAndSaveDepartment("개발부서");
+        User user = createAndSaveUser("testuser", "testuser@example.com", department, affiliation);
+
+        createAndSaveOfficeBooking(office, date, startTime.minusHours(1), endTime.minusHours(1), user);
+
+        // when
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<OfficeRes> result = officeService.findAvailableOffices(date, startTime, endTime, facility.getName(), pageable);
+
+        // then
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        result.getContent().forEach(officeRes -> {
+            assertEquals("회의실 A", officeRes.getName());
+            assertTrue(officeRes.getFacilityList().contains("빔 프로젝터"));
+        });
+    }
 
     @DisplayName("회의실 개별 조회")
     @Test
