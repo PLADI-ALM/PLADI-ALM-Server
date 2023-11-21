@@ -71,7 +71,8 @@ public class User extends BaseEntity {
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken, String assets, Affiliation affiliation) {
+    public User(Long userId, String name, String email, String password, Department department, String phone, Role role, String fcmToken, String assets, Affiliation affiliation) {
+        this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
