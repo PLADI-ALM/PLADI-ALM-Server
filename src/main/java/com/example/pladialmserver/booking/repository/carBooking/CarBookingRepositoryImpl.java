@@ -19,14 +19,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
-import static com.example.pladialmserver.booking.entity.QResourceBooking.resourceBooking;
 
 @RequiredArgsConstructor
 public class CarBookingRepositoryImpl implements CarBookingCustom {
@@ -67,42 +64,26 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
     }
 
     @Override
-    public List<String> getCarBookedDate(Car car, LocalDate standardDate, LocalDate date) {
+    public List<String> getCarBookedDate(Car car, LocalDate standardDate) {
         // 해당 월의 첫 날 (00:00)
         LocalDateTime startDateTime = standardDate.withDayOfMonth(1).atStartOfDay();
         // 다음 월의 첫 날 (00:00)
         LocalDateTime endDateTime = standardDate.plusMonths(1).atStartOfDay();
 
-        // 이후 가장 가까운 예약 날짜&시간
-        if (date != null) {
-            // 조회 일의 첫 날 (00:00)
-            LocalDateTime dateTime = date.atStartOfDay();
-            // 가장 가까운 예약 현황 조회
-            CarBooking booking = jpaQueryFactory.selectFrom(carBooking)
-                    .where(carBooking.car.eq(car),
-                            carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING),
-                            carBooking.startDate.after(dateTime))
-                    .orderBy(carBooking.startDate.asc())
-                    .fetchFirst();
+        // 해당 월의 예약 현황 조회
+        List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
+                .where(carBooking.car.eq(car)
+                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and((carBooking.startDate.between(startDateTime, endDateTime))
+                                .or(carBooking.endDate.between(startDateTime, endDateTime)))
+                ).orderBy(carBooking.startDate.asc())
+                .fetch();
 
-            return Optional.ofNullable(booking)
-                    .map(b -> Collections.singletonList(DateTimeUtil.dateTimeToString(b.getStartDate())))
-                    .orElse(null);
-        } else {
-            // 해당 월의 예약 현황 조회
-            List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
-                    .where(carBooking.car.eq(car)
-                            .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                            .and((carBooking.startDate.between(startDateTime, endDateTime))
-                                    .or(carBooking.endDate.between(startDateTime, endDateTime)))
-                    ).orderBy(carBooking.startDate.asc())
-                    .fetch();
-
-            // 예약이 모두 된 날짜(첫 날 0시 ~ 다음 날 0시) 반환
-            List<String> bookedDate = new ArrayList<>();
-            int index = 0;
-            boolean isContinuity = false;
-            LocalDateTime standard = null;
+        // 예약이 모두 된 날짜(첫 날 0시 ~ 다음 날 0시) 반환
+        List<String> bookedDate = new ArrayList<>();
+        int index = 0;
+        boolean isContinuity = false;
+        LocalDateTime standard = null;
 
             for (CarBooking b : bookings) {
                 index++;
@@ -140,7 +121,6 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                 standard = b.getEndDate();
             }
             return bookedDate;
-        }
     }
 
     private boolean isMidnight(LocalDateTime localDateTime) {

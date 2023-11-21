@@ -96,12 +96,12 @@ public class CarService implements ProductService {
     }
 
     @Override
-    public List<String> getProductBookedDate(Long resourceId, String month, LocalDate date) {
+    public List<String> getProductBookedDate(Long resourceId, String month) {
         Car car = carRepository.findById(resourceId)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
         // 예약 현황 조회할 월
         LocalDate standardDate = DateTimeUtil.stringToFirstLocalDate(month);
-        return carBookingRepository.getCarBookedDate(car, standardDate, date);
+        return carBookingRepository.getCarBookedDate(car, standardDate);
     }
 
     @Override

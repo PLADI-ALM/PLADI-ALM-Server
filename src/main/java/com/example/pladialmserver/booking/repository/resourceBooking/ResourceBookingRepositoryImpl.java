@@ -59,33 +59,17 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
 
     // 장비 월별 예약 현황 조회
     @Override
-    public List<String> getResourceBookedDate(Resource resource, LocalDate standardDate, LocalDate date) {
+    public List<String> getResourceBookedDate(Resource resource, LocalDate standardDate) {
         // 해당 월의 첫 날 (00:00)
         LocalDateTime startDateTime = standardDate.withDayOfMonth(1).atStartOfDay();
         // 다음 월의 첫 날 (00:00)
         LocalDateTime endDateTime = standardDate.plusMonths(1).atStartOfDay();
 
-        // 이후 가장 가까운 예약 날짜&시간
-        if (date != null) {
-            // 조회 일의 첫 날 (00:00)
-            LocalDateTime dateTime = date.atStartOfDay();
-            // 가장 가까운 예약 현황 조회
-            ResourceBooking booking = jpaQueryFactory.selectFrom(resourceBooking)
-                    .where(resourceBooking.resource.eq(resource),
-                            resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING),
-                            resourceBooking.startDate.after(dateTime))
-                    .orderBy(resourceBooking.startDate.asc())
-                    .fetchFirst();
-
-            return Optional.ofNullable(booking)
-                    .map(b -> Collections.singletonList(DateTimeUtil.dateTimeToString(b.getStartDate())))
-                    .orElse(null);
-        } else {
-            // 해당 월의 예약 현황 조회
-            List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
-                    .where(resourceBooking.resource.eq(resource)
-                            .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                            .and((resourceBooking.startDate.between(startDateTime, endDateTime))
+        // 해당 월의 예약 현황 조회
+        List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
+                .where(resourceBooking.resource.eq(resource)
+                        .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and((resourceBooking.startDate.between(startDateTime, endDateTime))
                                     .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
                     ).orderBy(resourceBooking.startDate.asc())
                     .fetch();
@@ -132,7 +116,6 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 standard = b.getEndDate();
             }
             return bookedDate;
-        }
     }
 
     private boolean isMidnight(LocalDateTime localDateTime) {
