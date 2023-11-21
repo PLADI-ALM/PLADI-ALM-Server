@@ -197,7 +197,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0009)사용중인 상태에서만 반납이 가능합니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @PatchMapping("/cars/{carBookingId}")
+    @PatchMapping("/cars/{carBookingId}/return")
     public ResponseCustom returnBookingCar(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId,
@@ -217,7 +217,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "(B0006)존재하지 않는 예약입니다. (U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "409", description = "(B0009)사용중인 상태에서만 반납이 가능합니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
-    @PatchMapping("/resources/{resourceBookingId}")
+    @PatchMapping("/resources/{resourceBookingId}/return")
     public ResponseCustom returnBookingResource(
             @Account User user,
             @Parameter(description = "(Long) 장비 예약 Id", example = "1") @PathVariable(name = "resourceBookingId") Long resourceBookingId,

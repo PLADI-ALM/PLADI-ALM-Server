@@ -76,7 +76,7 @@ public class CarBookingAdminController {
     public ResponseCustom returnBookingCar(
             @Account User user,
             @Parameter(description = "(Long) 차량 예약 Id", example = "1") @PathVariable(name = "carBookingId") Long carBookingId,
-            ReturnProductReq request
+            @RequestBody ReturnProductReq request
     ){
         bookingService.returnBookingProductByAdmin(user, carBookingId, request);
         return ResponseCustom.OK();
