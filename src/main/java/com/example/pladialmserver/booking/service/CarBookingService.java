@@ -14,7 +14,7 @@ import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.car.repository.CarRepository;
-import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
+import com.example.pladialmserver.product.dto.response.AdminProductRes;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;

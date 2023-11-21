@@ -2,7 +2,7 @@ package com.example.pladialmserver.product.resource.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
-import com.example.pladialmserver.product.resource.dto.request.CreateProductReq;
+import com.example.pladialmserver.product.dto.request.CreateProductReq;
 import com.example.pladialmserver.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;

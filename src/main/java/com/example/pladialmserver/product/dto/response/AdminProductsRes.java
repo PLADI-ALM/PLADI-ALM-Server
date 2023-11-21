@@ -1,4 +1,4 @@
-package com.example.pladialmserver.product.resource.dto.response;
+package com.example.pladialmserver.product.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;

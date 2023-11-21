@@ -1,4 +1,4 @@
-package com.example.pladialmserver.product.resource.dto.request;
+package com.example.pladialmserver.product.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

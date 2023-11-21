@@ -2,8 +2,8 @@ package com.example.pladialmserver.product.car.repository;
 
 import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.dto.QCarRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminProductsRes;
-import com.example.pladialmserver.product.resource.dto.response.QAdminResourcesRes;
+import com.example.pladialmserver.product.dto.response.AdminProductsRes;
+import com.example.pladialmserver.product.dto.response.QAdminProductsRes;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -74,7 +74,7 @@ public class CarRepositoryImpl implements CarCustom {
     @Override
     public Page<AdminProductsRes> search(String carName, Pageable pageable) {
         List<AdminProductsRes> results = jpaQueryFactory
-                .select(new QAdminResourcesRes(
+                .select(new QAdminProductsRes(
                         car.carId,
                         car.name,
                         car.manufacturer,

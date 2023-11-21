@@ -1,4 +1,4 @@
-package com.example.pladialmserver.product.resource.dto.response;
+package com.example.pladialmserver.product.resource.dto;
 
 import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.product.resource.entity.Resource;

@@ -7,7 +7,7 @@ import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
-import com.example.pladialmserver.product.resource.dto.response.ResourceRes;
+import com.example.pladialmserver.product.resource.dto.ResourceRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;

@@ -12,7 +12,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.notification.service.PushNotificationService;
-import com.example.pladialmserver.product.resource.dto.response.AdminProductRes;
+import com.example.pladialmserver.product.dto.response.AdminProductRes;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.product.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.entity.Role;

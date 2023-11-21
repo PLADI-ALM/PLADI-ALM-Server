@@ -1,4 +1,4 @@
-package com.example.pladialmserver.product.resource.dto.response;
+package com.example.pladialmserver.product.dto.response;
 
 import com.example.pladialmserver.booking.entity.CarBooking;
 import com.example.pladialmserver.booking.entity.ResourceBooking;

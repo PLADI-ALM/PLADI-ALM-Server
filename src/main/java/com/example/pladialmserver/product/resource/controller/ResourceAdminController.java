@@ -2,9 +2,9 @@ package com.example.pladialmserver.product.resource.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
-import com.example.pladialmserver.product.resource.dto.request.CreateProductReq;
-import com.example.pladialmserver.product.resource.dto.response.AdminProductDetailsRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminProductsRes;
+import com.example.pladialmserver.product.dto.request.CreateProductReq;
+import com.example.pladialmserver.product.dto.response.AdminProductDetailsRes;
+import com.example.pladialmserver.product.dto.response.AdminProductsRes;
 import com.example.pladialmserver.product.resource.service.ResourceService;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;

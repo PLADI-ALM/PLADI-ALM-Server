@@ -1,7 +1,7 @@
 package com.example.pladialmserver.product.car.repository;
 
 import com.example.pladialmserver.product.car.dto.CarRes;
-import com.example.pladialmserver.product.resource.dto.response.AdminProductsRes;
+import com.example.pladialmserver.product.dto.response.AdminProductsRes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
