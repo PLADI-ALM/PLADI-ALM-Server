@@ -1,6 +1,8 @@
 package com.example.pladialmserver.notification.service;
 
 import com.example.pladialmserver.global.Constants;
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.notification.dto.FcmMessage;
 import com.example.pladialmserver.notification.entity.PushNotification;
 import com.example.pladialmserver.notification.repository.PushNotificationRepository;
@@ -60,7 +62,7 @@ public class PushNotificationService {
             try {
                 sendNotification(user, title, extractAssetsMessageBody(user.getAssets()));
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new BaseException(BaseResponseCode.NOTIFICATION_TOKEN_NOT_FOUND);
             }
         });
     }

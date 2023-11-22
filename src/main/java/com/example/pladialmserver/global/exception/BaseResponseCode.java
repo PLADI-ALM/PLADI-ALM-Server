@@ -24,6 +24,7 @@ public enum BaseResponseCode {
     EXPIRED_TOKEN("T0005", HttpStatus.FORBIDDEN, "만료된 토큰 값입니다."),
     NOT_ACCESS_HEADER("T0006", HttpStatus.INTERNAL_SERVER_ERROR, "헤더에 접근할 수 없습니다."),
     BLACKLIST_TOKEN("T0007", HttpStatus.FORBIDDEN, "로그아웃 혹은 회원 탈퇴된 토큰입니다."),
+    NOTIFICATION_TOKEN_NOT_FOUND("T0008", HttpStatus.NOT_FOUND, "유효하지 않은 알림 토큰입니다."),
 
 
     // User
