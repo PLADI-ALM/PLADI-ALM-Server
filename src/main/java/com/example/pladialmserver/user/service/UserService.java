@@ -131,15 +131,6 @@ public class UserService {
         return UserRes.toDto(user);
     }
 
-    // 자산 정보 확인 알림 / 메일 전송
-    @Scheduled(cron = "0 0 9 1 */3 ?", zone = "GMT+9:00")
-    public void sendAssetsEmail(){
-        userRepository.findByAssetsIsNotNull().forEach(user -> {
-            emailUtil.sendEmail(user.getEmail(), COMPANY_NAME + ASSETS_TITLE
-                    , emailUtil.createAssetsData(SendAssetsEmailReq.toDto(user)), ASSETS_TEMPLATE);
-        });
-    }
-
     // ===================================================================================================================
     // [관리자-사용자]
     // ===================================================================================================================
