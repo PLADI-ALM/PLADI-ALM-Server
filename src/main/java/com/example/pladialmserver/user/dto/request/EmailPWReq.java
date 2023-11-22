@@ -1,6 +1,7 @@
 package com.example.pladialmserver.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
+@Builder
 public class EmailPWReq {
     @Schema(type = "String", description = "이메일", example = "1234@email.com", required = true)
     @Email(message = "U0002")
