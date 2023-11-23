@@ -81,6 +81,22 @@ class ResourceBookingServiceTest {
     }
 
     @Test
+    @DisplayName("[실패] 장비 예약 개별 조회 - 존재하지 않는 예약인 경우")
+    void getProductBookingDetail_BOOKING_NOT_FOUND() {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User fakeUser = setUpUser(3L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser);
+        // when
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            resourceBookingService.getProductBookingDetail(fakeUser, resourceBooking.getResourceBookingId()+1);
+        });
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.BOOKING_NOT_FOUND);
+    }
+
+    @Test
     void cancelBookingProduct() {
     }
 
