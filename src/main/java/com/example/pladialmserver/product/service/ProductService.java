@@ -37,5 +37,5 @@ public interface ProductService {
 
     void activateProductByAdmin(User user, Long productId);
 
-    List<ProductBookingRes> getProductBookedInfo(Long resourceId, LocalDate date);
+    List<ProductBookingRes> getProductBookedInfo(Long productId, LocalDate date);
 }

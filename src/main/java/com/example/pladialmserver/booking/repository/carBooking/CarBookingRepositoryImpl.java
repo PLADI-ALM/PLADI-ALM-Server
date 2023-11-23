@@ -189,4 +189,25 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
 
         return answer;
     }
+
+    @Override
+    public List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate standardDate) {
+        // 기준 날짜의 첫 시간 (00:00)
+        LocalDateTime startDateTime = standardDate.atStartOfDay();
+        // 기준 날짜의 마지막 시간 (23:00)
+        LocalDateTime endDateTime = standardDate.atTime(23, 0);
+
+        // 기준 날짜에 포함된 예약
+        List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
+                .where(carBooking.car.eq(car)
+                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(carBooking.startDate.before(endDateTime)
+                                .and(carBooking.endDate.after(startDateTime))
+                                .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))
+                        )
+                ).orderBy(carBooking.startDate.asc())
+                .fetch();
+
+        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());량
+    }
 }

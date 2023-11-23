@@ -1,7 +1,6 @@
 package com.example.pladialmserver.booking.repository.carBooking;
 
 import com.example.pladialmserver.booking.dto.response.BookingRes;
-import com.example.pladialmserver.product.car.dto.CarRes;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.user.entity.User;
@@ -24,4 +23,6 @@ public interface CarBookingCustom {
     List<Long> findBookedCarIdsByDate(LocalDateTime startDate, LocalDateTime endDate);
 
     List<String> getBookedTime(Car car, LocalDate date);
+
+    List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate date);
 }

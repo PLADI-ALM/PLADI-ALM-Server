@@ -198,6 +198,14 @@ public class CarService implements ProductService {
         car.activateResource();
     }
 
+    @Override
+    public List<ProductBookingRes> getProductBookedInfo(Long carId, LocalDate date) {
+        // 차량 유무 확인
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BaseException(BaseResponseCode.CAR_NOT_FOUND));
+        return carBookingRepository.findCarBookingByDate(car, date);
+    }
+
     // 관리자 권한 확인
     private void checkAdminRole(User user) {
         if(!user.checkRole(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
