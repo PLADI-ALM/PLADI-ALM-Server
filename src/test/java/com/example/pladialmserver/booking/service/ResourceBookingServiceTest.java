@@ -80,7 +80,7 @@ class ResourceBookingServiceTest {
     }
 
     @Test
-    @DisplayName("[실패] 장비 예약 개별 조회 - 존재하지 않는 예약녀 경우")
+    @DisplayName("[실패] 장비 예약 개별 조회 - 존재하지 않는 예약인 경우")
     void getProductBookingDetail_BOOKING_NOT_FOUND() {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
