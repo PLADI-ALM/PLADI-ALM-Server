@@ -34,6 +34,20 @@ public class TestUserInfo {
                 .build();
     }
 
+    public static User setUpUser(Long userId, Role role, Department department, Affiliation affiliation, String password){
+        return new User(
+                userId,
+                "홍길동",
+                "test@email.com",
+                password,
+                department,
+                "010-0000-0000",
+                role,
+                "1234545",
+                "A12345",
+                affiliation);
+    }
+
     public static User setUpBasicUser(Department department, Affiliation affiliation, String password){
         return User.builder()
                 .userId(1L)

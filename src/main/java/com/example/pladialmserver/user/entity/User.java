@@ -84,6 +84,18 @@ public class User extends BaseEntity {
         this.affiliation = affiliation;
     }
 
+    public User(Long userId, String name, String email, String password, String phone, String assets, Department department, Role role, Affiliation affiliation) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.assets = assets;
+        this.department = department;
+        this.role = role;
+        this.affiliation = affiliation;
+    }
+
     public static User toEntity(CreateUserReq req, Department department, Affiliation affiliation){
         return User.builder()
                 .name(req.getName())
