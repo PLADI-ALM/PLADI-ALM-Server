@@ -208,6 +208,6 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                 ).orderBy(carBooking.startDate.asc())
                 .fetch();
 
-        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());량
+        return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());
     }
 }
