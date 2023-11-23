@@ -22,7 +22,6 @@ import java.util.Optional;
 import static com.example.pladialmserver.booking.service.model.TestResourceBookingInfo.setUpResourceBooking;
 import static com.example.pladialmserver.user.service.model.TestUserInfo.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
@@ -44,7 +43,7 @@ class ResourceBookingServiceTest {
 
     @Test
     @DisplayName("[성공] 장비 예약 개별 조회")
-    void getProductBookingDetail() {
+    void getProductBookingDetail_SUCCESS() {
         // given
         User basicUser = setUpBasicUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
@@ -73,15 +72,15 @@ class ResourceBookingServiceTest {
         ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser);
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
-        // then
         BaseException exception = assertThrows(BaseException.class, () -> {
             resourceBookingService.getProductBookingDetail(fakeUser, resourceBooking.getResourceBookingId());
         });
+        // then
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.NO_AUTHENTICATION);
     }
 
     @Test
-    @DisplayName("[실패] 장비 예약 개별 조회 - 존재하지 않는 예약인 경우")
+    @DisplayName("[실패] 장비 예약 개별 조회 - 존재하지 않는 예약녀 경우")
     void getProductBookingDetail_BOOKING_NOT_FOUND() {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
@@ -128,15 +127,4 @@ class ResourceBookingServiceTest {
     void returnBookingProduct() {
     }
 
-//    @Test
-//    @DisplayName("[성공] 관리자 권한 확인")
-//    void checkRole() {
-//        // given
-//        User adminUser = setUpUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-//
-//        // when
-//        resourceBookingService.check
-//
-//        // then
-//    }
 }
