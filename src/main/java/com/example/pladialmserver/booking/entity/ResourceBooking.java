@@ -63,6 +63,14 @@ public class ResourceBooking extends BaseEntity {
     this.memo = memo;
   }
 
+  public ResourceBooking(Long resourceBookingId, User user, Resource resource, LocalDateTime startDate, LocalDateTime endDate, String memo) {
+    this.resourceBookingId = resourceBookingId;
+    this.user = user;
+    this.resource = resource;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.memo = memo;
+  }
 
   public static ResourceBooking toDto(User user, Resource resource, ProductReq productReq) {
     return ResourceBooking.builder()
