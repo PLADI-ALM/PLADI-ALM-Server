@@ -1,5 +1,7 @@
 package com.example.pladialmserver.user.service;
 
+import com.example.pladialmserver.global.exception.BaseException;
+import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 import static com.example.pladialmserver.user.service.model.TestUserInfo.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,6 +75,21 @@ class UserServiceTest {
         verify(jwtUtil, times(1)).createToken(any(Long.class), any(Role.class));
         verify(passwordEncoder, times(1)).encode(any(String.class));
     }
+    @Test
+    @DisplayName("[실패] 로그인")
+    void loginFail(){
+        // given
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        EmailPWReq req = setUpEmailPWReq("test1@email.com", "asdf1234!");
+        // when
+        doThrow(new BaseException(BaseResponseCode.USER_NOT_FOUND)).when(userRepository).findByEmailAndIsEnable(req.getEmail(), true);
+        // then
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.login(req);
+        });
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.USER_NOT_FOUND);
+    }
+
 
     @Test
     void getUserName() {
