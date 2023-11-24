@@ -1,12 +1,14 @@
 package com.example.pladialmserver.equipment.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
+@Builder
 public class RegisterEquipmentReq {
 
     @Schema(type = "String", description = "이름", example = "맥심커피", required = true)
