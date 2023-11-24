@@ -4,7 +4,10 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
+import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
+import com.example.pladialmserver.user.entity.Affiliation;
+import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.AffiliationRepository;
@@ -15,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -79,7 +83,6 @@ class UserServiceTest {
     @DisplayName("[실패] 로그인")
     void loginFail(){
         // given
-        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         EmailPWReq req = setUpEmailPWReq("test1@email.com", "asdf1234!");
         // when
         doThrow(new BaseException(BaseResponseCode.USER_NOT_FOUND)).when(userRepository).findByEmailAndIsEnable(req.getEmail(), true);
@@ -88,6 +91,30 @@ class UserServiceTest {
             userService.login(req);
         });
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.USER_NOT_FOUND);
+    }
+
+    @Test
+    @DisplayName("[성공] 직원 계정 생성")
+    void createUser() {
+        // given
+        Department department = setUpDepartment();
+        Affiliation affiliation = setUpAffiliation();
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        CreateUserReq createUserReq = setUpCreateUserReq("test1@email.com", "adsf1234!");
+
+        //when
+        doReturn(Optional.of(department)).when(departmentRepository).findByNameAndIsEnable(department.getName(), true);
+        doReturn(Optional.of(affiliation)).when(affiliationRepository).findByNameAndIsEnable(affiliation.getName(), true);
+        when(userRepository.save(any(User.class))).then(AdditionalAnswers.returnsFirstArg());
+        userService.createUser(user, createUserReq);
+
+        // verify - because of void method
+        verify(userRepository, times(1)).existsByEmailAndIsEnable(any(String.class), any(Boolean.class));
+        verify(userRepository, times(1)).existsByPhoneAndIsEnable(any(String.class), any(Boolean.class));
+        verify(departmentRepository, times(1)).findByNameAndIsEnable(any(String.class), any(Boolean.class));
+        verify(affiliationRepository, times(1)).findByNameAndIsEnable(any(String.class), any(Boolean.class));
+        verify(passwordEncoder, times(2)).encode(any(String.class));
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
 
@@ -133,10 +160,6 @@ class UserServiceTest {
 
     @Test
     void sendAssetsEmail() {
-    }
-
-    @Test
-    void createUser() {
     }
 
     @Test

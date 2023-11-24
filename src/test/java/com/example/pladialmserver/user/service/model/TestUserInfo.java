@@ -1,5 +1,6 @@
 package com.example.pladialmserver.user.service.model;
 
+import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
 import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
@@ -17,6 +18,18 @@ public class TestUserInfo {
                 .password(pw)
                 .fcmToken("1234545")
                 .build();
+    }
+
+    public static CreateUserReq setUpCreateUserReq(String email, String pw){
+        return new CreateUserReq(
+                "홍길동",
+                email,
+                pw,
+                setUpDepartment().getName(),
+                setUpAffiliation().getName(),
+                "010-0000-0000",
+                Role.ADMIN.getValue(),
+                "1234545");
     }
 
     public static User setUpUser(Long userId, Role role, Department department, Affiliation affiliation, String password){
