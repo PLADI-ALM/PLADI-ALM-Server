@@ -58,6 +58,16 @@ public class Resource extends BaseEntity {
     this.user=user;
   }
 
+  public Resource(Long resourceId, String name, String manufacturer, String location, String description, String imgKey, User user) {
+    this.resourceId = resourceId;
+    this.name = name;
+    this.manufacturer = manufacturer;
+    this.location = location;
+    this.description = description;
+    this.imgKey = imgKey;
+    this.user = user;
+  }
+
   public static Resource toDto(CreateProductReq request, User responsibility) {
     return Resource.builder()
             .name(request.getName())
