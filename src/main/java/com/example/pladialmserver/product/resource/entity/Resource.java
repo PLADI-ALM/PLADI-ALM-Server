@@ -49,13 +49,14 @@ public class Resource extends BaseEntity {
   private User user;
 
   @Builder
-  public Resource(String name, String manufacturer, String description, String imgKey, String location, User user) {
+  public Resource(String name, String manufacturer, String description, String imgKey, String location, User user,Boolean isActive) {
     this.name = name;
     this.manufacturer = manufacturer;
     this.description = description;
     this.imgKey = imgKey;
     this.location=location;
     this.user=user;
+    this.isActive=isActive;
   }
 
   public Resource(Long resourceId, String name, String manufacturer, String location, String description, String imgKey, User user) {
