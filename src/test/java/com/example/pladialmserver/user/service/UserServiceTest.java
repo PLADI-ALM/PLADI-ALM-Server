@@ -99,14 +99,14 @@ class UserServiceTest {
         // given
         Department department = setUpDepartment();
         Affiliation affiliation = setUpAffiliation();
-        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         CreateUserReq createUserReq = setUpCreateUserReq("test1@email.com", "adsf1234!");
 
         //when
         doReturn(Optional.of(department)).when(departmentRepository).findByNameAndIsEnable(department.getName(), true);
         doReturn(Optional.of(affiliation)).when(affiliationRepository).findByNameAndIsEnable(affiliation.getName(), true);
         when(userRepository.save(any(User.class))).then(AdditionalAnswers.returnsFirstArg());
-        userService.createUser(user, createUserReq);
+        userService.createUser(admin, createUserReq);
 
         // verify - because of void method
         verify(userRepository, times(1)).existsByEmailAndIsEnable(any(String.class), any(Boolean.class));
@@ -115,6 +115,37 @@ class UserServiceTest {
         verify(affiliationRepository, times(1)).findByNameAndIsEnable(any(String.class), any(Boolean.class));
         verify(passwordEncoder, times(2)).encode(any(String.class));
         verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    @DisplayName("[실패] 직원 계정 생성 - 관리자 접근이 아닌 경우")
+    void createUserFail() {
+        // given
+        User admin = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        CreateUserReq createUserReq = setUpCreateUserReq("test1@email.com", "adsf1234!");
+
+        // when
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.createUser(admin, createUserReq);
+        });
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.NO_AUTHENTICATION);
+    }
+
+    @Test
+    @DisplayName("[실패] 직원 계정 생성 - 존재하는 휴대폰 번호인 경우")
+    void createUserFail2() {
+        // given
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        CreateUserReq createUserReq = setUpCreateUserReq("test1@email.com", "adsf1234!");
+
+        // when
+        doReturn(true).when(userRepository).existsByPhoneAndIsEnable(createUserReq.getPhone(), true);
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.createUser(admin, createUserReq);
+        });
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.EXISTS_PHONE);
     }
 
 
