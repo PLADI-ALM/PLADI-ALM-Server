@@ -40,16 +40,16 @@ public class OfficeServiceTest extends IntegrationTestSupport {
     @Autowired private AffiliationRepository affiliationRepository;
     @Autowired private DepartmentRepository departmentRepository;
 
-    @AfterEach
-    void tearDown(){
-        // 참조하는 엔티티 먼저 삭제
-        officeBookingRepository.deleteAllInBatch();
-        officeFacilityRepository.deleteAllInBatch();
-        // 참조되는 엔티티 삭제
-        officeRepository.deleteAllInBatch();
-        facilityRepository.deleteAllInBatch();
-
-    }
+//    @AfterEach
+//    void tearDown(){
+//        // 참조하는 엔티티 먼저 삭제
+//        officeBookingRepository.deleteAllInBatch();
+//        officeFacilityRepository.deleteAllInBatch();
+//        // 참조되는 엔티티 삭제
+//        officeRepository.deleteAllInBatch();
+//        facilityRepository.deleteAllInBatch();
+//
+//    }
 
     @Test
     @DisplayName("회의실 목록 조회 테스트")
