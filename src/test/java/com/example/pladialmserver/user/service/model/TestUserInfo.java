@@ -19,48 +19,18 @@ public class TestUserInfo {
                 .build();
     }
 
-    public static User setUpUser(Department department, Affiliation affiliation, String password){
-        return User.builder()
-                .userId(1L)
-                .name("홍길동")
-                .email("test@email.com")
-                .password(password)
-                .fcmToken("1234545")
-                .phone("010-0000-0000")
-                .department(department)
-                .role(Role.ADMIN)
-                .assets("A12345")
-                .affiliation(affiliation)
-                .build();
-    }
-
     public static User setUpUser(Long userId, Role role, Department department, Affiliation affiliation, String password){
         return new User(
                 userId,
                 "홍길동",
                 "test@email.com",
                 password,
-                department,
                 "010-0000-0000",
-                role,
-                "1234545",
                 "A12345",
-                affiliation);
-    }
-
-    public static User setUpBasicUser(Department department, Affiliation affiliation, String password){
-        return User.builder()
-                .userId(1L)
-                .name("홍길동")
-                .email("test@email.com")
-                .password(password)
-                .fcmToken("1234545")
-                .phone("010-0000-0000")
-                .department(department)
-                .role(Role.BASIC)
-                .assets("A12345")
-                .affiliation(affiliation)
-                .build();
+                department,
+                role,
+                affiliation,
+                "1234545");
     }
 
     public static Department setUpDepartment(){

@@ -52,7 +52,7 @@ class UserServiceTest {
     @DisplayName("[성공] 로그인")
     void login(){
         // given
-        User user = setUpUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         EmailPWReq req = setUpEmailPWReq("test@email.com", "asdf1234!");
 
         // when

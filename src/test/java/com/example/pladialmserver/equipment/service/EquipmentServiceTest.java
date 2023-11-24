@@ -4,6 +4,7 @@ import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
 import com.example.pladialmserver.equipment.repository.EquipmentCategoryRepository;
 import com.example.pladialmserver.equipment.repository.EquipmentRepository;
 import com.example.pladialmserver.global.utils.JwtUtil;
+import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -49,7 +50,7 @@ public class EquipmentServiceTest {
     @DisplayName("[성공] 구매 비품 추가")
     void registerEquipmentSuccess() {
         // given
-        User user = setUpUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         RegisterEquipmentReq req = setUpRegisterEquipmentInfo("맥심커피", "10박스", "기타", "S1305", "맥심커피입니다.", "photo/maxim.png");
 
         // when
