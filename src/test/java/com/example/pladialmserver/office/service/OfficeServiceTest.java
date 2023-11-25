@@ -82,16 +82,6 @@ public class OfficeServiceTest extends IntegrationTestSupport {
         });
     }
 
-    @DisplayName("회의실 개별 조회")
-    @Test
-    void getOffice() throws Exception{
-        //given
-
-        //when
-
-        //then
-    }
-
     private User createAndSaveUser(String name, String email, Department department, Affiliation affiliation) {
         User user = User.builder()
                 .name(name)
@@ -158,7 +148,14 @@ public class OfficeServiceTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("회의실 개별 조회")
+    @Test
+    void getOffice() throws Exception{
+        //given
 
+        //when
 
+        //then
+    }
 
 }
