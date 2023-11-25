@@ -71,29 +71,16 @@ public class User extends BaseEntity {
     private List<OfficeBooking> officeBookingList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, Department department, String phone, Role role, String fcmToken, String assets, Affiliation affiliation) {
+    public User(Long id, String name, String email, String password, Department department, String phone, Role role, String fcmToken, String assets, Affiliation affiliation) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.department = department;
-        this.phone=phone;
-        this.role = role;
-        this.fcmToken = fcmToken;
-        this.assets = assets;
-        this.affiliation = affiliation;
-    }
-
-    public User(Long userId, String name, String email, String password, String phone, String assets, Department department, Role role, Affiliation affiliation, String fcmToken) {
-        this.userId = userId;
-        this.name = name;
-        this.email = email;
-        this.password = password;
         this.phone = phone;
-        this.assets = assets;
-        this.department = department;
         this.role = role;
-        this.affiliation = affiliation;
         this.fcmToken = fcmToken;
+        this.assets = assets;
+        this.affiliation = affiliation;
     }
 
     public static User toEntity(CreateUserReq req, Department department, Affiliation affiliation){

@@ -33,17 +33,17 @@ public class TestUserInfo {
     }
 
     public static User setUpUser(Long userId, Role role, Department department, Affiliation affiliation, String password){
-        return new User(
-                userId,
-                "홍길동",
-                "test@email.com",
-                password,
-                "010-0000-0000",
-                "A12345",
-                department,
-                role,
-                affiliation,
-                "1234545");
+        return User.builder()
+                .id(userId)
+                .name("홍길동")
+                .email("test@email.com")
+                .password("010-0000-0000")
+                .phone("010-0000-0000")
+                .department(department)
+                .role(role)
+                .assets("A12345")
+                .affiliation(affiliation)
+                .build();
     }
 
     public static Department setUpDepartment(){

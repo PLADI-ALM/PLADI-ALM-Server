@@ -62,14 +62,18 @@ public class ResourceServiceTest extends IntegrationTestSupport {
     }
 
     private User createAndSaveUser(String name, String email, Department department, Affiliation affiliation) {
-        User user = new User(1L,
-                name,
-                email,
-                "password",
-                "010-1234-5678",
-                "testAssets",
-                department,Role.ADMIN,
-                affiliation);
+        User user = User.builder()
+                .id(1L)
+                .name("홍길동")
+                .email("test@email.com")
+                .password("asdf")
+                .phone("010-0000-0000")
+                .department(department)
+                .role(Role.ADMIN)
+                .assets("A12345")
+                .affiliation(affiliation)
+                .assets("1234545")
+                .build();
         userRepository.save(user);
         return user;
     }

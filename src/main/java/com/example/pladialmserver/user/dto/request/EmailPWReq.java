@@ -1,14 +1,18 @@
 package com.example.pladialmserver.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class EmailPWReq {
     @Schema(type = "String", description = "이메일", example = "1234@email.com", required = true)
