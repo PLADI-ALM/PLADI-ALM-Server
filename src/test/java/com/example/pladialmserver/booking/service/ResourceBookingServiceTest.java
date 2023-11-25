@@ -183,7 +183,24 @@ class ResourceBookingServiceTest {
     }
 
     @Test
-    void rejectProductBooking() {
+    @DisplayName("[성공] 관리자 장비 예약 반려")
+    void rejectProductBooking_SUCCESS() throws IOException {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.WAITING);
+
+        // when
+        doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
+        String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
+        Map<String, String> bookingData = new HashMap<>();
+        doNothing().when(emailUtil).sendEmail(resourceBooking.getUser().getEmail(), title, bookingData, BOOKING_TEMPLATE);
+        doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.EQUIPMENT), eq(Constants.Notification.BODY_DENIED), any(User.class));
+
+        resourceBookingService.rejectProductBooking(adminUser, resourceBooking.getResourceBookingId());
+
+        // then
+        assertThat(resourceBooking.getStatus()).isEqualTo(BookingStatus.CANCELED);
     }
 
     @Test
