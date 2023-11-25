@@ -157,6 +157,24 @@ class ResourceBookingServiceTest {
     }
 
     @Test
+    @DisplayName("[실패] 장비 예약 취소 - 이미 사용 완료된 예약인 경우")
+    void cancelBookingProduct_ALREADY_FINISHED_BOOKING() {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.FINISHED);
+
+        // when
+        doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
+
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            resourceBookingService.cancelBookingProduct(basicUser, resourceBooking.getResourceBookingId());
+        });
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.ALREADY_FINISHED_BOOKING);
+    }
+
+    @Test
     void checkProductBookingTime() {
     }
 
