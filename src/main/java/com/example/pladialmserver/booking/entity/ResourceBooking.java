@@ -55,21 +55,14 @@ public class ResourceBooking extends BaseEntity {
   private BookingStatus status = BookingStatus.WAITING;
 
   @Builder
-  public ResourceBooking(User user, Resource resource, LocalDateTime startDate, LocalDateTime endDate, String memo) {
-    this.user = user;
-    this.resource = resource;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.memo = memo;
-  }
-
-  public ResourceBooking(Long resourceBookingId, User user, Resource resource, LocalDateTime startDate, LocalDateTime endDate, String memo) {
+  public ResourceBooking(Long resourceBookingId, User user, Resource resource, LocalDateTime startDate, LocalDateTime endDate, String memo, BookingStatus status) {
     this.resourceBookingId = resourceBookingId;
     this.user = user;
     this.resource = resource;
     this.startDate = startDate;
     this.endDate = endDate;
     this.memo = memo;
+    this.status = status;
   }
 
   public static ResourceBooking toDto(User user, Resource resource, ProductReq productReq) {
