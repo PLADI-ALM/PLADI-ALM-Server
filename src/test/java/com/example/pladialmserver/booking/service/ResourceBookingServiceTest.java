@@ -226,6 +226,25 @@ class ResourceBookingServiceTest {
     }
 
     @Test
+    @DisplayName("[실패] 관리자 장비 예약 반려 - 접근 권한이 없는 경우")
+    void rejectProductBooking_NO_AUTHENTICATION() {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.WAITING);
+
+        // when
+        doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
+
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            resourceBookingService.rejectProductBooking(basicUser, resourceBooking.getResourceBookingId());
+        });
+
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.NO_AUTHENTICATION);
+    }
+
+    @Test
     void allowProductBooking() {
     }
 
