@@ -1,14 +1,6 @@
 package com.example.pladialmserver.equipment.controller;
 
-import static com.example.pladialmserver.equipment.service.model.TestEquipmentInfo.setUpRegisterEquipmentInfo;
-import static com.example.pladialmserver.user.service.model.TestUserInfo.*;
-import static com.example.pladialmserver.user.service.model.TestUserInfo.PASSWORD;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
 import com.example.pladialmserver.global.ControllerTestSupport;
-import com.example.pladialmserver.user.entity.Role;
-import com.example.pladialmserver.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.Collections;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
