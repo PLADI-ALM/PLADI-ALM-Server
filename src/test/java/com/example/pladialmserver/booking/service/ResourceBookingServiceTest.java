@@ -132,7 +132,7 @@ class ResourceBookingServiceTest {
         doNothing().when(emailUtil).sendEmail(resourceBooking.getUser().getEmail(), title, bookingData, BOOKING_TEMPLATE);
         doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.EQUIPMENT), eq(Constants.Notification.BODY_CANCELED), any(User.class));
 
-        resourceBookingService.cancelBookingProduct(basicUser, resourceBooking.getResourceBookingId());
+        resourceBookingService.cancelBookingProduct(basicUser, reso거ourceBooking.getResourceBookingId());
 
         // then
         assertThat(resourceBooking.getStatus()).isEqualTo(BookingStatus.CANCELED);
@@ -140,7 +140,7 @@ class ResourceBookingServiceTest {
 
     @Test
     @DisplayName("[실패] 장비 예약 취소 - 이미 취소된 예약인 경우")
-    void cancelBookingProduct_ALREADY_CANCELED_BOOKING() throws IOException {
+    void cancelBookingProduct_ALREADY_CANCELED_BOOKING() {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
