@@ -119,7 +119,7 @@ class ResourceBookingServiceTest {
 
     @Test
     @DisplayName("[성공] 장비 예약 취소")
-    void cancelBookingProduct() throws IOException {
+    void cancelBookingProduct_SUCCESS() throws IOException {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
@@ -136,7 +136,24 @@ class ResourceBookingServiceTest {
 
         // then
         assertThat(resourceBooking.getStatus()).isEqualTo(BookingStatus.CANCELED);
+    }
 
+    @Test
+    @DisplayName("[실패] 장비 예약 취소 - 이미 취소된 예약인 경우")
+    void cancelBookingProduct_ALREADY_CANCELED_BOOKING() throws IOException {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.CANCELED);
+
+        // when
+        doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
+
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            resourceBookingService.cancelBookingProduct(basicUser, resourceBooking.getResourceBookingId());
+        });
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.ALREADY_CANCELED_BOOKING);
     }
 
     @Test
