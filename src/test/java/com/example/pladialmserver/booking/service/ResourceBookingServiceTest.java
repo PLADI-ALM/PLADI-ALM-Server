@@ -45,8 +45,8 @@ class ResourceBookingServiceTest {
     @DisplayName("[성공] 장비 예약 개별 조회")
     void getProductBookingDetail_SUCCESS() {
         // given
-        User basicUser = setUpBasicUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        User adminUser = setUpUser(setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser);
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
