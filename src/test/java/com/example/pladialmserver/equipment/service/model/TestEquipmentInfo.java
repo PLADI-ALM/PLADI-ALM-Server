@@ -1,6 +1,7 @@
 package com.example.pladialmserver.equipment.service.model;
 
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
+import com.example.pladialmserver.equipment.entity.EquipmentCategory;
 
 public class TestEquipmentInfo {
 
@@ -14,5 +15,11 @@ public class TestEquipmentInfo {
                 .imgKey(imgKey)
                 .build();
 
+    }
+
+    public static EquipmentCategory setUpEquipmentCategory(String name) {
+        return EquipmentCategory.builder()
+                .name(name)
+                .build();
     }
 }
