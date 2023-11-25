@@ -132,7 +132,7 @@ class ResourceBookingServiceTest {
         doNothing().when(emailUtil).sendEmail(resourceBooking.getUser().getEmail(), title, bookingData, BOOKING_TEMPLATE);
         doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.EQUIPMENT), eq(Constants.Notification.BODY_CANCELED), any(User.class));
 
-        resourceBookingService.cancelBookingProduct(basicUser, reso거ourceBooking.getResourceBookingId());
+        resourceBookingService.cancelBookingProduct(basicUser, resourceBooking.getResourceBookingId());
 
         // then
         assertThat(resourceBooking.getStatus()).isEqualTo(BookingStatus.CANCELED);
