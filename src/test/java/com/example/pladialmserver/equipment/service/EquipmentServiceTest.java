@@ -14,6 +14,7 @@ import com.example.pladialmserver.user.repository.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -97,9 +98,40 @@ class EquipmentServiceTest {
         });
         // then
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.EQUIPMENT_NOT_FOUND);
+
     }
 
     @Test
-    void deleteEquipment() {
+    @DisplayName("[성공] 비품 정보 삭제")
+    void deleteEquipment_SUCCESS() {
+        // given
+        Long equipmentId = 1L;
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        Equipment equipment = setUpEquipment("비품1", "10개", "photo/maxim.png", "S1350", "비품1입니다.", new EquipmentCategory("기타"), user);
+
+        // when
+        doReturn(Optional.of(equipment)).when(equipmentRepository).findByEquipmentIdAndIsEnable(equipmentId, true);
+        equipmentService.deleteEquipment(equipmentId, user);
+
+        // verify
+        verify(equipmentService, times(1)).deleteEquipment(equipmentId, user);
+    }
+
+    @Test
+    @DisplayName("[실패] 비품 정보 삭제 - 관리자가 아닌 경우")
+    void deleteEquipment_NO_AUTHENTICATION() {
+        // given
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User basic = setUpUser(2L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        Equipment equipment = setUpEquipment("비품1", "10개", "photo/maxim.png", "S1350", "비품1입니다.", new EquipmentCategory("기타"), admin);
+
+        // when
+        doReturn(Optional.of(equipment)).when(equipmentRepository).findByEquipmentIdAndIsEnable(equipment.getEquipmentId(), true);
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            equipmentService.deleteEquipment(equipment.getEquipmentId(), basic);
+        });
+
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.NO_AUTHENTICATION);
     }
 }

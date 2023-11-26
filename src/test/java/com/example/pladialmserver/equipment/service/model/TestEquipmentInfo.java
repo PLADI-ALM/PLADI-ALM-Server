@@ -19,7 +19,7 @@ public class TestEquipmentInfo {
                 .build();
 
     }
-  
+
     public static Equipment setUpEquipment(String name, String quantity, String imgKey, String location, String description, EquipmentCategory category, User user) {
         return Equipment.builder()
                 .name(name)
