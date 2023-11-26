@@ -2,6 +2,7 @@ package com.example.pladialmserver.office.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import static com.example.pladialmserver.global.Constants.DATE_PATTERN;
 import static com.example.pladialmserver.global.Constants.TIME_PATTERN;
 
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OfficeReq {
