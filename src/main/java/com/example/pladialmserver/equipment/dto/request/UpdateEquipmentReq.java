@@ -1,6 +1,7 @@
 package com.example.pladialmserver.equipment.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Builder
 public class UpdateEquipmentReq {
     @Schema(type = "String", description = "이름", example = "맥심커피", required = true)
     @NotBlank(message = "E0003")
