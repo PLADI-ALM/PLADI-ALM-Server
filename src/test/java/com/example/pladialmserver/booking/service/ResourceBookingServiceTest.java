@@ -1,6 +1,5 @@
 package com.example.pladialmserver.booking.service;
 
-import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.dto.response.ProductBookingDetailRes;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
@@ -11,7 +10,6 @@ import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.notification.service.PushNotificationService;
-import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import org.junit.jupiter.api.DisplayName;
@@ -21,13 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +62,7 @@ class ResourceBookingServiceTest {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.WAITING);
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.WAITING);
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
         ProductBookingDetailRes res = resourceBookingService.getProductBookingDetail(basicUser, resourceBooking.getResourceBookingId());
@@ -91,7 +84,7 @@ class ResourceBookingServiceTest {
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User fakeUser = setUpUser(3L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.WAITING);
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.WAITING);
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
         BaseException exception = assertThrows(BaseException.class, () -> {
@@ -108,7 +101,7 @@ class ResourceBookingServiceTest {
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User fakeUser = setUpUser(3L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.WAITING);
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.WAITING);
         // when
         BaseException exception = assertThrows(BaseException.class, () -> {
             resourceBookingService.getProductBookingDetail(fakeUser, resourceBooking.getResourceBookingId()+1);
@@ -123,7 +116,7 @@ class ResourceBookingServiceTest {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.USING);
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.USING);
 
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
@@ -144,7 +137,7 @@ class ResourceBookingServiceTest {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.CANCELED);
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.CANCELED);
 
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
@@ -162,7 +155,7 @@ class ResourceBookingServiceTest {
         // given
         User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
         User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        ResourceBooking resourceBooking = setUpResourceBooking(basicUser, adminUser, BookingStatus.FINISHED);
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.FINISHED);
 
         // when
         doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
@@ -183,7 +176,65 @@ class ResourceBookingServiceTest {
     }
 
     @Test
-    void rejectProductBooking() {
+    @DisplayName("[성공] 관리자 장비 예약 반려")
+    void rejectProductBooking_SUCCESS() throws IOException {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.WAITING);
+
+        // when
+        doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
+        String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
+        Map<String, String> bookingData = new HashMap<>();
+        doNothing().when(emailUtil).sendEmail(resourceBooking.getUser().getEmail(), title, bookingData, BOOKING_TEMPLATE);
+        doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.EQUIPMENT), eq(Constants.Notification.BODY_DENIED), any(User.class));
+
+        resourceBookingService.rejectProductBooking(adminUser, resourceBooking.getResourceBookingId());
+
+        // then
+        assertThat(resourceBooking.getStatus()).isEqualTo(BookingStatus.CANCELED);
+    }
+
+    @Test
+    @DisplayName("[실패] 관리자 장비 예약 반려 - 불가능한 예약 상태인 경우")
+    void rejectProductBooking_INVALID_BOOKING_STATUS() {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking_finished = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.FINISHED);
+        ResourceBooking resourceBooking_canceled = setUpResourceBooking(2L, basicUser, adminUser, BookingStatus.CANCELED);
+
+        // when
+        lenient().when(resourceBookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(resourceBooking_finished))
+                .thenReturn(Optional.of(resourceBooking_canceled));
+
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            resourceBookingService.rejectProductBooking(adminUser, resourceBooking_finished.getResourceBookingId());
+            resourceBookingService.rejectProductBooking(adminUser, resourceBooking_canceled.getResourceBookingId());
+        });
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.INVALID_BOOKING_STATUS);
+    }
+
+    @Test
+    @DisplayName("[실패] 관리자 장비 예약 반려 - 접근 권한이 없는 경우")
+    void rejectProductBooking_NO_AUTHENTICATION() {
+        // given
+        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        ResourceBooking resourceBooking = setUpResourceBooking(1L, basicUser, adminUser, BookingStatus.WAITING);
+
+        // when
+        doReturn(Optional.of(resourceBooking)).when(resourceBookingRepository).findById(resourceBooking.getResourceBookingId());
+
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            resourceBookingService.rejectProductBooking(basicUser, resourceBooking.getResourceBookingId());
+        });
+
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.NO_AUTHENTICATION);
     }
 
     @Test
