@@ -34,7 +34,6 @@ public class Resource extends BaseEntity {
   @Size(max = 30)
   private String location;
 
-  @NotNull
   @Size(max = 255)
   private String description;
 
@@ -72,8 +71,9 @@ public class Resource extends BaseEntity {
   public static Resource toDto(CreateProductReq request, User responsibility) {
     return Resource.builder()
             .name(request.getName())
-            .location(request.getLocation())
-            .description(request.getDescription())
+            .manufacturer(request.getManufacturer() == null ? null : request.getDescription())
+            .location(request.getLocation() == null ? null : request.getDescription())
+            .description(request.getDescription() == null ? null : request.getDescription())
             .imgKey((request.getImgKey() == null) ? null : request.getImgKey())
             .user(responsibility)
             .build();

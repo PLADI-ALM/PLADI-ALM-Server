@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.util.Optional;
 
 import static com.example.pladialmserver.equipment.service.model.TestEquipmentInfo.*;
