@@ -114,6 +114,6 @@ public class EquipmentController {
             @Account User user
     )
     {
-        return ResponseCustom.OK(equipmentService.getEquipmentCategories());
+        return ResponseCustom.OK(equipmentService.getEquipmentCategories(user));
     }
 }

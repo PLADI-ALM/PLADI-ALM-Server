@@ -73,7 +73,7 @@ public class EquipmentService {
         equipmentRepository.delete(equipment);
     }
 
-    public List<EquipmentCategoryRes> getEquipmentCategories() {
+    public List<EquipmentCategoryRes> getEquipmentCategories(User user) {
         List<EquipmentCategory> categories = equipmentCategoryRepository.findByIsEnable(true);
         return categories.stream().map(EquipmentCategoryRes::toDto).collect(Collectors.toList());
     }
