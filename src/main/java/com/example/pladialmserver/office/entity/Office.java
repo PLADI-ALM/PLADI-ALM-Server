@@ -45,7 +45,8 @@ public class Office extends BaseEntity {
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();
     @Builder
-     public Office(String name, String location, String capacity, String description, String imgKey,Boolean isActive){
+     public Office(Long id, String name, String location, String capacity, String description, String imgKey,Boolean isActive){
+        this.officeId = id;
          this.name=name;
          this.location=location;
          this.capacity=capacity;
@@ -65,11 +66,11 @@ public class Office extends BaseEntity {
      }
 
     public void updateOffice(CreateOfficeReq request) {
-        if(!request.getName().equals(name)) name=request.getName();
-        if(!request.getLocation().equals(location)) name=request.getLocation();
-        if(!request.getCapacity().equals(capacity)) capacity=request.getCapacity();
-        if(!request.getDescription().equals(description)) description=request.getDescription();
-        if(!request.getImgUrl().equals(imgKey)) imgKey=request.getImgUrl();
+        if (!name.equals(request.getName())) name = request.getName();
+        if (!location.equals(request.getLocation())) name = request.getLocation();
+        if (!capacity.equals(request.getCapacity())) capacity = request.getCapacity();
+        if (!description.equals(request.getDescription())) description = request.getDescription();
+        if (!imgKey.equals(request.getImgUrl())) imgKey = request.getImgUrl();
     }
 
     public void activateOffice() {

@@ -98,6 +98,7 @@ class EquipmentServiceTest {
         });
         // then
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.EQUIPMENT_NOT_FOUND);
+
     }
 
     @Test
