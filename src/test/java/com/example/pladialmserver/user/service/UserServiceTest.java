@@ -159,9 +159,8 @@ class UserServiceTest {
         User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
 
         // when
-        when(userRepository.findByUserIdAndIsEnable(user.getUserId(), true)).thenReturn(Optional.of(user));
+        doReturn(Optional.of(user)).when(userRepository).findByUserIdAndIsEnable(user.getUserId(), true);
         UserRes userRes = userService.getUserInfoByAdmin(admin, user.getUserId());
-
         // then
         assertThat(userRes.getUserId()).isEqualTo(user.getUserId());
 
@@ -196,7 +195,7 @@ class UserServiceTest {
             userService.getUserInfoByAdmin(admin, 1L);
         });
 
-//        // then
+        // then
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.USER_NOT_FOUND);
     }
 
