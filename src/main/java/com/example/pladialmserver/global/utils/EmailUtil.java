@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -31,6 +32,7 @@ public class EmailUtil {
 
     private static final long ACCESS_CODE_EXPIRE_TIME = 1000 * 60 * 5; // 5분
 
+    @Async("mailExecutor")
     public void sendEmail(String toEmail, String title, Map<String, String> data, String template) {
         try{
             emailSender.send(createForm(toEmail, title, data, template));
