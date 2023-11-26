@@ -232,7 +232,6 @@ class UserServiceTest {
     @DisplayName("[실패] 직원 게정 목록 조회 (관리자 전용) - 관리자가 접근하지 않은 경우")
     void getUserListFail() {
         // given
-        Department department = setUpDepartment();
         Affiliation affiliation = setUpAffiliation();
         Pageable pageable = Pageable.ofSize(5);
         User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
@@ -240,7 +239,7 @@ class UserServiceTest {
         // when
         doThrow(new BaseException(BaseResponseCode.DEPARTMENT_NOT_FOUND)).when(departmentRepository).findByNameAndIsEnable("플", true);
         BaseException exception = assertThrows(BaseException.class, () -> {
-            userService.getUserList(admin, "홍길동", department.getName(), affiliation.getName(), pageable);
+            userService.getUserList(admin, "홍길동", "플", affiliation.getName(), pageable);
         });
 
         // then
