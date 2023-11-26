@@ -37,7 +37,6 @@ public class Car extends BaseEntity {
     @Size(max = 30)
     private String location;
 
-    @NotNull
     @Size(max = 255)
     private String description;
 
@@ -61,8 +60,9 @@ public class Car extends BaseEntity {
     public static Car toDto(CreateProductReq request, User responsibility) {
         return Car.builder()
                 .name(request.getName())
-                .location(request.getLocation())
-                .description(request.getDescription())
+                .manufacturer(request.getManufacturer() == null ? null : request.getManufacturer())
+                .location(request.getLocation() == null ? null : request.getLocation())
+                .description(request.getDescription() == null ? null : request.getDescription())
                 .imgKey((request.getImgKey() == null) ? null : request.getImgKey())
                 .user(responsibility)
                 .build();
