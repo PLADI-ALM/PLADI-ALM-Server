@@ -47,13 +47,12 @@ public class Car extends BaseEntity {
     private Boolean isActive = true;
 
     @Builder
-    public Car(String name, String manufacturer, String description, String imgKey, String location, Boolean isActive, User user) {
+    public Car(String name, String manufacturer, String description, String imgKey, String location, User user) {
         this.name = name;
         this.manufacturer = manufacturer;
         this.description = description;
         this.imgKey = imgKey;
         this.location = location;
-        this.isActive = isActive;
         this.user = user;
     }
 
