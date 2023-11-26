@@ -14,6 +14,7 @@ import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.AffiliationRepository;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
 import com.example.pladialmserver.user.repository.user.UserRepository;
+import com.example.pladialmserver.user.service.model.TestUserInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +25,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
@@ -202,6 +205,62 @@ class UserServiceTest {
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.USER_NOT_FOUND);
     }
 
+    @Test
+    @DisplayName("[성공] 직원 게정 목록 조회 (관리자 전용)")
+    void getUserList() {
+        // given
+        Department department = setUpDepartment();
+        Affiliation affiliation = setUpAffiliation();
+        User admin = setUpUser(1L, Role.ADMIN, department, affiliation, passwordEncoder.encode(PASSWORD));
+
+        Pageable pageable = Pageable.ofSize(5);
+
+        // when
+        doReturn(Optional.of(department)).when(departmentRepository).findByNameAndIsEnable(department.getName(), true);
+        doReturn(Optional.of(affiliation)).when(affiliationRepository).findByNameAndIsEnable(affiliation.getName(), true);
+        when(userRepository.findAllByName("홍길동", department, affiliation, pageable)).thenReturn(TestUserInfo.setUpUserResListDto());
+        Page<UserRes> userResList = userService.getUserList(admin, "홍길동", department.getName(), affiliation.getName(), pageable);
+
+        // then
+        assertThat(userResList.getTotalElements()).isEqualTo(5);
+
+        // verify
+        verify(userRepository, times(1)).findAllByName(any(String.class), any(Department.class), any(Affiliation.class), any(Pageable.class));
+    }
+
+    @Test
+    @DisplayName("[실패] 직원 게정 목록 조회 (관리자 전용) - 관리자가 접근하지 않은 경우")
+    void getUserListFail() {
+        // given
+        Department department = setUpDepartment();
+        Affiliation affiliation = setUpAffiliation();
+        Pageable pageable = Pageable.ofSize(5);
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+
+        // when
+        doThrow(new BaseException(BaseResponseCode.DEPARTMENT_NOT_FOUND)).when(departmentRepository).findByNameAndIsEnable("플", true);
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.getUserList(admin, "홍길동", department.getName(), affiliation.getName(), pageable);
+        });
+
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.DEPARTMENT_NOT_FOUND);
+    }
+    @Test
+    @DisplayName("[실패] 직원 게정 목록 조회 (관리자 전용) - 부서를 찾을 수 없는 경우")
+    void getUserListFail2() {
+        // given
+        Department department = setUpDepartment();
+        Affiliation affiliation = setUpAffiliation();
+        Pageable pageable = Pageable.ofSize(5);
+        User admin = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        // when
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.getUserList(admin, "홍길동", department.getName(), affiliation.getName(), pageable);
+        });
+
+    }
+
 
     @Test
     void getUserName() {
@@ -249,10 +308,6 @@ class UserServiceTest {
 
     @Test
     void getDepartmentList() {
-    }
-
-    @Test
-    void getUserList() {
     }
 
     @Test

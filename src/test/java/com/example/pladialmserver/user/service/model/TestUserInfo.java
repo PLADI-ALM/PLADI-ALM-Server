@@ -2,10 +2,16 @@ package com.example.pladialmserver.user.service.model;
 
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
+import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestUserInfo {
 
@@ -56,5 +62,15 @@ public class TestUserInfo {
         return Affiliation.builder()
                 .name("플래디")
                 .build();
+    }
+
+    public static Page<User> setUpUserResListDto(){
+        List<User> userResList = new ArrayList<>();
+        userResList.add(setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
+        userResList.add(setUpUser(2L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
+        userResList.add(setUpUser(3L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
+        userResList.add(setUpUser(4L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
+        userResList.add(setUpUser(5L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
+        return new PageImpl<>(userResList);
     }
 }
