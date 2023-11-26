@@ -37,7 +37,7 @@ public class TestUserInfo {
                 .id(userId)
                 .name("홍길동")
                 .email("test@email.com")
-                .password("010-0000-0000")
+                .password(password)
                 .phone("010-0000-0000")
                 .department(department)
                 .role(role)

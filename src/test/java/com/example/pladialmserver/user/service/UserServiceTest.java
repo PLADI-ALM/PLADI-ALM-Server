@@ -6,6 +6,7 @@ import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
+import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
@@ -79,6 +80,7 @@ class UserServiceTest {
         verify(jwtUtil, times(1)).createToken(any(Long.class), any(Role.class));
         verify(passwordEncoder, times(1)).encode(any(String.class));
     }
+
     @Test
     @DisplayName("[실패] 로그인")
     void loginFail(){
@@ -144,8 +146,58 @@ class UserServiceTest {
         BaseException exception = assertThrows(BaseException.class, () -> {
             userService.createUser(admin, createUserReq);
         });
+
         // then
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.EXISTS_PHONE);
+    }
+
+    @Test
+    @DisplayName("[성공] 직원 개별 정보 (관리자 전용)")
+    void getUserInfo() {
+        // given
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+
+        // when
+        when(userRepository.findByUserIdAndIsEnable(user.getUserId(), true)).thenReturn(Optional.of(user));
+        UserRes userRes = userService.getUserInfoByAdmin(admin, user.getUserId());
+
+        // then
+        assertThat(userRes.getUserId()).isEqualTo(user.getUserId());
+
+        // verify
+        verify(userRepository, times(1)).findByUserIdAndIsEnable(any(Long.class), any(Boolean.class));
+    }
+
+    @Test
+    @DisplayName("[실패] 직원 개별 정보 (관리자 전용) - 관리자 접근이 아닌 경우")
+    void getUserInfoFail() {
+        // given
+        User admin = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+
+        // when
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.getUserInfoByAdmin(admin, 1L);
+        });
+
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.NO_AUTHENTICATION);
+    }
+
+    @Test
+    @DisplayName("[실패] 직원 개별 정보 (관리자 전용) - 사용자를 찾을 수 없는 경우")
+    void getUserInfoFail2() {
+        // given
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+
+        // when
+        doThrow(new BaseException(BaseResponseCode.USER_NOT_FOUND)).when(userRepository).findByUserIdAndIsEnable(1L, true);
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.getUserInfoByAdmin(admin, 1L);
+        });
+
+//        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.USER_NOT_FOUND);
     }
 
 
@@ -183,10 +235,6 @@ class UserServiceTest {
 
     @Test
     void updateUser() {
-    }
-
-    @Test
-    void getUserInfo() {
     }
 
     @Test
