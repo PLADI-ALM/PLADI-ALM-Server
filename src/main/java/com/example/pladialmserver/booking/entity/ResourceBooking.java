@@ -5,10 +5,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.resource.entity.Resource;
 import com.example.pladialmserver.user.entity.User;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -22,6 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
+@Builder
+@AllArgsConstructor
 public class ResourceBooking extends BaseEntity {
 
   @Id
@@ -51,19 +50,9 @@ public class ResourceBooking extends BaseEntity {
   @Size(max = 100)
   private String remark;
 
+  @Builder.Default
   @Enumerated(EnumType.STRING)
   private BookingStatus status = BookingStatus.WAITING;
-
-  @Builder
-  public ResourceBooking(Long resourceBookingId, User user, Resource resource, LocalDateTime startDate, LocalDateTime endDate, String memo, BookingStatus status) {
-    this.resourceBookingId = resourceBookingId;
-    this.user = user;
-    this.resource = resource;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.memo = memo;
-    this.status = status;
-  }
 
   public static ResourceBooking toDto(User user, Resource resource, ProductReq productReq) {
     return ResourceBooking.builder()
