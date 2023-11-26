@@ -74,7 +74,7 @@ public class EquipmentService {
     }
 
     public List<EquipmentCategoryRes> getEquipmentCategories() {
-        List<EquipmentCategory> categories = equipmentCategoryRepository.findAll();
+        List<EquipmentCategory> categories = equipmentCategoryRepository.findByIsEnable(true);
         return categories.stream().map(EquipmentCategoryRes::toDto).collect(Collectors.toList());
     }
 }
