@@ -76,11 +76,11 @@ public class Car extends BaseEntity {
     }
 
     public void updateCar(CreateProductReq request, User responsibility) {
-        if (!request.getName().equals(name)) name = request.getName();
-        if (!request.getManufacturer().equals(manufacturer)) manufacturer = request.getManufacturer();
-        if (!request.getLocation().equals(location)) location = request.getLocation();
-        if (!request.getDescription().equals(description)) description = request.getDescription();
-        if (!request.getImgKey().equals(AwsS3ImageUrlUtil.toUrl(imgKey))) imgKey = request.getImgKey();
-        if (!responsibility.equals(user)) user = responsibility;
+        if (!name.equals(request.getName())) name = request.getName();
+        if (!manufacturer.equals(request.getManufacturer())) manufacturer = request.getManufacturer();
+        if (!location.equals(request.getLocation())) location = request.getLocation();
+        if (!description.equals(request.getDescription())) description = request.getDescription();
+        if (!AwsS3ImageUrlUtil.toUrl(imgKey).equals(request.getImgKey())) imgKey = request.getImgKey();
+        if (!user.equals(responsibility)) user = responsibility;
     }
 }
