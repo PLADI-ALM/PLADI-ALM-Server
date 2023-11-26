@@ -45,7 +45,8 @@ public class Office extends BaseEntity {
     @OneToMany(mappedBy = "office")
     private List<OfficeFacility> facilityList = new ArrayList<>();
     @Builder
-     public Office(String name, String location, String capacity, String description, String imgKey,Boolean isActive){
+     public Office(Long id, String name, String location, String capacity, String description, String imgKey,Boolean isActive){
+        this.officeId = id;
          this.name=name;
          this.location=location;
          this.capacity=capacity;

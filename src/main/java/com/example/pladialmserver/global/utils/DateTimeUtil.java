@@ -39,6 +39,10 @@ public class DateTimeUtil {
         return LocalDate.parse(stringDate, DateTimeFormatter.ISO_DATE);
     }
 
+    public static LocalTime stringToLocalTime(String stringDate) {
+        return LocalTime.parse(stringDate, DateTimeFormatter.ISO_TIME);
+    }
+
     // string(YYYY-MM) -> localDate (해당 월의 첫 날)
     public static LocalDate stringToFirstLocalDate(String stringDate) {
         return stringToLocalDate(stringDate + "-01");
