@@ -161,8 +161,11 @@ class UserServiceTest {
         // when
         doReturn(Optional.of(user)).when(userRepository).findByUserIdAndIsEnable(user.getUserId(), true);
         UserRes userRes = userService.getUserInfoByAdmin(admin, user.getUserId());
+
         // then
         assertThat(userRes.getUserId()).isEqualTo(user.getUserId());
+        assertThat(userRes.getName()).isEqualTo(user.getName());
+        assertThat(userRes.getEmail()).isEqualTo(user.getEmail());
 
         // verify
         verify(userRepository, times(1)).findByUserIdAndIsEnable(any(Long.class), any(Boolean.class));
