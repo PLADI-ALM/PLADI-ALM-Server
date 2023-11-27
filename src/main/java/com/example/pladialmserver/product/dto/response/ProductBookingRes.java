@@ -22,6 +22,7 @@ public class ProductBookingRes {
     private String reservatorPhone;
 
     public static ProductBookingRes toDto(ResourceBooking booking) {
+        if (booking == null) return null;
         return ProductBookingRes.builder()
                 .startDateTime(DateTimeUtil.dateTimeToString(booking.getStartDate()))
                 .endDateTime(DateTimeUtil.dateTimeToString(booking.getEndDate()))
