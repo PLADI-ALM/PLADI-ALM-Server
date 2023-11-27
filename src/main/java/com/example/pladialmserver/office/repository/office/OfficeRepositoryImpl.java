@@ -1,20 +1,12 @@
-package com.example.pladialmserver.office.repository;
+package com.example.pladialmserver.office.repository.office;
 
-import com.example.pladialmserver.office.dto.response.OfficeRes;
-import com.example.pladialmserver.office.dto.response.QOfficeRes;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.example.pladialmserver.office.entity.QFacility.facility;
 import static com.example.pladialmserver.office.entity.QOffice.office;
 import static com.example.pladialmserver.office.entity.QOfficeFacility.officeFacility;
 
