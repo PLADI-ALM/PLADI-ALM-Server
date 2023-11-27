@@ -61,7 +61,7 @@ public class Office extends BaseEntity {
                 .location(req.getLocation())
                 .capacity(req.getCapacity())
                 .description(req.getDescription())
-                .imgKey(req.getImgUrl())
+                .imgKey(req.getImgKey())
                 .build();
      }
 
@@ -70,7 +70,7 @@ public class Office extends BaseEntity {
         if (!location.equals(request.getLocation())) name = request.getLocation();
         if (!capacity.equals(request.getCapacity())) capacity = request.getCapacity();
         if (!description.equals(request.getDescription())) description = request.getDescription();
-        if (!imgKey.equals(request.getImgUrl())) imgKey = request.getImgUrl();
+        if (!imgKey.equals(request.getImgKey())) imgKey = request.getImgKey();
     }
 
     public void activateOffice() {

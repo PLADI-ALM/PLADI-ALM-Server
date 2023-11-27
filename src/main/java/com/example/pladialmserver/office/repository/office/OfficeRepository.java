@@ -1,4 +1,4 @@
-package com.example.pladialmserver.office.repository;
+package com.example.pladialmserver.office.repository.office;
 
 import com.example.pladialmserver.office.entity.Office;
 import org.springframework.data.domain.Page;
