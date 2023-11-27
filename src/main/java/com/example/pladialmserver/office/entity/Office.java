@@ -62,6 +62,7 @@ public class Office extends BaseEntity {
                 .capacity(req.getCapacity())
                 .description(req.getDescription())
                 .imgKey(req.getImgUrl())
+                .isActive(true)
                 .build();
      }
 
