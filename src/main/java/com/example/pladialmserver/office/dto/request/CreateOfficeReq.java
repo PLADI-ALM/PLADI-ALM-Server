@@ -36,6 +36,6 @@ public class CreateOfficeReq {
     private String description;
 
     @Schema(type = "String", description = "회의실 이미지", example = "photo/image.key")
-    private String imgUrl;
+    private String imgKey;
 
 }

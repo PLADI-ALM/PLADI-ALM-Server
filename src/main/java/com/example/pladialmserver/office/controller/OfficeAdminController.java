@@ -2,10 +2,10 @@ package com.example.pladialmserver.office.controller;
 
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
+import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import com.example.pladialmserver.office.dto.response.AdminOfficeRes;
 import com.example.pladialmserver.office.dto.response.AdminOfficesDetailsRes;
 import com.example.pladialmserver.office.service.OfficeService;
-import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import com.example.pladialmserver.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(tags = "관리자 회의실 API")
 @RestController
@@ -134,6 +135,20 @@ public class OfficeAdminController {
         return ResponseCustom.OK(officeService.findAvailableAdminOffices(user,facilityName,pageable));
     }
 
+    /**
+     * 회의실 시설 조회 (검색)
+     */
+    @Operation(summary = "회의실 시설 조회 리스트 (장채은)", description = "회의실 시설 정보를 확인한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)회의실 예약자 정보 확인 성공")
+    })
+    @GetMapping("/facilities")
+    public ResponseCustom<List<String>> getFacilityList(
+            @Parameter(description = "(String) 시설 검색", example = "마이크") @RequestParam(name = "name", required = false) String name,
+            @Account User user
+    ){
+        return ResponseCustom.OK(officeService.getFacilityList(name, user));
+    }
 
 
 }

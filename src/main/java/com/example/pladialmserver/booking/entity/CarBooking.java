@@ -5,10 +5,7 @@ import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.product.car.entity.Car;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.user.entity.User;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -22,6 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate
+@Builder
+@AllArgsConstructor
 public class CarBooking extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,18 +49,9 @@ public class CarBooking extends BaseEntity {
     @Size(max = 100)
     private String remark;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.BOOKED;
-
-    @Builder
-    public CarBooking(User user, Car car, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime returnDate, String memo) {
-        this.user = user;
-        this.car = car;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.returnDate = returnDate;
-        this.memo = memo;
-    }
 
     public static CarBooking toDto(User user, Car car, ProductReq productReq) {
         return CarBooking.builder()
