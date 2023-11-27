@@ -26,7 +26,7 @@ public class CreateOfficeReq {
     @NotEmpty(message = "O0007")
     private List<String> facility;
 
-    @Schema(type = "Integer", description = "수용인원", example = "6")
+    @Schema(type = "String", description = "수용인원", example = "6~10",maxLength = 50)
     @NotNull(message = "O0008")
     private String capacity;
 
