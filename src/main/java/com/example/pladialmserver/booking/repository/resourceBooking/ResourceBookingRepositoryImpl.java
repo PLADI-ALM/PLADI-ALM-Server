@@ -142,7 +142,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 .selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource),
                         (resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
-                        (resourceBooking.startDate.before(standardDate)),
+                        (resourceBooking.startDate.before(standardDate).or(resourceBooking.startDate.eq(standardDate))),
                         (resourceBooking.endDate.after(standardDate))
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetchOne();
