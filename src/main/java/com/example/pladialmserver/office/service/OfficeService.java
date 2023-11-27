@@ -138,7 +138,7 @@ public class OfficeService {
         // 2. 시설 리스트를 가져와서 각 시설을 OfficeFacility에 연결
         for (String facilityName : request.getFacility()) {
             Facility facility = facilityRepository.findByName(facilityName)
-                    .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_FACILITY_NOT_FOUND));
+                    .orElseGet(() -> facilityRepository.save(new Facility(facilityName)));
 
             officeFacilityRepository.save(OfficeFacility.toDto(savedOffice, facility));
         }
@@ -164,7 +164,7 @@ public class OfficeService {
 
         for (String facilityName : request.getFacility()) {
             Facility facility = facilityRepository.findByName(facilityName)
-                    .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_FACILITY_NOT_FOUND));
+                    .orElseGet(() -> facilityRepository.save(new Facility(facilityName)));
 
             OfficeFacility officeFacility = OfficeFacility.toDto(office, facility);
             officeFacilityRepository.save(officeFacility);
