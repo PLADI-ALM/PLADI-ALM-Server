@@ -105,7 +105,7 @@ public class UserService {
 
     // 비밀번호 재설정
     @Transactional
-    public void resetPassword(EmailPWReq resetPasswordReq) {
+    public void resetPassword(ResetPWReq resetPasswordReq) {
         User user = userRepository.findByEmailAndIsEnable(resetPasswordReq.getEmail(), true).orElseThrow(() -> new BaseException(USER_NOT_FOUND));
         user.updatePassword(passwordEncoder.encode(resetPasswordReq.getPassword()));
         userRepository.save(user);

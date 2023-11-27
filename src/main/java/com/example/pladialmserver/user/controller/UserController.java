@@ -107,7 +107,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })
     @PatchMapping("/password")
-    public ResponseCustom resetPassword(@RequestBody @Valid EmailPWReq resetPasswordReq){
+    public ResponseCustom resetPassword(@RequestBody @Valid ResetPWReq resetPasswordReq){
         userService.resetPassword(resetPasswordReq);
         return ResponseCustom.OK();
     }
