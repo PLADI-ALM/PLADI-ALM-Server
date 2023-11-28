@@ -110,7 +110,7 @@ public class EquipmentController {
     @Operation(summary = "비품 카테고리 조회 (김민기)", description = "비품을 카테고리를 조회한다.")
     @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다.")
     @GetMapping("/categories")
-    public ResponseCustom<List<EquipmentCategoryRes>> getEquipmentCategories(
+    public ResponseCustom<EquipmentCategoryRes> getEquipmentCategories(
             @Account User user
     )
     {
