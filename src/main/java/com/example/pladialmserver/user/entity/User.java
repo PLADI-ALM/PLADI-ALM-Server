@@ -72,6 +72,7 @@ public class User extends BaseEntity {
 
     @Builder
     public User(Long id, String name, String email, String password, Department department, String phone, Role role, String fcmToken, String assets, Affiliation affiliation) {
+        this.userId = id;
         this.name = name;
         this.email = email;
         this.password = password;
