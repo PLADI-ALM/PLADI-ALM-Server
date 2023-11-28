@@ -3,10 +3,9 @@ package com.example.pladialmserver.equipment.controller;
 
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
 import com.example.pladialmserver.equipment.dto.request.UpdateEquipmentReq;
+import com.example.pladialmserver.equipment.dto.response.EquipmentCategoryRes;
 import com.example.pladialmserver.equipment.dto.response.SearchEquipmentRes;
 import com.example.pladialmserver.equipment.service.EquipmentService;
-import com.example.pladialmserver.global.exception.BaseException;
-import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.resolver.Account;
 import com.example.pladialmserver.global.response.ResponseCustom;
 import com.example.pladialmserver.user.entity.User;
@@ -20,10 +19,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(tags = "비품 API")
 @RestController
@@ -106,5 +105,15 @@ public class EquipmentController {
     {
         equipmentService.deleteEquipment(equipmentId, user);
         return ResponseCustom.OK();
+    }
+
+    @Operation(summary = "비품 카테고리 조회 (김민기)", description = "비품을 카테고리를 조회한다.")
+    @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다.")
+    @GetMapping("/categories")
+    public ResponseCustom<List<EquipmentCategoryRes>> getEquipmentCategories(
+            @Account User user
+    )
+    {
+        return ResponseCustom.OK(equipmentService.getEquipmentCategories(user));
     }
 }

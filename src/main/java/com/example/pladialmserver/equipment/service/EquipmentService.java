@@ -2,6 +2,7 @@ package com.example.pladialmserver.equipment.service;
 
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
 import com.example.pladialmserver.equipment.dto.request.UpdateEquipmentReq;
+import com.example.pladialmserver.equipment.dto.response.EquipmentCategoryRes;
 import com.example.pladialmserver.equipment.dto.response.SearchEquipmentRes;
 import com.example.pladialmserver.equipment.entity.Equipment;
 import com.example.pladialmserver.equipment.entity.EquipmentCategory;
@@ -18,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,5 +71,10 @@ public class EquipmentService {
         if(!user.getRole().equals(Role.ADMIN)) throw new BaseException(BaseResponseCode.NO_AUTHENTICATION);
 
         equipmentRepository.delete(equipment);
+    }
+
+    public List<EquipmentCategoryRes> getEquipmentCategories(User user) {
+        List<EquipmentCategory> categories = equipmentCategoryRepository.findByIsEnable(true);
+        return categories.stream().map(EquipmentCategoryRes::toDto).collect(Collectors.toList());
     }
 }
