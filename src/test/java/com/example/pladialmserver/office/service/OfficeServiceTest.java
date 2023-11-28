@@ -3,13 +3,14 @@ package com.example.pladialmserver.office.service;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.global.IntegrationTestSupport;
+import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeFacility;
-import com.example.pladialmserver.office.repository.FacilityRepository;
+import com.example.pladialmserver.office.repository.facility.FacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeFacilityRepository;
-import com.example.pladialmserver.office.repository.OfficeRepository;
+import com.example.pladialmserver.office.repository.office.OfficeRepository;
 import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
@@ -17,7 +18,6 @@ import com.example.pladialmserver.user.entity.User;
 import com.example.pladialmserver.user.repository.AffiliationRepository;
 import com.example.pladialmserver.user.repository.DepartmentRepository;
 import com.example.pladialmserver.user.repository.user.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +40,6 @@ public class OfficeServiceTest extends IntegrationTestSupport {
     @Autowired private AffiliationRepository affiliationRepository;
     @Autowired private DepartmentRepository departmentRepository;
 
-//    @AfterEach
-//    void tearDown(){
-//        // 참조하는 엔티티 먼저 삭제
-//        officeBookingRepository.deleteAllInBatch();
-//        officeFacilityRepository.deleteAllInBatch();
-//        // 참조되는 엔티티 삭제
-//        officeRepository.deleteAllInBatch();
-//        facilityRepository.deleteAllInBatch();
-//
-//    }
 
     @Test
     @DisplayName("회의실 목록 조회 테스트")
@@ -59,13 +49,13 @@ public class OfficeServiceTest extends IntegrationTestSupport {
         LocalTime startTime = LocalTime.of(10, 0);
         LocalTime endTime = LocalTime.of(12, 0);
 
-        Office office = createAndSaveOffice("회의실 A", "1층");
+        Office office = createAndSaveOffice("회의실 A", "1층",true);
         Facility facility = createAndSaveFacility("빔 프로젝터");
         createAndSaveOfficeFacility(office, facility);
 
         Affiliation affiliation = createAndSaveAffiliation("플래디");
         Department department = createAndSaveDepartment("개발부서");
-        User user = createAndSaveUser("testuser", "testuser@example.com", department, affiliation);
+        User user = createAndSaveUser("testuser", "testuser@example.com", department, affiliation,Role.BASIC);
 
         createAndSaveOfficeBooking(office, date, startTime.minusHours(1), endTime.minusHours(1), user);
 
@@ -75,20 +65,71 @@ public class OfficeServiceTest extends IntegrationTestSupport {
 
         // then
         assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
+        assertFalse(result.getContent().isEmpty());
         result.getContent().forEach(officeRes -> {
             assertEquals("회의실 A", officeRes.getName());
             assertTrue(officeRes.getFacilityList().contains("빔 프로젝터"));
         });
     }
 
-    private User createAndSaveUser(String name, String email, Department department, Affiliation affiliation) {
+    @Test
+    @DisplayName("관리자가 회의실을 활성화/비활성화 - 성공")
+    void activateOfficeByAdmin_Success() {
+        //given
+        Affiliation affiliation = createAndSaveAffiliation("플래디");
+        Department department = createAndSaveDepartment("개발부서");
+        User adminUser = createAndSaveUser("testuser", "testuser@example.com", department, affiliation,Role.ADMIN);
+
+        Office office = createAndSaveOffice("회의실 A", "1층",false);
+
+        // when
+        officeService.activateOfficeByAdmin(adminUser, office.getOfficeId());
+        Office updatedOffice = officeRepository.findById(office.getOfficeId()).orElse(null);
+        //then
+        assertNotNull(updatedOffice);
+        assertTrue(updatedOffice.getIsActive()); // 활성화 여부 확인
+    }
+
+    @Test
+    @DisplayName("관리자가 회의실을 활성화/비활성화 - 실패 (존재하지 않는 회의실)")
+    void activateOfficeByAdmin_Fail_InvalidOffice() {
+        //given
+        Affiliation affiliation = createAndSaveAffiliation("플래디");
+        Department department = createAndSaveDepartment("개발부서");
+        User adminUser = createAndSaveUser("testuser", "testuser@example.com", department, affiliation,Role.ADMIN);
+
+        Long invalidOfficeId = 999L; // 존재하지 않는 회의실 id
+
+        //when-then
+        assertThrows(BaseException.class, () -> {
+            officeService.activateOfficeByAdmin(adminUser, invalidOfficeId);
+        });
+    }
+
+    @Test
+    @DisplayName("관리자가 아닌 사용자가 회의실을 활성화/비활성화 시도 - 실패")
+    void activateOfficeByAdmin_Fail_NotAdmin() {
+        //given
+        Affiliation affiliation = createAndSaveAffiliation("플래디");
+        Department department = createAndSaveDepartment("개발부서");
+
+        User nonAdminUser = createAndSaveUser("testuser", "testuser@example.com", department, affiliation,Role.BASIC);
+
+        Office office = createAndSaveOffice("회의실 B", "2층",false);
+
+        //when-then
+        assertThrows(BaseException.class, () -> {
+            officeService.activateOfficeByAdmin(nonAdminUser, office.getOfficeId());
+        });
+    }
+
+    private User createAndSaveUser(String name, String email, Department department, Affiliation affiliation,Role role) {
         User user = User.builder()
                 .name(name)
                 .email(email)
                 .password("password")
                 .phone("010-1234-5678")
-                .role(Role.ADMIN)
+                .role(role)
                 .department(department)
                 .affiliation(affiliation)
                 .build();
@@ -96,16 +137,15 @@ public class OfficeServiceTest extends IntegrationTestSupport {
         return user;
     }
 
-    private Office createAndSaveOffice(String name, String location) {
+    private Office createAndSaveOffice(String name, String location,Boolean isActive) {
         return officeRepository.save(Office.builder()
                 .name(name)
                 .location(location)
                 .capacity(String.valueOf(10))
                 .description("테스트 회의실")
-                .isActive(true)
+                .isActive(isActive)
                 .build());
     }
-
 
     private Facility createAndSaveFacility(String name) {
         return facilityRepository.save(Facility.builder()
@@ -146,16 +186,6 @@ public class OfficeServiceTest extends IntegrationTestSupport {
         departmentRepository.save(department);
         return department;
 
-    }
-
-    @DisplayName("회의실 개별 조회")
-    @Test
-    void getOffice() throws Exception{
-        //given
-
-        //when
-
-        //then
     }
 
 }

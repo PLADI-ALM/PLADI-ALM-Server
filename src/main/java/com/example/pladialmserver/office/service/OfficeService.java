@@ -5,15 +5,15 @@ import com.example.pladialmserver.booking.repository.officeBooking.OfficeBooking
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
+import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import com.example.pladialmserver.office.dto.request.OfficeReq;
 import com.example.pladialmserver.office.dto.response.*;
 import com.example.pladialmserver.office.entity.Facility;
 import com.example.pladialmserver.office.entity.Office;
 import com.example.pladialmserver.office.entity.OfficeFacility;
-import com.example.pladialmserver.office.repository.FacilityRepository;
+import com.example.pladialmserver.office.repository.facility.FacilityRepository;
 import com.example.pladialmserver.office.repository.OfficeFacilityRepository;
-import com.example.pladialmserver.office.repository.OfficeRepository;
-import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
+import com.example.pladialmserver.office.repository.office.OfficeRepository;
 import com.example.pladialmserver.user.entity.Role;
 import com.example.pladialmserver.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -138,7 +138,7 @@ public class OfficeService {
         // 2. 시설 리스트를 가져와서 각 시설을 OfficeFacility에 연결
         for (String facilityName : request.getFacility()) {
             Facility facility = facilityRepository.findByName(facilityName)
-                    .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_FACILITY_NOT_FOUND));
+                    .orElseGet(() -> facilityRepository.save(new Facility(facilityName)));
 
             officeFacilityRepository.save(OfficeFacility.toDto(savedOffice, facility));
         }
@@ -164,7 +164,7 @@ public class OfficeService {
 
         for (String facilityName : request.getFacility()) {
             Facility facility = facilityRepository.findByName(facilityName)
-                    .orElseThrow(() -> new BaseException(BaseResponseCode.OFFICE_FACILITY_NOT_FOUND));
+                    .orElseGet(() -> facilityRepository.save(new Facility(facilityName)));
 
             OfficeFacility officeFacility = OfficeFacility.toDto(office, facility);
             officeFacilityRepository.save(officeFacility);
@@ -236,5 +236,10 @@ public class OfficeService {
             }
 
         return allOffices.map(AdminOfficeRes::toDto);
+    }
+
+    public List<String> getFacilityList(String name, User user) {
+        checkAdminRole(user);
+        return facilityRepository.findByNameContainingAndIsActive(name);
     }
 }

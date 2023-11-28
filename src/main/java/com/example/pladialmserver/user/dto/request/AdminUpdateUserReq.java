@@ -1,12 +1,16 @@
 package com.example.pladialmserver.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdminUpdateUserReq {
     @Schema(type = "String", description = "성명", example = "홍길동", required = true)
     @NotBlank(message = "U0007")
