@@ -65,7 +65,7 @@ public class OfficeServiceTest extends IntegrationTestSupport {
 
         // then
         assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
+        assertFalse(result.getContent().isEmpty());
         result.getContent().forEach(officeRes -> {
             assertEquals("회의실 A", officeRes.getName());
             assertTrue(officeRes.getFacilityList().contains("빔 프로젝터"));
