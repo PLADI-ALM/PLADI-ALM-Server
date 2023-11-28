@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 @Data
 public class EquipmentCategoryRes {
     @Schema(type = "List<CategoryNameRes>", description = "카테고리 목록 리스트", example = "기타")
-    private List<CategoryNameRes> categoryNames;
+    private List<String> categoryNames;
 
     @Builder
-    public EquipmentCategoryRes(List<CategoryNameRes> categoryNames) {
+    public EquipmentCategoryRes(List<String> categoryNames) {
         this.categoryNames = categoryNames;
     }
 
     public static EquipmentCategoryRes toDto(List<EquipmentCategory> categories) {
         return EquipmentCategoryRes.builder()
-                .categoryNames(categories.stream().map(CategoryNameRes::toDto).collect(Collectors.toList()))
+                .categoryNames(categories.stream().map(EquipmentCategory::getName).collect(Collectors.toList()))
                 .build();
     }
 }
