@@ -1,8 +1,8 @@
 package com.example.pladialmserver.user.service.model;
 
+import com.example.pladialmserver.user.dto.request.AdminUpdateUserReq;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
-import com.example.pladialmserver.user.dto.response.UserRes;
 import com.example.pladialmserver.user.entity.Affiliation;
 import com.example.pladialmserver.user.entity.Department;
 import com.example.pladialmserver.user.entity.Role;
@@ -72,5 +72,9 @@ public class TestUserInfo {
         userResList.add(setUpUser(4L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
         userResList.add(setUpUser(5L, Role.BASIC, setUpDepartment(), setUpAffiliation(), "adsf1234!"));
         return new PageImpl<>(userResList);
+    }
+
+    public static AdminUpdateUserReq setUpAdminUpdateUserReq(){
+        return new AdminUpdateUserReq("홍길동", "마케팅", "010-1111-1111", "플래디", "일반", "A123434, B123434");
     }
 }

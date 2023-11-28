@@ -4,6 +4,7 @@ import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.user.dto.TokenDto;
+import com.example.pladialmserver.user.dto.request.AdminUpdateUserReq;
 import com.example.pladialmserver.user.dto.request.CreateUserReq;
 import com.example.pladialmserver.user.dto.request.EmailPWReq;
 import com.example.pladialmserver.user.dto.response.UserRes;
@@ -245,6 +246,7 @@ class UserServiceTest {
         // then
         assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.DEPARTMENT_NOT_FOUND);
     }
+
     @Test
     @DisplayName("[실패] 직원 게정 목록 조회 (관리자 전용) - 부서를 찾을 수 없는 경우")
     void getUserListFail2() {
@@ -260,6 +262,53 @@ class UserServiceTest {
 
     }
 
+    @Test
+    @DisplayName("[성공] 사용자 정보 수정 (관리자 전용)")
+    void updateUserByAdmin() {
+        // given
+        Department department = setUpDepartment();
+        Affiliation affiliation = setUpAffiliation();
+        User admin = setUpUser(1L, Role.ADMIN, department, affiliation, passwordEncoder.encode(PASSWORD));
+        User user = setUpUser(1L, Role.ADMIN, department, affiliation, passwordEncoder.encode(PASSWORD));
+        AdminUpdateUserReq req = setUpAdminUpdateUserReq();
+        // when
+        doReturn(Optional.of(user)).when(userRepository).findByUserIdAndIsEnable(user.getUserId(), true);
+        doReturn(false).when(userRepository).existsByPhoneAndUserIdNotAndIsEnable(req.getPhone(), user.getUserId(), true);
+        doReturn(Optional.of(department)).when(departmentRepository).findByNameAndIsEnable(department.getName(), true);
+        doReturn(Optional.of(affiliation)).when(affiliationRepository).findByNameAndIsEnable(affiliation.getName(), true);
+        userService.updateUserByAdmin(admin, user.getUserId(), req);
+
+        // verify
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(userRepository, times(1)).findByUserIdAndIsEnable(any(Long.class), any(Boolean.class));
+        verify(userRepository, times(1)).existsByPhoneAndUserIdNotAndIsEnable(any(String.class), any(Long.class), any(Boolean.class));
+        verify(departmentRepository, times(1)).findByNameAndIsEnable(any(String.class), any(Boolean.class));
+        verify(affiliationRepository, times(1)).findByNameAndIsEnable(any(String.class), any(Boolean.class));
+    }
+
+    @Test
+    @DisplayName("[실패] 사용자 정보 수정 (관리자 전용) - 사용자 번호가 중복된 경우")
+    void updateUserByAdminFail() {
+        // given
+        User admin = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        User user = setUpUser(1L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
+        AdminUpdateUserReq req = setUpAdminUpdateUserReq();
+
+        // when
+        doReturn(Optional.of(user)).when(userRepository).findByUserIdAndIsEnable(user.getUserId(), true);
+        doReturn(true).when(userRepository).existsByPhoneAndUserIdNotAndIsEnable(req.getPhone(), 1L, true);
+        BaseException exception = assertThrows(BaseException.class, () -> {
+            userService.updateUserByAdmin(admin, 1L, req);
+        });
+
+        // then
+        assertThat(exception.getBaseResponseCode()).isEqualTo(BaseResponseCode.EXISTS_PHONE);
+    }
+
+
+    @Test
+    void updateUser() {
+    }
 
     @Test
     void getUserName() {
@@ -294,16 +343,10 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser() {
-    }
-
-    @Test
     void sendAssetsEmail() {
     }
 
-    @Test
-    void updateUserByAdmin() {
-    }
+
 
     @Test
     void getDepartmentList() {
