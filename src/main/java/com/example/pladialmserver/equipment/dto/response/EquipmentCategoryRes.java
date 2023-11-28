@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class EquipmentCategoryRes {
-    @Schema(type = "List<CategoryNameRes>", description = "카테고리 목록 리스트", example = "기타")
+    @Schema(type = "List<String>", description = "카테고리 목록 리스트", example = "기타, 기타2, 전자제품 ...")
     private List<String> categoryNames;
 
     @Builder
