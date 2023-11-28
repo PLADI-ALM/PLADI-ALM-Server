@@ -1,11 +1,11 @@
 package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
+import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,5 +31,6 @@ public class Facility extends BaseEntity {
     public Facility(String name){
         this.name=name;
     }
+
 
 }
