@@ -118,7 +118,7 @@ public class ResourceService implements ProductService {
 
         // 차량 예약 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_SUCCESS, resource.getUser());
+            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_SUCCESS, resource.getUser());
         } catch (IOException e) {
             e.printStackTrace();
         }

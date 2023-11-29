@@ -123,7 +123,7 @@ class ResourceBookingServiceTest {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_CANCEL;
         Map<String, String> bookingData = new HashMap<>();
         doNothing().when(emailUtil).sendEmail(resourceBooking.getUser().getEmail(), title, bookingData, BOOKING_TEMPLATE);
-        doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.EQUIPMENT), eq(Constants.Notification.BODY_CANCELED), any(User.class));
+        doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.RESOURCE), eq(Constants.Notification.BODY_CANCELED), any(User.class));
 
         resourceBookingService.cancelBookingProduct(basicUser, resourceBooking.getResourceBookingId());
 
@@ -188,7 +188,7 @@ class ResourceBookingServiceTest {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REJECT;
         Map<String, String> bookingData = new HashMap<>();
         doNothing().when(emailUtil).sendEmail(resourceBooking.getUser().getEmail(), title, bookingData, BOOKING_TEMPLATE);
-        doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.EQUIPMENT), eq(Constants.Notification.BODY_DENIED), any(User.class));
+        doNothing().when(notificationService).sendNotification(eq(Constants.NotificationCategory.RESOURCE), eq(Constants.Notification.BODY_DENIED), any(User.class));
 
         resourceBookingService.rejectProductBooking(adminUser, resourceBooking.getResourceBookingId());
 

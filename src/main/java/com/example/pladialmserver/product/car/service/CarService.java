@@ -90,7 +90,7 @@ public class CarService implements ProductService {
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, NEW_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차량 예약 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_SUCCESS, car.getUser());
+            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_SUCCESS, car.getUser());
         } catch (IOException e) {
             e.printStackTrace();
         }
