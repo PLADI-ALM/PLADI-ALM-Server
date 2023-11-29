@@ -4,11 +4,13 @@ package com.example.pladialmserver.product.resource.service;
 import com.example.pladialmserver.booking.dto.request.SendEmailReq;
 import com.example.pladialmserver.booking.entity.ResourceBooking;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
+import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.exception.BaseResponseCode;
 import com.example.pladialmserver.global.utils.DateTimeUtil;
 import com.example.pladialmserver.global.utils.EmailUtil;
+import com.example.pladialmserver.notification.service.PushNotificationService;
 import com.example.pladialmserver.product.dto.request.ProductReq;
 import com.example.pladialmserver.product.dto.response.ProductBookingRes;
 import com.example.pladialmserver.product.dto.response.ProductDetailRes;
@@ -29,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,6 +50,7 @@ public class ResourceService implements ProductService {
     private final ResourceBookingRepository resourceBookingRepository;
     private final UserRepository userRepository;
     private final EmailUtil emailUtil;
+    private final PushNotificationService notificationService;
 
 
     // 관리자 권한 확인
@@ -111,6 +115,13 @@ public class ResourceService implements ProductService {
         String title = COMPANY_NAME + RESOURCE + SPACE + BOOKING_TEXT + BOOKING_REQUEST;
         emailUtil.sendEmail(resource.getUser().getEmail(), title,
                 emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, NEW_BOOKING_TEXT)), BOOKING_TEMPLATE);
+
+        // 차량 예약 알림
+        try {
+            notificationService.sendNotification(Constants.NotificationCategory.EQUIPMENT, Constants.Notification.BODY_SUCCESS, resource.getUser());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // ===================================================================================================================
