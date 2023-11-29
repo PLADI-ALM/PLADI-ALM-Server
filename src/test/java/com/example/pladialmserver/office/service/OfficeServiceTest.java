@@ -3,6 +3,7 @@ package com.example.pladialmserver.office.service;
 import com.example.pladialmserver.booking.entity.OfficeBooking;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.global.IntegrationTestSupport;
+import com.example.pladialmserver.global.entity.BookingStatus;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.office.dto.response.OfficeRes;
 import com.example.pladialmserver.office.entity.Facility;
@@ -57,7 +58,7 @@ public class OfficeServiceTest extends IntegrationTestSupport {
         Department department = createAndSaveDepartment("개발부서");
         User user = createAndSaveUser("testuser", "testuser@example.com", department, affiliation,Role.BASIC);
 
-        createAndSaveOfficeBooking(office, date, startTime.minusHours(1), endTime.minusHours(1), user);
+        createAndSaveOfficeBooking(office, date, startTime.minusHours(1), endTime.minusHours(1), user, BookingStatus.WAITING);
 
         // when
         Pageable pageable = PageRequest.of(0, 10);
@@ -160,13 +161,14 @@ public class OfficeServiceTest extends IntegrationTestSupport {
                 .build());
     }
 
-    private void createAndSaveOfficeBooking(Office office, LocalDate date, LocalTime startTime, LocalTime endTime, User user) {
+    private void createAndSaveOfficeBooking(Office office, LocalDate date, LocalTime startTime, LocalTime endTime, User user, BookingStatus status) {
         officeBookingRepository.save(OfficeBooking.builder()
                 .office(office)
                 .date(date)
                 .startTime(startTime)
                 .endTime(endTime)
                 .user(user)
+                .status(status)
                 .build());
     }
 
