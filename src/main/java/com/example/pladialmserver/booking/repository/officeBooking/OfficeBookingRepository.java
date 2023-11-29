@@ -21,7 +21,7 @@ public interface OfficeBookingRepository extends JpaRepository<OfficeBooking, Lo
             "WHERE ob.date = :date " +
             "AND ((ob.startTime <= :startTime AND ob.endTime > :startTime) " +
             "OR (ob.startTime < :endTime AND ob.endTime >= :endTime))"+
-            "AND ob.status = 'USING'")
+            "AND (ob.status = 'USING' OR ob.status = 'BOOKED')")
     List<Long> findBookedOfficeIdsByDateAndTime(@Param("date") LocalDate date, @Param("startTime") LocalTime startTime, @Param("endTime") LocalTime endTime);
     Page<OfficeBooking> findByStatusIn(List<BookingStatus> list, Pageable pageable);
     List<OfficeBooking> findByOfficeAndDateAndStatusNot(Office office, LocalDate date, BookingStatus bookingStatus);
