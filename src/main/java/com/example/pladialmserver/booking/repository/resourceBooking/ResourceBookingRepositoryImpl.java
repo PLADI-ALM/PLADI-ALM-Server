@@ -17,10 +17,10 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -50,74 +50,52 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         return new PageImpl<>(res.subList(start, end), pageable, res.size());
     }
 
-//    private BooleanExpression dateContaining(LocalDate date) {
-//        return ObjectUtil.check ?
-//        return hasText(resourceName) ? resource.name.contains(resourceName) : null;
-//    }
-
     // 장비 월별 예약 현황 조회
     @Override
     public List<String> getResourceBookedDate(Resource resource, LocalDate standardDate) {
         // 해당 월의 첫 날 (00:00)
         LocalDateTime startDateTime = standardDate.withDayOfMonth(1).atStartOfDay();
-        // 다음 월의 첫 날 (00:00)
-        LocalDateTime endDateTime = standardDate.plusMonths(1).atStartOfDay();
+        // 해당 월의 마지막 날 (23:00)
+        LocalDateTime endDateTime = standardDate.withDayOfMonth(standardDate.lengthOfMonth()).atTime(23, 0);
 
         // 해당 월의 예약 현황 조회
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and((resourceBooking.startDate.between(startDateTime, endDateTime))
-                                    .or(resourceBooking.endDate.between(startDateTime, endDateTime)))
-                    ).orderBy(resourceBooking.startDate.asc())
-                    .fetch();
+                        .and(resourceBooking.startDate.loe(endDateTime)
+                                .and(resourceBooking.endDate.after(startDateTime))
+                                .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
+                        )
+                ).orderBy(resourceBooking.startDate.asc())
+                .fetch();
 
-            // 예약이 모두 된 날짜(첫 날 0시 ~ 다음 날 0시) 반환
-            List<String> bookedDate = new ArrayList<>();
-            int index = 0;
-            boolean isContinuity = false;
-            LocalDateTime standard = null;
+        Map<LocalDate, Integer> datesOfMonth = createDatesOfMonth(standardDate.getYear(), standardDate.getMonth());
+        for (LocalDate date : datesOfMonth.keySet()) {
+            List<LocalDateTime> hoursList = IntStream.range(0, 24)
+                    .mapToObj(date.atStartOfDay()::plusHours)
+                    .collect(Collectors.toList());
 
             for (ResourceBooking b : bookings) {
-                index++;
-
-                // 연속 유무 및 연속 기준일 체크
-                if (index == 1) {
-                    standard = bookings.get(0).getEndDate();
-                    if (isMidnight(bookings.get(0).getStartDate())) isContinuity = true;
-                } else {
-                    isContinuity = (standard.isEqual(b.getStartDate()) || isMidnight(b.getStartDate()));
+                for (LocalDateTime dateTime : hoursList) {
+                    if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()))
+                        // 시간마다 +1
+                        datesOfMonth.put(date, datesOfMonth.get(date) + 1);
                 }
-
-                // 시작일 & 종료일 다른 경우
-                if (!DateTimeUtil.dateTimeToDate(b.getStartDate()).isEqual(DateTimeUtil.dateTimeToDate(b.getEndDate()))) {
-                    // 연속인 경우 & 다음 날 00시 또는 이상인 경우 -> startDate 더해주기
-                    if (isContinuity &&
-                            b.getEndDate().isAfter(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))
-                            || b.getEndDate().isEqual(DateTimeUtil.getMidNightDateTime(b.getEndDate().plusDays(1)))) {
-                        bookedDate.add(DateTimeUtil.dateToString(b.getStartDate().toLocalDate()));
-                    } else if (!isContinuity && ChronoUnit.DAYS.between(b.getStartDate(), b.getEndDate()) == 1) {
-                        break;
-                    } else {
-                        List<String> dates = b.getStartDate().toLocalDate().datesUntil(b.getEndDate().toLocalDate())
-                                .map(DateTimeUtil::dateToString)
-                                .collect(Collectors.toList());
-                        bookedDate.addAll(dates);
-                    }
-                }
-                // 시작일 & 종료일 동일한 경우
-                else {
-                    if (!isContinuity && bookings.size() > index)
-                        isContinuity = isMidnight(bookings.get(index).getStartDate());
-                }
-                // 모두 수행
-                standard = b.getEndDate();
             }
-            return bookedDate;
+        }
+
+        return datesOfMonth.entrySet().stream()
+                // 예약이 모두 된 날짜 반환
+                .filter(entry -> entry.getValue() == 24)
+                .map(date -> DateTimeUtil.dateToString(date.getKey()))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    private boolean isMidnight(LocalDateTime localDateTime) {
-        return DateTimeUtil.dateTimeToTime(localDateTime).equals(LocalTime.MIN);
+    private Map<LocalDate, Integer> createDatesOfMonth(int year, Month month) {
+        return IntStream.rangeClosed(1, month.maxLength())
+                .mapToObj(day -> LocalDate.of(year, month, day))
+                .collect(Collectors.toMap(date -> date, date -> 0));
     }
 
     @Override
