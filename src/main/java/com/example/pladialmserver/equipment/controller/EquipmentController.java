@@ -4,6 +4,7 @@ package com.example.pladialmserver.equipment.controller;
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
 import com.example.pladialmserver.equipment.dto.request.UpdateEquipmentReq;
 import com.example.pladialmserver.equipment.dto.response.EquipmentCategoryRes;
+import com.example.pladialmserver.equipment.dto.response.GetEquipmentRes;
 import com.example.pladialmserver.equipment.dto.response.SearchEquipmentRes;
 import com.example.pladialmserver.equipment.service.EquipmentService;
 import com.example.pladialmserver.global.resolver.Account;
@@ -115,5 +116,18 @@ public class EquipmentController {
     )
     {
         return ResponseCustom.OK(equipmentService.getEquipmentCategories(user));
+    }
+
+    @Operation(summary = "비품 조회 (김민기)", description = "비품을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "(E0002)존재하지 않는 비품입니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
+    })
+    @GetMapping("{equipmentId}")
+    public ResponseCustom<GetEquipmentRes> getEquipment(
+            @PathVariable Long equipmentId
+    )
+    {
+        return ResponseCustom.OK(equipmentService.getEquipment(equipmentId));
     }
 }
