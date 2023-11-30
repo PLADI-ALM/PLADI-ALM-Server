@@ -34,7 +34,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         // 1. 예약중 & 사용중인 날짜들
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
-                        .and(carBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
+                        .and(carBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED)))
                 .orderBy(carBooking.startDate.asc())
                 .fetch();
 
@@ -54,7 +54,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         CarBooking booking = jpaQueryFactory
                 .selectFrom(carBooking)
                 .where(carBooking.car.eq(car),
-                        (carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
+                        (carBooking.status.notIn(BookingStatus.CANCELED)),
                         (carBooking.startDate.before(standardDate)),
                         (carBooking.endDate.after(standardDate))
                 ).orderBy(carBooking.startDate.asc())
@@ -73,7 +73,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         // 해당 월의 예약 현황 조회
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
-                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(carBooking.status.notIn(BookingStatus.CANCELED))
                         .and(carBooking.startDate.loe(endDateTime)
                                 .and(carBooking.endDate.after(startDateTime))
                                 .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))
@@ -149,7 +149,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         // 기준 날짜에 포함된 예약
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
-                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(carBooking.status.notIn(BookingStatus.CANCELED))
                         .and(carBooking.startDate.loe(endDateTime)
                                 .and(carBooking.endDate.after(startDateTime))
                                 .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))
@@ -183,7 +183,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         // 기준 날짜에 포함된 예약
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
-                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(carBooking.status.notIn(BookingStatus.CANCELED))
                         .and(carBooking.startDate.loe(endDateTime)
                                 .and(carBooking.endDate.after(startDateTime))
                                 .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))

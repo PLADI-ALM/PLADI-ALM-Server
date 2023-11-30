@@ -61,7 +61,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         // 해당 월의 예약 현황 조회
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
-                        .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(resourceBooking.status.notIn(BookingStatus.CANCELED))
                         .and(resourceBooking.startDate.loe(endDateTime)
                                 .and(resourceBooking.endDate.after(startDateTime))
                                 .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
@@ -117,7 +117,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         ResourceBooking booking = jpaQueryFactory
                 .selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource),
-                        (resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)),
+                        (resourceBooking.status.notIn(BookingStatus.CANCELED)),
                         (resourceBooking.startDate.before(standardDate).or(resourceBooking.startDate.eq(standardDate))),
                         (resourceBooking.endDate.after(standardDate))
                 ).orderBy(resourceBooking.startDate.asc())
@@ -133,7 +133,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         // 1. 예약중 & 사용중인 날짜들
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
-                        .and(resourceBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
+                        .and(resourceBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED)))
                 .orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
@@ -143,7 +143,6 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
             if (!startDateTime.isBefore(b.getStartDate()) && startDateTime.isBefore(b.getEndDate())) return true;
             if (!endDateTime.isBefore(b.getStartDate()) && endDateTime.isBefore(b.getEndDate())) return true;
         }
-
         return false;
     }
 
@@ -171,7 +170,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         // 기준 날짜에 포함된 예약
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
-                        .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(resourceBooking.status.notIn(BookingStatus.CANCELED))
                         .and(resourceBooking.startDate.loe(endDateTime)
                                 .and(resourceBooking.endDate.after(startDateTime))
                                 .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
@@ -206,7 +205,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         // 기준 날짜에 포함된 예약
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
-                        .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
+                        .and(resourceBooking.status.notIn(BookingStatus.CANCELED))
                         .and(resourceBooking.startDate.loe(endDateTime)
                                 .and(resourceBooking.endDate.after(startDateTime))
                                 .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
