@@ -25,7 +25,7 @@ class OfficeControllerTest extends ControllerTestSupport {
     @WithMockUser
     void searchOffice() throws Exception {
         // given
-        LocalDate date = LocalDate.of(2023, 11, 30);
+        LocalDate date = LocalDate.of(2024, 11, 30);
         LocalTime startTime = LocalTime.of(12, 0);
         LocalTime endTime = LocalTime.of(13, 0);
         String facilityName = "빔 프로젝터";
