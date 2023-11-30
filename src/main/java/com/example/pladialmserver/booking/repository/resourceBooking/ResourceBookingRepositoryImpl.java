@@ -203,6 +203,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
+
         // 0시부터 24시
         List<LocalDateTime> hoursList = IntStream.range(0, 24)
                 .mapToObj(startDateTime::plusHours)
@@ -211,7 +212,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         List<String> answer = new ArrayList<>();
         for (ResourceBooking b : bookings) {
             for (LocalDateTime dateTime : hoursList) {
-                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()) || dateTime.isEqual(b.getEndDate()))
+                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()))
                     answer.add(DateTimeUtil.dateTimeToStringTime(dateTime));
             }
         }
