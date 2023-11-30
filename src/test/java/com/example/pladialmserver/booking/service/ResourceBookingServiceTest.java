@@ -256,11 +256,4 @@ class ResourceBookingServiceTest {
     void returnBookingProduct() {
     }
 
-    //ResourceBooking resourceBooking2 = setUpResourceBookingByDate(1L, basicUser, adminUser,
-    //                LocalDateTime.of(2024, 12, 1, 16, 0),
-    //                LocalDateTime.of(2024, 12, 1, 17, 0));
-    //        ResourceBooking resourceBooking3 = setUpResourceBookingByDate(1L, basicUser, adminUser,
-    //                LocalDateTime.of(2024, 12, 1, 16, 0),
-    //                LocalDateTime.of(2024, 12, 1, 17, 0));
-
 }

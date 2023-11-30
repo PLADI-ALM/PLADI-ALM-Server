@@ -156,36 +156,4 @@ public class ResourceServiceTest extends IntegrationTestSupport {
 
     }
 
-    @Test
-    @DisplayName("[성공] 해당 날짜의 장비 예약된 시간 조회")
-    @Transactional
-    void getProductBookedTime_SUCCESS() {
-        // given
-        User basicUser = setUpUser(1L, Role.BASIC, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-        User adminUser = setUpUser(2L, Role.ADMIN, setUpDepartment(), setUpAffiliation(), passwordEncoder.encode(PASSWORD));
-
-        ResourceBooking resourceBooking = setUpResourceBookingByDate(1L, basicUser, adminUser,
-                        LocalDateTime.of(2024, 12, 1, 16, 0),
-                        LocalDateTime.of(2024, 12, 1, 19, 0));
-        ResourceBooking resourceBooking2 = setUpResourceBookingByDate(2L, basicUser, adminUser,
-                LocalDateTime.of(2024, 12, 1, 21, 0),
-                LocalDateTime.of(2024, 12, 2, 19, 0));
-        resourceBookingMockRepository.saveAndFlush(resourceBooking);
-        resourceBookingMockRepository.saveAndFlush(resourceBooking2);
-
-        // when
-        when(resourceBookingMockRepository.findById(anyLong())).thenReturn(Optional.of(resourceBooking));
-        when(resourceBookingRepositoryImpl.getBookedTime(any(Resource.class), any(LocalDate.class))).thenReturn(anyList());
-        Optional<ResourceBooking> all = resourceBookingMockRepository.findById(1L);
-        List<String> response = resourceBookingRepositoryImpl.getBookedTime(resourceBooking.getResource(), LocalDate.of(2024, 12, 1));
-
-
-        // then
-        System.out.println(all.get().getResourceBookingId());
-        for (String s : response) {
-            System.out.println(s);
-        }
-
-    }
-
 }
