@@ -3,6 +3,7 @@ package com.example.pladialmserver.equipment.service;
 import com.example.pladialmserver.equipment.dto.request.RegisterEquipmentReq;
 import com.example.pladialmserver.equipment.dto.request.UpdateEquipmentReq;
 import com.example.pladialmserver.equipment.dto.response.EquipmentCategoryRes;
+import com.example.pladialmserver.equipment.dto.response.GetEquipmentRes;
 import com.example.pladialmserver.equipment.dto.response.SearchEquipmentRes;
 import com.example.pladialmserver.equipment.entity.Equipment;
 import com.example.pladialmserver.equipment.entity.EquipmentCategory;
@@ -76,5 +77,10 @@ public class EquipmentService {
     public EquipmentCategoryRes getEquipmentCategories(User user) {
         List<EquipmentCategory> categories = equipmentCategoryRepository.findByIsEnable(true);
         return EquipmentCategoryRes.toDto(categories);
+    }
+
+    public GetEquipmentRes getEquipment(Long equipmentId) {
+        Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
+        return GetEquipmentRes.toDto(equipment);
     }
 }
