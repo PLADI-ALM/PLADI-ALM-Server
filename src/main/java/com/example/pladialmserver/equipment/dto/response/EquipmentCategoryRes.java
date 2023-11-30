@@ -5,19 +5,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 public class EquipmentCategoryRes {
-    @Schema(type = "String", description = "비품 카테고리 이름", example = "기타")
-    private String name;
+    @Schema(type = "List<String>", description = "카테고리 목록 리스트", example = "기타, 기타2, 전자제품 ...")
+    private List<String> categoryNames;
 
     @Builder
-    public EquipmentCategoryRes(String name) {
-        this.name = name;
+    public EquipmentCategoryRes(List<String> categoryNames) {
+        this.categoryNames = categoryNames;
     }
 
-    public static EquipmentCategoryRes toDto(EquipmentCategory category) {
+    public static EquipmentCategoryRes toDto(List<EquipmentCategory> categories) {
         return EquipmentCategoryRes.builder()
-                .name(category.getName())
+                .categoryNames(categories.stream().map(EquipmentCategory::getName).collect(Collectors.toList()))
                 .build();
     }
 }
