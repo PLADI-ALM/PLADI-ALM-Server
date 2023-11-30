@@ -1,6 +1,7 @@
 package com.example.pladialmserver.product.resource.repository;
 
 import com.example.pladialmserver.product.resource.entity.Resource;
+import com.example.pladialmserver.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,5 +32,7 @@ public interface ResourceRepository extends JpaRepository<Resource, Long>, Resou
             "FROM Resource r " +
             "WHERE r.isEnable = true AND r.isActive = true")
     Page<Resource> findAllByIsEnableTrueAndIsActiveTrue(Pageable pageable);
+
+    Boolean existsByUserAndIsEnable(User user, Boolean isEnable);
 
 }
