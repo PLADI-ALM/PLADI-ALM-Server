@@ -167,7 +167,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
                         .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and(carBooking.startDate.before(endDateTime)
+                        .and(carBooking.startDate.loe(endDateTime)
                                 .and(carBooking.endDate.after(startDateTime))
                                 .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))
                         )
@@ -182,7 +182,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         List<String> answer = new ArrayList<>();
         for (CarBooking b : bookings) {
             for (LocalDateTime dateTime : hoursList) {
-                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()) || dateTime.isEqual(b.getEndDate()))
+                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()))
                     answer.add(DateTimeUtil.dateTimeToStringTime(dateTime));
             }
         }
@@ -201,7 +201,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
                         .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and(carBooking.startDate.before(endDateTime)
+                        .and(carBooking.startDate.loe(endDateTime)
                                 .and(carBooking.endDate.after(startDateTime))
                                 .or(carBooking.startDate.before(startDateTime).and(carBooking.endDate.after(endDateTime)))
                         )

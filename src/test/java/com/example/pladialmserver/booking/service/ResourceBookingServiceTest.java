@@ -22,11 +22,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.example.pladialmserver.booking.service.model.TestResourceBookingInfo.setUpResourceBooking;
+import static com.example.pladialmserver.booking.service.model.TestResourceBookingInfo.setUpResourceBookingByDate;
 import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 import static com.example.pladialmserver.user.service.model.TestUserInfo.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

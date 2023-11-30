@@ -20,9 +20,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -196,12 +194,13 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and(resourceBooking.startDate.before(endDateTime)
+                        .and(resourceBooking.startDate.loe(endDateTime)
                                 .and(resourceBooking.endDate.after(startDateTime))
                                 .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
                         )
                 ).orderBy(resourceBooking.startDate.asc())
                 .fetch();
+
 
         // 0시부터 24시
         List<LocalDateTime> hoursList = IntStream.range(0, 24)
@@ -211,7 +210,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         List<String> answer = new ArrayList<>();
         for (ResourceBooking b : bookings) {
             for (LocalDateTime dateTime : hoursList) {
-                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()) || dateTime.isEqual(b.getEndDate()))
+                if ((dateTime.isAfter(b.getStartDate()) && dateTime.isBefore(b.getEndDate())) || dateTime.isEqual(b.getStartDate()))
                     answer.add(DateTimeUtil.dateTimeToStringTime(dateTime));
             }
         }
@@ -230,7 +229,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
                         .and(resourceBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING))
-                        .and(resourceBooking.startDate.before(endDateTime)
+                        .and(resourceBooking.startDate.loe(endDateTime)
                                 .and(resourceBooking.endDate.after(startDateTime))
                                 .or(resourceBooking.startDate.before(startDateTime).and(resourceBooking.endDate.after(endDateTime)))
                         )
