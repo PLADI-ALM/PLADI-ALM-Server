@@ -88,7 +88,7 @@ public class PushNotificationService {
     private String getTitle(String category, String type) {
         String title = "";
         if (category.equals(Constants.NotificationCategory.CAR)) title = extract(type, title, category);
-        if (category.equals(Constants.NotificationCategory.EQUIPMENT)) title = extract(type, title, category);
+        if (category.equals(Constants.NotificationCategory.RESOURCE)) title = extract(type, title, category);
         if (category.equals(Constants.NotificationCategory.OFFICE)) title = extract(type, title, category);
         return title;
     }
