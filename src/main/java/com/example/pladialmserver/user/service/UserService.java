@@ -121,10 +121,10 @@ public class UserService {
     }
     // 직원 접근 탈퇴
     public void resignUser(User user) {
-        // 탈퇴하려는 회원이 장비, 차량 관리자인 경우 애러처리
+        // 탈퇴하려는 회원이 장비, 차량, 비품 관리자인 경우 애러처리
         if (resourceRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_RESOURCE_ADMIN_USER);
         if (carRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_CAR_ADMIN_USER);
-        if (equipmentRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_CAR_ADMIN_USER);
+        if (equipmentRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_EQUIPMENT_ADMIN_USER);
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
     }
