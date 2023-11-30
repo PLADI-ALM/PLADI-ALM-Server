@@ -22,4 +22,17 @@ public class TestResourceBookingInfo {
                 .status(status)
                 .build();
     }
+
+    public static ResourceBooking setUpResourceBookingByDate(Long resourceBookingId, User basicUser, User adminUser, LocalDateTime startDate, LocalDateTime endDate) {
+        Resource resource = setUpResource(adminUser);
+        return ResourceBooking.builder()
+                .resourceBookingId(resourceBookingId)
+                .user(basicUser)
+                .resource(resource)
+                .startDate(startDate)
+                .endDate(endDate)
+                .memo("예약합니다.")
+                .status(BookingStatus.BOOKED)
+                .build();
+    }
 }
