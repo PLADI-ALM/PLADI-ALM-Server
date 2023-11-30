@@ -25,8 +25,8 @@ class ResourceControllerTest extends ControllerTestSupport {
     @WithMockUser
     void getResource_Success() throws Exception {
         // given
-        LocalDateTime startDate = LocalDateTime.of(2023, 11, 30, 13, 0);
-        LocalDateTime endDate = LocalDateTime.of(2023, 11, 30, 16, 0);
+        LocalDateTime startDate = LocalDateTime.of(2024, 11, 30, 13, 0);
+        LocalDateTime endDate = LocalDateTime.of(2024, 11, 30, 16, 0);
         String resourceName = "맥북 프로";
         Pageable pageable = PageRequest.of(0, 10);
 

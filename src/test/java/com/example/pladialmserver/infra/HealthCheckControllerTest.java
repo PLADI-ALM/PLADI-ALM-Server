@@ -14,7 +14,7 @@ public class HealthCheckControllerTest extends ControllerTestSupport {
     void healthCheck() throws Exception{
         String test="Server is Up";
 
-        mockMvc.perform(get("/health-check"))
+        mockMvc.perform(get("/health"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(test));
     }
