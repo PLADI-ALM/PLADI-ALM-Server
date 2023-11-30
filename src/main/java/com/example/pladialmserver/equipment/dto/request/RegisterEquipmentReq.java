@@ -31,6 +31,5 @@ public class RegisterEquipmentReq {
     private String description;
 
     @Schema(type = "String", description = "이미지키", example = "photo/maxim.png", required = true)
-    @NotBlank(message = "E0001")
     private String imgKey;
 }
