@@ -175,7 +175,7 @@ public class ResourceBookingService implements ProductBookingService {
 
         // 장비 예약 반려 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_DENIED, user);
+            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_DENIED, resourceBooking.getUser());
         } catch (IOException e) {
             e.printStackTrace();
         }
