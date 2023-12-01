@@ -36,7 +36,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
         // 1. 예약중 & 사용중인 날짜들
         List<CarBooking> bookings = jpaQueryFactory.selectFrom(carBooking)
                 .where(carBooking.car.eq(car)
-                        .and(carBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED)))
+                        .and(carBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
                 .orderBy(carBooking.startDate.asc())
                 .fetch();
 

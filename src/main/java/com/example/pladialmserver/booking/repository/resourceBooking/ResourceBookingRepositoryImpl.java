@@ -133,7 +133,7 @@ public class ResourceBookingRepositoryImpl implements ResourceBookingCustom {
         // 1. 예약중 & 사용중인 날짜들
         List<ResourceBooking> bookings = jpaQueryFactory.selectFrom(resourceBooking)
                 .where(resourceBooking.resource.eq(resource)
-                        .and(resourceBooking.status.notIn(BookingStatus.CANCELED, BookingStatus.FINISHED)))
+                        .and(resourceBooking.status.in(BookingStatus.BOOKED, BookingStatus.USING)))
                 .orderBy(resourceBooking.startDate.asc())
                 .fetch();
 
