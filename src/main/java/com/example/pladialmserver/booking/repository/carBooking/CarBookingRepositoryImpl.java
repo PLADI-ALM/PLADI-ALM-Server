@@ -57,7 +57,7 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                 .selectFrom(carBooking)
                 .where(carBooking.car.eq(car),
                         (carBooking.status.notIn(BookingStatus.CANCELED)),
-                        (carBooking.startDate.before(standardDate)),
+                        (carBooking.startDate.loe(standardDate)),
                         (carBooking.endDate.after(standardDate))
                 ).orderBy(carBooking.startDate.asc())
                 .fetchOne();
