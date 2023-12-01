@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -64,10 +65,11 @@ public class ResourceBooking extends BaseEntity {
             .build();
   }
 
-  public void returnBookingResource(String remark) {
+  public void returnBookingResource(String remark, LocalDateTime now) {
     changeBookingStatus(BookingStatus.FINISHED);
-    this.returnDate = LocalDateTime.now();
+    this.returnDate = now;
     this.remark = remark;
+    this.endDate = LocalDateTime.of(now.toLocalDate(), LocalTime.of(now.getHour(), 0).plusHours(1));
   }
 
   public void changeBookingStatus(BookingStatus bookingStatus) {

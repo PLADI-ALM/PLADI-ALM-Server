@@ -160,7 +160,7 @@ public class CarBookingService implements ProductBookingService{
             throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
         // 차량 반납
-        carBooking.returnBookingCar(request.getRemark());
+        carBooking.returnBookingCar(request.getRemark(), LocalDateTime.now());
         carBookingRepository.save(carBooking);
 
         Car car = carBooking.getCar();

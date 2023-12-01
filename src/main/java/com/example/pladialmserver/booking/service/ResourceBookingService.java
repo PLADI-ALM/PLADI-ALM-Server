@@ -81,7 +81,7 @@ public class ResourceBookingService implements ProductBookingService {
             throw new BaseException(BaseResponseCode.MUST_BE_IN_USE);
 
         // 장비 반납
-        resourceBooking.returnBookingResource(request.getRemark());
+        resourceBooking.returnBookingResource(request.getRemark(), LocalDateTime.now());
         resourceBookingRepository.save(resourceBooking);
 
         Resource resource = resourceBooking.getResource();

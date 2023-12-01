@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -71,10 +72,11 @@ public class CarBooking extends BaseEntity {
         return status.equals(bookingStatus);
     }
 
-    public void returnBookingCar(String remark) {
+    public void returnBookingCar(String remark, LocalDateTime now) {
         changeBookingStatus(BookingStatus.FINISHED);
-        this.returnDate = LocalDateTime.now();
+        this.returnDate = now;
         this.remark = remark;
+        this.endDate = LocalDateTime.of(now.toLocalDate(), LocalTime.of(now.getHour(), 0).plusHours(1));
     }
 
 
