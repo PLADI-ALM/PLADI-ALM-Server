@@ -40,20 +40,15 @@ public class EquipmentService {
     }
 
     public Page<SearchEquipmentRes> searchEquipment(String cond, Pageable pageable) {
-        Page<Equipment> equipments;
-
-        if(StringUtils.hasText(cond)) equipments = equipmentRepository.findByNameContainsAndIsEnable(cond, pageable, true);
-        else equipments = equipmentRepository.findAll(pageable);
+        Page<Equipment> equipments = equipmentRepository.findByNameContainsAndIsEnable(cond,pageable,true);
         return equipments.map(SearchEquipmentRes::toDto);
     }
 
     @Transactional
     public void updateEquipment(Long equipmentId, UpdateEquipmentReq updateEquipmentReq, User user) {
         Equipment equipment = equipmentRepository.findByEquipmentIdAndIsEnable(equipmentId, true).orElseThrow(() -> new BaseException(BaseResponseCode.EQUIPMENT_NOT_FOUND));
-
-        User register = userRepository.findByUserIdAndIsEnable(updateEquipmentReq.getUserId(), true).orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
         EquipmentCategory updateCategory = extractCategory(updateEquipmentReq.getCategory());
-        equipment.toUpdateInfo(updateEquipmentReq, register, updateCategory);
+        equipment.toUpdateInfo(updateEquipmentReq, user, updateCategory);
     }
 
     private EquipmentCategory extractCategory(String name) {
