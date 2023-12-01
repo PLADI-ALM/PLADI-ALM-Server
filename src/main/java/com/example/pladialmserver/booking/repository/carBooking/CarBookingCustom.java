@@ -25,4 +25,5 @@ public interface CarBookingCustom {
     List<String> getBookedTime(Car car, LocalDate date);
 
     List<ProductBookingRes> findCarBookingByDate(Car car, LocalDate date);
+    void updateBookingStatusForResigning(User user);
 }

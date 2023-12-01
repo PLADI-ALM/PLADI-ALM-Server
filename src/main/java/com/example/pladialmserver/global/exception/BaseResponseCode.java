@@ -49,6 +49,9 @@ public enum BaseResponseCode {
     EXISTS_PHONE("U0019", HttpStatus.CONFLICT, "존재하는 휴대폰번호입니다."),
     NOT_EMPTY_AFFILIATION("U0020", HttpStatus.BAD_REQUEST, "소속을 입력해주세요."),
     AFFILIATION_NOT_FOUND("U0021", HttpStatus.NOT_FOUND, "소속을 찾을 수 없습니다."),
+    EXISTS_CAR_ADMIN_USER("U0022", HttpStatus.BAD_REQUEST, "차량을 관리하는 직원입니다. 관리자를 변경해주세요."),
+    EXISTS_RESOURCE_ADMIN_USER("U0023", HttpStatus.BAD_REQUEST, "장비을 관리하는 직원입니다. 관리자를 변경해주세요."),
+    EXISTS_EQUIPMENT_ADMIN_USER("U0024", HttpStatus.BAD_REQUEST, "비품을 관리하는 직원입니다. 관리자를 변경해주세요."),
 
     // Booking
     DATE_OR_TIME_IS_NULL("B0001", HttpStatus.BAD_REQUEST, "날짜와 시간을 모두 입력해주세요."),

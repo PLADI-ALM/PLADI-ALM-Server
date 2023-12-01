@@ -1,6 +1,7 @@
 package com.example.pladialmserver.product.car.repository;
 
 import com.example.pladialmserver.product.car.entity.Car;
+import com.example.pladialmserver.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,5 @@ public interface CarRepository extends JpaRepository<Car, Long>,CarCustom {
     Page<Car> findAllByIsEnableTrueAndIsActiveTrue(Pageable pageable);
 
     Optional<Car> findByCarIdAndIsEnable(Long carId, boolean isEnable);
+    Boolean existsByUserAndIsEnable(User user, Boolean isEnable);
 }

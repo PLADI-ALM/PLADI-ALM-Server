@@ -1,11 +1,14 @@
 package com.example.pladialmserver.user.service;
 
+import com.example.pladialmserver.equipment.repository.EquipmentRepository;
 import com.example.pladialmserver.global.Constants;
 import com.example.pladialmserver.global.exception.BaseException;
 import com.example.pladialmserver.global.utils.EmailUtil;
 import com.example.pladialmserver.global.utils.JwtUtil;
 import com.example.pladialmserver.notification.entity.PushNotification;
 import com.example.pladialmserver.notification.repository.PushNotificationRepository;
+import com.example.pladialmserver.product.car.repository.CarRepository;
+import com.example.pladialmserver.product.resource.repository.ResourceRepository;
 import com.example.pladialmserver.user.dto.TokenDto;
 import com.example.pladialmserver.user.dto.request.*;
 import com.example.pladialmserver.user.dto.response.DepartmentListDto;
@@ -23,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final PushNotificationRepository notificationRepository;
+    private final CarRepository carRepository;
+    private final EquipmentRepository equipmentRepository;
+    private final ResourceRepository resourceRepository;
     private final AffiliationRepository affiliationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -116,6 +121,10 @@ public class UserService {
     }
     // 직원 접근 탈퇴
     public void resignUser(User user) {
+        // 탈퇴하려는 회원이 장비, 차량, 비품 관리자인 경우 애러처리
+        if (resourceRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_RESOURCE_ADMIN_USER);
+        if (carRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_CAR_ADMIN_USER);
+        if (equipmentRepository.existsByUserAndIsEnable(user, true)) throw new BaseException(EXISTS_EQUIPMENT_ADMIN_USER);
         jwtUtil.deleteRefreshToken(user.getUserId());
         userRepository.delete(user);
     }

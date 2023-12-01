@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,6 +29,7 @@ import static com.example.pladialmserver.booking.entity.QCarBooking.carBooking;
 @RequiredArgsConstructor
 public class CarBookingRepositoryImpl implements CarBookingCustom {
     private final JPAQueryFactory jpaQueryFactory;
+    private final EntityManager entityManager;
 
     @Override
     public boolean existsDateTime(Car car, LocalDateTime startDateTime, LocalDateTime endDateTime) {
@@ -209,5 +211,18 @@ public class CarBookingRepositoryImpl implements CarBookingCustom {
                 .fetch();
 
         return bookings.stream().map(ProductBookingRes::toDto).collect(Collectors.toList());
+    }
+
+    // 회원 탈퇴를 위한 예약 상태 변경
+    @Override
+    public void updateBookingStatusForResigning(User user) {
+        jpaQueryFactory.update(carBooking)
+                .set(carBooking.status, BookingStatus.CANCELED)
+                .where(carBooking.user.eq(user)
+                        .and(carBooking.status.in(BookingStatus.WAITING, BookingStatus.BOOKED, BookingStatus.USING)))
+                .execute();
+
+        // 영속성 컨텍스트를 DB 에 즉시 반영
+        entityManager.flush();
     }
 }

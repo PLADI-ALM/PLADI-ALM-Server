@@ -100,6 +100,7 @@ public class AdminUserController {
     @Operation(summary = "직원 탈퇴 (장채은)", description = "직원을 탈퇴 시킨다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)직원 탈퇴 성공"),
+            @ApiResponse(responseCode = "400", description = "(U0022)차량을 관리하는 직원입니다. 관리자를 변경해주세요.\n (U0023)장비을 관리하는 직원입니다. 관리자를 변경해주세요.\n(U0024)비품을 관리하는 직원입니다. 관리자를 변경해주세요."),
             @ApiResponse(responseCode = "403", description = "(G0002)접근 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseCustom.class))),
             @ApiResponse(responseCode = "404", description = "(U0001)사용자를 찾을 수 없습니다.[관리자 및 직원 모두]", content = @Content(schema = @Schema(implementation = ResponseCustom.class)))
     })

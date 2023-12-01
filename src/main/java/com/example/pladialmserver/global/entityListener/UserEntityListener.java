@@ -1,5 +1,6 @@
 package com.example.pladialmserver.global.entityListener;
 
+import com.example.pladialmserver.booking.repository.carBooking.CarBookingRepository;
 import com.example.pladialmserver.booking.repository.officeBooking.OfficeBookingRepository;
 import com.example.pladialmserver.booking.repository.resourceBooking.ResourceBookingRepository;
 import com.example.pladialmserver.global.utils.BeanUtil;
@@ -16,5 +17,8 @@ public class UserEntityListener {
         // 자원 예약 확인 및 예약 취소
         ResourceBookingRepository resourceBookingRepository = BeanUtil.getBean(ResourceBookingRepository.class);
         resourceBookingRepository.updateBookingStatusForResigning(user);
+        // 차량 예약 확인 및 예약 취소
+        CarBookingRepository carBookingRepository = BeanUtil.getBean(CarBookingRepository.class);
+        carBookingRepository.updateBookingStatusForResigning(user);
     }
 }
