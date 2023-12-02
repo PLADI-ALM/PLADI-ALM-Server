@@ -16,6 +16,7 @@ public class RegisterEquipmentReq {
     private String name;
 
     @Schema(type = "String", description = "수량", example = "10박스", required = true)
+    @NotBlank(message = "E0001")
     private String quantity;
 
     @Schema(type = "String", description = "카테고리", example = "기타", required = true)
@@ -23,11 +24,9 @@ public class RegisterEquipmentReq {
     private String category;
 
     @Schema(type = "String", description = "위치", example = "S1305", required = true)
-    @NotBlank(message = "E0001")
     private String location;
 
     @Schema(type = "String", description = "설명", example = "맥심커피입니다.", required = true)
-    @NotBlank(message = "E0001")
     private String description;
 
     @Schema(type = "String", description = "이미지키", example = "photo/maxim.png", required = true)
