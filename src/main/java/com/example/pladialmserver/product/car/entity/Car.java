@@ -10,6 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -66,11 +67,11 @@ public class Car extends BaseEntity {
     }
 
     public void updateCar(CreateProductReq request, User responsibility) {
-        if (!name.equals(request.getName())) name = request.getName();
-        if (!manufacturer.equals(request.getManufacturer())) manufacturer = request.getManufacturer();
-        if (!location.equals(request.getLocation())) location = request.getLocation();
-        if (!description.equals(request.getDescription())) description = request.getDescription();
-        if (!AwsS3ImageUrlUtil.toUrl(imgKey).equals(request.getImgKey())) imgKey = request.getImgKey();
-        if (!user.equals(responsibility)) user = responsibility;
+        if (!Objects.equals(name, request.getName())) name = request.getName();
+        if (!Objects.equals(manufacturer, request.getManufacturer())) manufacturer = request.getManufacturer();
+        if (!Objects.equals(location, request.getLocation())) location = request.getLocation();
+        if (!Objects.equals(description, request.getDescription())) description = request.getDescription();
+        if (!Objects.equals(AwsS3ImageUrlUtil.toUrl(imgKey), request.getImgKey())) imgKey = request.getImgKey();
+        if (!Objects.equals(user, responsibility)) user = responsibility;
     }
 }
