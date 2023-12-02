@@ -1,6 +1,7 @@
 package com.example.pladialmserver.office.entity;
 
 import com.example.pladialmserver.global.entity.BaseEntity;
+import com.example.pladialmserver.global.utils.AwsS3ImageUrlUtil;
 import com.example.pladialmserver.office.dto.request.CreateOfficeReq;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -67,11 +69,11 @@ public class Office extends BaseEntity {
      }
 
     public void updateOffice(CreateOfficeReq request) {
-        if (!name.equals(request.getName())) name = request.getName();
-        if (!location.equals(request.getLocation())) name = request.getLocation();
-        if (!capacity.equals(request.getCapacity())) capacity = request.getCapacity();
-        if (!description.equals(request.getDescription())) description = request.getDescription();
-        if (!imgKey.equals(request.getImgKey())) imgKey = request.getImgKey();
+        if (!Objects.equals(name, request.getName())) name = request.getName();
+        if (!Objects.equals(location, request.getLocation())) location = request.getLocation();
+        if (!Objects.equals(capacity, request.getCapacity())) capacity = request.getCapacity();
+        if (!Objects.equals(description, request.getDescription())) description = request.getDescription();
+        if (!Objects.equals(AwsS3ImageUrlUtil.toUrl(imgKey), request.getImgKey())) imgKey = request.getImgKey();
     }
 
     public void activateOffice() {
