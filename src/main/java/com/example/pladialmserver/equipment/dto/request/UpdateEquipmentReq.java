@@ -30,4 +30,7 @@ public class UpdateEquipmentReq {
     private String category;
     @Schema(type = "String", description = "비품 이미지 키", example = "photo/maxim.png", required = true)
     private String imgKey;
+    @Schema(type = "Long", description = "비품 등록자", example = "1", required = true)
+    @NotNull(message = "E0003")
+    private Long userId;
 }
