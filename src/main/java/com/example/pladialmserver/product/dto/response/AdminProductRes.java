@@ -26,6 +26,8 @@ public class AdminProductRes {
     private String reservatorName;
     @Schema(type = "String", description = "예약자 전화번호", example = "010-0000-0000")
     private String reservatorPhone;
+    @Schema(type = "String", description = "이용목적", example = "드라마 촬영")
+    private String memo;
     @Schema(type = "String", description = "상태", example = "'예약중' / '사용중'")
     private String status;
 
@@ -39,6 +41,7 @@ public class AdminProductRes {
                 .endDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getEndDate()))
                 .reservatorName(resourceBooking.getUser().getName())
                 .reservatorPhone(resourceBooking.getUser().getPhone())
+                .memo(resourceBooking.getMemo())
                 .status(resourceBooking.getStatus().getValue())
                 .build();
     }
@@ -53,6 +56,7 @@ public class AdminProductRes {
                 .endDateTime(DateTimeUtil.dateTimeToString(carBooking.getEndDate()))
                 .reservatorName(carBooking.getUser().getName())
                 .reservatorPhone(carBooking.getUser().getPhone())
+                .memo(carBooking.getMemo())
                 .status(carBooking.getStatus().getValue())
                 .build();
     }

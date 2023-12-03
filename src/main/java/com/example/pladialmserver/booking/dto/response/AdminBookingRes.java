@@ -26,6 +26,8 @@ public class AdminBookingRes {
     private String reservatorName;
     @Schema(type = "String", description = "예약자 전화번호", example = "010-4158-8124")
     private String reservatorPhone;
+    @Schema(type = "String", description = "이용목적", example = "드라마 촬영")
+    private String memo;
     @Schema(type = "String", description = "상태", example = "'예약중' / '사용중'")
     private String status;
 
@@ -39,6 +41,7 @@ public class AdminBookingRes {
                 .endDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getEndTime()))
                 .reservatorName(officeBooking.getUser().getName())
                 .reservatorPhone(officeBooking.getUser().getPhone())
+                .memo(officeBooking.getMemo())
                 .status(officeBooking.getStatus().getValue())
                 .build();
     }
