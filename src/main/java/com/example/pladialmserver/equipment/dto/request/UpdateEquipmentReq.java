@@ -17,8 +17,6 @@ public class UpdateEquipmentReq {
     @Schema(type = "String", description = "비품 수량", example = "10박스", required = true)
     @NotNull(message = "E0003")
     private String quantity;
-    @Schema(type = "Long", description = "비품 담당자", example = "1", required = true)
-    private Long register;
     @Schema(type = "String", description = "비품 위치", example = "s1350", required = true)
     @NotBlank(message = "E0003")
     private String location;
