@@ -12,8 +12,10 @@ import lombok.Getter;
 @Builder
 public class BookingRes {
 
-    @Schema(type = "Long", description = "Id", example = "1")
+    @Schema(type = "Long", description = "예약 Id", example = "1")
     private Long id;
+    @Schema(type = "Long", description = "예약 대상 Id", example = "1")
+    private Long targetId;
     @Schema(type = "String", description = "회의실명 / 장비명 / 차량명", example = "'회의실1' / '카메라1' / '벤틀리'")
     private String name;
     @Schema(type = "String", description = "회의실 위치 / 보관장소", example = "'401호' / '3층 A홀' / '주차장'")
@@ -30,6 +32,7 @@ public class BookingRes {
     public static BookingRes toDto(OfficeBooking officeBooking) {
         return BookingRes.builder()
                 .id(officeBooking.getOfficeBookingId())
+                .targetId(officeBooking.getOffice().getOfficeId())
                 .name(officeBooking.getOffice().getName())
                 .detailInfo(officeBooking.getOffice().getLocation())
                 .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(), officeBooking.getStartTime()))
@@ -42,6 +45,7 @@ public class BookingRes {
     public static BookingRes toDto(ResourceBooking resourceBooking) {
         return BookingRes.builder()
                 .id(resourceBooking.getResourceBookingId())
+                .targetId(resourceBooking.getResource().getResourceId())
                 .name(resourceBooking.getResource().getName())
                 .detailInfo(resourceBooking.getResource().getLocation())
                 .startDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getStartDate()))
@@ -54,6 +58,7 @@ public class BookingRes {
     public static BookingRes toDto(CarBooking carBooking) {
         return BookingRes.builder()
                 .id(carBooking.getCarBookingId())
+                .targetId(carBooking.getCar().getCarId())
                 .name(carBooking.getCar().getName())
                 .detailInfo(carBooking.getCar().getLocation())
                 .startDateTime(DateTimeUtil.dateTimeToString(carBooking.getStartDate()))
