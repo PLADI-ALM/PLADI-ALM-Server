@@ -63,6 +63,10 @@ jobs:
 #          echo "${{ secrets.FIREBASE_SERVICE_KEY}}" > ./firebase_service_key.json
 #        shell: bash
       ## create firebase_service_key-dev.json
+      - name: make firebase_service_key.json
+        run: mkdir ./src/main/resources/firebase
+        shell: bash
+
       - name: create-json
         id: create-json
         uses: jsdaniell/create-json@1.1.2
