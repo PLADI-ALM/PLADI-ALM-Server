@@ -30,4 +30,5 @@ public class UpdateEquipmentReq {
     private String category;
     @Schema(type = "String", description = "비품 이미지 키", example = "photo/maxim.png", required = true)
     private String imgKey;
+
 }
