@@ -63,15 +63,15 @@ jobs:
 #          echo "${{ secrets.FIREBASE_SERVICE_KEY}}" > ./firebase_service_key.json
 #        shell: bash
       ## create firebase_service_key-dev.json
-      - name: make firebase_service_key.json
+      - name: create-json
+        id: create-json
         if: contains(github.ref, 'develop')
         run: mkdir ./src/main/resources/firebase
-        id: create-json
-          uses: jsdaniell/create-json@1.1.2
-          with:
-            name: "firebase_service_key.json"
-            json: ${{ secrets.FIREBASE_SERVICE_KEY }}
-            dir: './src/main/resources/firebase'
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "firebase_service_key.json"
+          json: ${{ secrets.FIREBASE_SERVICE_KEY }}
+          dir: './src/main/resources/firebase'
 
       ## gradle build
       - name: Build with Gradle
