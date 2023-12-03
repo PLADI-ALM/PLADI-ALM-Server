@@ -58,10 +58,11 @@ public class Constants {
     }
 
     public static class Notification {
-        public static final String BODY_SUCCESS = "예약이 완료되었습니다.";
+        public static final String SPACE = " ";
+        public static final String BODY_SUCCESS = "예약이 승인되었습니다.";
         public static final String BODY_DENIED = "예약이 반려되었습니다.";
         public static final String BODY_CANCELED = "예약이 취소되었습니다.";
-        public static final String BODY_RETURNED = "예약이 종료되었습니다.";
+        public static final String BODY_RETURNED = "반납 확인되었습니다.";
         public static final String TITLE_SUCCESS = "예약 완료";
         public static final String TITLE_DENIED = "예약 반려";
         public static final String TITLE_CANCELED = "예약 취소";

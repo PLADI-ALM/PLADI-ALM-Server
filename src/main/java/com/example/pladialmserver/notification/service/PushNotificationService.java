@@ -40,9 +40,9 @@ public class PushNotificationService {
     private final EmailUtil emailUtil;
 
     @Transactional
-    public void sendNotification(String category, String type, User user) throws IOException {
+    public void sendNotification(String name, String category, String type, User user) throws IOException {
         String title = getTitle(category, type);
-        String messageBody = category + type;
+        String messageBody = name + Constants.Notification.SPACE + type;
         if (user.getFcmToken() != null) {
             FcmMessage fcmMessage = FcmMessage.makeMessage(user.getFcmToken(), title, messageBody);
             Response response = sendMessage(objectMapper.writeValueAsString(fcmMessage));

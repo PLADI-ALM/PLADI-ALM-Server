@@ -124,7 +124,7 @@ public class ResourceBookingService implements ProductBookingService {
 
         // 장비 예약 취소 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_CANCELED, user);
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -175,7 +175,7 @@ public class ResourceBookingService implements ProductBookingService {
 
         // 장비 예약 반려 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_DENIED, resourceBooking.getUser());
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_DENIED, resourceBooking.getUser());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -201,7 +201,7 @@ public class ResourceBookingService implements ProductBookingService {
                 emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, APPROVE_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 예약 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_SUCCESS, resourceBooking.getResource().getUser());
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_SUCCESS, resourceBooking.getResource().getUser());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -225,7 +225,7 @@ public class ResourceBookingService implements ProductBookingService {
                 emailUtil.createBookingData(SendEmailReq.toDto(resourceBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 장비 반납 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_RETURNED, user);
+            notificationService.sendNotification(resourceBooking.getResource().getName(), Constants.NotificationCategory.RESOURCE, Constants.Notification.BODY_RETURNED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }

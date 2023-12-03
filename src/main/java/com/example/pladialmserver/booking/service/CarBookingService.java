@@ -93,7 +93,7 @@ public class CarBookingService implements ProductBookingService{
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, REJECT_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차랑 예약 반려 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_DENIED, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.Notification.BODY_DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,7 +148,7 @@ public class CarBookingService implements ProductBookingService{
                 emailUtil.createBookingData(SendEmailReq.toDto(carBooking, RETURN_BOOKING_TEXT)), BOOKING_TEMPLATE);
         // 차랑 예약 반납 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_RETURNED, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.Notification.BODY_RETURNED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -202,7 +202,7 @@ public class CarBookingService implements ProductBookingService{
 
         // 차량 예약 취소 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.CAR, Constants.Notification.BODY_CANCELED, user);
+            notificationService.sendNotification(carBooking.getCar().getName(), Constants.NotificationCategory.CAR, Constants.Notification.BODY_CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
