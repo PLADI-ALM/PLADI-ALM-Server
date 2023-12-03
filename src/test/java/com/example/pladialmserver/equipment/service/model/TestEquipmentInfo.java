@@ -31,7 +31,7 @@ public class TestEquipmentInfo {
                 .user(user)
                 .build();
     }
-  
+
     public static EquipmentCategory setUpEquipmentCategory(String name) {
         return EquipmentCategory.builder()
                 .name(name)
@@ -42,8 +42,6 @@ public class TestEquipmentInfo {
         return UpdateEquipmentReq.builder()
                 .name(name)
                 .quantity(quantity)
-                .register(register)
-                .userId(userId)
                 .location(location)
                 .description(description)
                 .category(category)
