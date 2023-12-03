@@ -67,7 +67,7 @@ jobs:
         if: contains(github.ref, 'develop')
         run: mkdir ./src/main/resources/firebase
         id: create-json
-          uses: jsdaniell/create-json@v1.2.2
+          uses: jsdaniell/create-json@v1.1.2
           with:
             name: "firebase_service_key.json"
             json: ${{ secrets.FIREBASE_SERVICE_KEY }}
