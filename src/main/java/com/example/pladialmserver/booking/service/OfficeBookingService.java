@@ -105,7 +105,7 @@ public class OfficeBookingService {
 
         // 회의실 예약 취소 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.OFFICE, Constants.Notification.BODY_CANCELED, user);
+            notificationService.sendNotification(officeBooking.getOffice().getName(), Constants.NotificationCategory.OFFICE, Constants.Notification.BODY_CANCELED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -191,7 +191,7 @@ public class OfficeBookingService {
 
         // 회의실 예약 반려 알림
         try {
-            notificationService.sendNotification(Constants.NotificationCategory.OFFICE, Constants.Notification.BODY_DENIED, user);
+            notificationService.sendNotification(officeBooking.getOffice().getName(), Constants.NotificationCategory.OFFICE, Constants.Notification.BODY_DENIED, user);
         } catch (IOException e) {
             e.printStackTrace();
         }
