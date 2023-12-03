@@ -33,7 +33,7 @@ import static com.example.pladialmserver.global.Constants.EmailNotification.*;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PushNotificationService {
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/pladi-alm-7702202947/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/pladi-alm/messages:send";
     private final ObjectMapper objectMapper;
     private final PushNotificationRepository notificationRepository;
     private final UserRepository userRepository;
