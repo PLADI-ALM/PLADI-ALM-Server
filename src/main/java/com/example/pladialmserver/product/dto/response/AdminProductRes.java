@@ -10,8 +10,10 @@ import lombok.Data;
 @Data
 @Builder
 public class AdminProductRes {
-    @Schema(type = "Long", description = "Id", example = "1")
+    @Schema(type = "Long", description = "예약 Id", example = "1")
     private Long id;
+    @Schema(type = "Long", description = "예약 대상 Id", example = "1")
+    private Long targetId;
     @Schema(type = "String", description = "장비 이름", example = "'벤츠'")
     private String name;
     @Schema(type = "String", description = "보관장소", example = "'4층 창고'")
@@ -30,6 +32,7 @@ public class AdminProductRes {
     public static AdminProductRes toDto(ResourceBooking resourceBooking){
         return AdminProductRes.builder()
                 .id(resourceBooking.getResourceBookingId())
+                .targetId(resourceBooking.getResource().getResourceId())
                 .name(resourceBooking.getResource().getName())
                 .location(resourceBooking.getResource().getLocation())
                 .startDateTime(DateTimeUtil.dateTimeToString(resourceBooking.getStartDate()))
@@ -43,6 +46,7 @@ public class AdminProductRes {
     public static AdminProductRes toDto(CarBooking carBooking){
         return AdminProductRes.builder()
                 .id(carBooking.getCarBookingId())
+                .targetId(carBooking.getCar().getCarId())
                 .name(carBooking.getCar().getName())
                 .location(carBooking.getCar().getLocation())
                 .startDateTime(DateTimeUtil.dateTimeToString(carBooking.getStartDate()))

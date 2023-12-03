@@ -10,8 +10,10 @@ import lombok.Getter;
 @Builder
 public class AdminBookingRes {
 
-    @Schema(type = "Long", description = "회의실 Id / 자원 Id", example = "1")
+    @Schema(type = "Long", description = "예약 Id", example = "1")
     private Long id;
+    @Schema(type = "Long", description = "회의실 Id / 자원 Id", example = "1")
+    private Long targetId;
     @Schema(type = "String", description = "회의실명 / 자원명", example = "'회의실1' / '카메라1'")
     private String name;
     @Schema(type = "String", description = "회의실 위치 / 카테고리", example = "'401호' / '촬영장비'")
@@ -30,6 +32,7 @@ public class AdminBookingRes {
     public static AdminBookingRes toDto(OfficeBooking officeBooking){
         return AdminBookingRes.builder()
                 .id(officeBooking.getOfficeBookingId())
+                .targetId(officeBooking.getOffice().getOfficeId())
                 .name(officeBooking.getOffice().getName())
                 .detailInfo(officeBooking.getOffice().getLocation())
                 .startDateTime(DateTimeUtil.dateAndTimeToString(officeBooking.getDate(),officeBooking.getStartTime()))
