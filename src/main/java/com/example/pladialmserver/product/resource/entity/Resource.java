@@ -61,8 +61,8 @@ public class Resource extends BaseEntity {
   public static Resource toDto(CreateProductReq request, User responsibility) {
     return Resource.builder()
             .name(request.getName())
-            .manufacturer(request.getManufacturer() == null ? null : request.getDescription())
-            .location(request.getLocation() == null ? null : request.getDescription())
+            .manufacturer(request.getManufacturer() == null ? null : request.getManufacturer())
+            .location(request.getLocation() == null ? null : request.getLocation())
             .description(request.getDescription() == null ? null : request.getDescription())
             .imgKey((request.getImgKey() == null) ? null : request.getImgKey())
             .user(responsibility)
